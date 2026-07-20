@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 update_scores.py — 从 football-data.co.uk 抓取五大联赛当前赛季赛果，
-输出 football_latest.json 供 index.html 合并增量使用。
+输出 football_latest.json 与 football_latest.js（window.LATEST_DATA）供 index.html 合并增量使用。
 
 用法: python3 update_scores.py
 依赖: 仅标准库（urllib / csv / json）
@@ -20,6 +20,7 @@ from datetime import datetime
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEAM_CN_PATH = os.path.join(BASE_DIR, "team_cn.json")
 OUTPUT_PATH = os.path.join(BASE_DIR, "football_latest.json")
+OUTPUT_JS_PATH = os.path.join(BASE_DIR, "football_latest.js")
 
 LEAGUES = ["E0", "SP1", "D1", "I1", "F1"]
 URL_TEMPLATE = "https://www.football-data.co.uk/mmz4281/{code}/{league}.csv"
@@ -163,11 +164,18 @@ def main():
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
 
+    # 同步输出 JS 版本（window.LATEST_DATA），供 file:// 方式直接打开页面时加载
+    with open(OUTPUT_JS_PATH, "w", encoding="utf-8") as f:
+        f.write("window.LATEST_DATA = ")
+        json.dump(output, f, ensure_ascii=False)
+        f.write(";\n")
+
     print("\n===== 汇总 =====")
     for league in LEAGUES:
         print(f"  {league}: {summary.get(league, 0)} 场")
     print(f"  合计: {len(all_matches)} 场")
     print(f"  输出文件: {OUTPUT_PATH}")
+    print(f"  输出文件: {OUTPUT_JS_PATH}")
 
 
 if __name__ == "__main__":
