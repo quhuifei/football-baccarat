@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>五大联赛 · 百家乐路单</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #0d1b2a;
+    color: #e0e1dd;
+    padding: 10px;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: none;
+    margin: 0 auto;
+    position: relative;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 28px;
+    color: #ffd700;
+  }
+  .subtitle {
+    text-align: center;
+    color: #778da9;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  .controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .year-select {
+    padding: 10px 15px;
+    border: 2px solid #415a77;
+    background: #1b263b;
+    color: #e0e1dd;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    min-width: 140px;
+  }
+  .year-select:focus {
+    outline: none;
+    border-color: #ffd700;
+  }
+  .year-select option {
+    background: #1b263b;
+    color: #e0e1dd;
+  }
+  .top-right-controls {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 100;
+  }
+  .mode-switcher {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .mode-btn {
+    padding: 6px 12px;
+    border: 2px solid #415a77;
+    background: #1b263b;
+    color: #e0e1dd;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+    width: 100%;
+    white-space: nowrap;
+  }
+  .mode-btn:hover {
+    background: #415a77;
+  }
+  .mode-btn.active {
+    background: #ffd700;
+    color: #0d1b2a;
+    border-color: #ffd700;
+    font-weight: bold;
+  }
+  .export-btn {
+    padding: 6px 12px;
+    border: 2px solid #415a77;
+    background: #1b263b;
+    color: #e0e1dd;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+    width: 100%;
+    white-space: nowrap;
+  }
+  .export-btn:hover {
+    background: #415a77;
+    border-color: #ffd700;
+  }
+  .multi-roads {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  .multi-road-item {
+    flex: 0 0 auto;
+    min-width: 200px;
+  }
+  .multi-road-title {
+    font-size: 14px;
+    color: #ffd700;
+    margin-bottom: 6px;
+    font-weight: bold;
+  }
+  .multi-road-item .road-wrapper {
+    margin-bottom: 0;
+  }
+  .multi-road-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .multi-road-close {
+    background: transparent;
+    border: none;
+    color: #e0e1dd;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0 4px;
+  }
+  .multi-road-close:hover {
+    color: #ff6b6b;
+  }
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+  }
+  .modal-overlay.active {
+    display: flex;
+  }
+  .modal-panel {
+    background: #1b263b;
+    border: 2px solid #415a77;
+    border-radius: 12px;
+    padding: 20px;
+    width: 420px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  .modal-header h3 {
+    color: #ffd700;
+    font-size: 18px;
+  }
+  .modal-close {
+    background: transparent;
+    border: none;
+    color: #e0e1dd;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .modal-add-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+  }
+  .modal-add-row select {
+    flex: 1;
+    min-width: 120px;
+  }
+  .modal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+  }
+  .modal-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0d1b2a;
+    padding: 8px 12px;
+    border-radius: 6px;
+  }
+  .modal-list-item button {
+    background: #c92a2a;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 3px 8px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .modal-empty {
+    color: #778da9;
+    font-size: 13px;
+    text-align: center;
+    padding: 10px;
+  }
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+  }
+  .legend-circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 4px rgba(0,0,0,0.5);
+  }
+  .banker { background: #e63946; }
+  .player { background: #1d3557; border-color: #457b9d; }
+  .tie { background: #2a9d8f; }
+  .tie-slash {
+    width: 22px;
+    height: 22px;
+    position: relative;
+  }
+  .tie-slash::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background: #2a9d8f;
+    transform: rotate(-45deg);
+    transform-origin: center;
+  }
+  .road-wrapper {
+    overflow-x: auto;
+    background: #1b263b;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    margin-bottom: 10px;
+  }
+  .road {
+    display: grid;
+    gap: 1px;
+    min-width: fit-content;
+  }
+  .cell {
+    width: 40px;
+    height: 40px;
+    background: #0d1b2a;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+  }
+  .cell:hover {
+    background: #1b263b;
+  }
+  .cell-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+  .cell-B { background: radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a); }
+  .cell-P { background: radial-gradient(circle at 30% 30%, #4dabf7, #1864ab); }
+  .cell-T { background: radial-gradient(circle at 30% 30%, #4dd0a8, #1b7a6a); }
+  .cell-tie {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+  }
+  .cell-tie-line {
+    position: absolute;
+    top: 50%;
+    left: 12%;
+    width: 76%;
+    height: 3px;
+    background: #2a9d8f;
+    transform-origin: center;
+    box-shadow: 0 0 5px #2a9d8f, 0 0 9px rgba(42, 157, 143, 0.7);
+    border-radius: 2px;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s;
+  }
+  .cell-tie-line:hover {
+    background: #4dd0a8;
+    box-shadow: 0 0 8px #2a9d8f, 0 0 14px rgba(42, 157, 143, 0.9);
+  }
+  .cell-tie-badge {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background: #2a9d8f;
+    color: #fff;
+    font-size: 9px;
+    font-weight: bold;
+    padding: 1px 4px;
+    border-radius: 3px;
+    z-index: 20;
+    box-shadow: 0 0 4px rgba(0,0,0,0.5);
+    pointer-events: none;
+  }
+  .tie-slash {
+    width: 22px;
+    height: 22px;
+    position: relative;
+  }
+  .tie-slash::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    width: 80%;
+    height: 4px;
+    background: #2a9d8f;
+    transform: rotate(-45deg);
+    transform-origin: center;
+    box-shadow: 0 0 5px #2a9d8f, 0 0 9px rgba(42, 157, 143, 0.7);
+    border-radius: 2px;
+  }
+  .tooltip {
+    position: fixed;
+    background: rgba(13, 27, 42, 0.96);
+    border: 1px solid #415a77;
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: #e0e1dd;
+    font-size: 12px;
+    line-height: 1.6;
+    pointer-events: none;
+    z-index: 1000;
+    max-width: 320px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    display: none;
+  }
+  .tooltip .match-row {
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #1b263b;
+  }
+  .tooltip .match-row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  .tooltip .match-date {
+    color: #ffd700;
+    font-weight: bold;
+  }
+  .tooltip .result-B { color: #ff6b6b; }
+  .tooltip .result-P { color: #4dabf7; }
+  .tooltip .result-T { color: #4dd0a8; }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  .stat-card {
+    background: #1b263b;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .stat-number {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .stat-label {
+    color: #778da9;
+    font-size: 13px;
+  }
+  .match-list {
+    background: #1b263b;
+    border-radius: 12px;
+    padding: 10px;
+    max-height: 600px;
+    overflow-y: auto;
+  }
+  .match-list h2 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #ffd700;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th, td {
+    padding: 6px 8px;
+    text-align: left;
+    border-bottom: 1px solid #0d1b2a;
+  }
+  th {
+    color: #778da9;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    background: #1b263b;
+  }
+  .result-B { color: #ff6b6b; font-weight: bold; }
+  .result-P { color: #4dabf7; font-weight: bold; }
+  .result-T { color: #4dd0a8; font-weight: bold; }
+  .year-separator td {
+    background: #415a77;
+    color: #ffd700;
+    font-weight: bold;
+    text-align: center;
+    padding: 6px;
+  }
+  .footer {
+    text-align: center;
+    color: #778da9;
+    font-size: 12px;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1 id="page-title">五大联赛 · 百家乐路单</h1>
+  <div class="subtitle" id="subtitle">选择赛事、赛季和显示模式 · v3.0</div>
+  <div class="subtitle" id="api-status" style="font-size:12px;color:#4dd0a8;min-height:18px;">正在加载五大联赛历史数据...</div>
+
+  <div class="controls">
+    <label for="league-select" style="color:#778da9;font-size:14px;">选择赛事：</label>
+    <select class="year-select" id="league-select" onchange="setLeague(this.value)">
+      <option value="E0">英超</option>
+      <option value="SP1">西甲</option>
+      <option value="D1">德甲</option>
+      <option value="I1">意甲</option>
+      <option value="F1">法甲</option>
+    </select>
+
+    <span id="season-wrapper">
+      <label for="season-select" style="color:#778da9;font-size:14px;">选择赛季：</label>
+      <select class="year-select" id="season-select" onchange="setSeason(this.value)">
+        <option value="all">全部赛季</option>
+      </select>
+    </span>
+
+    <button class="export-btn" onclick="openMultiPanel()">🔲 多窗口对比</button>
+  </div>
+
+  <div class="top-right-controls">
+    <div class="mode-switcher">
+      <button class="mode-btn active" onclick="setMode(this)">标准百家乐（和为斜杠）</button>
+    </div>
+  </div>
+
+  <div class="legend" id="legend">
+    <div class="legend-item"><div class="legend-circle banker"></div>庄（主队胜）</div>
+    <div class="legend-item"><div class="legend-circle player"></div>闲（客队胜）</div>
+    <div class="legend-item"><div class="tie-slash"></div>和（平局）— 斜杠叠加</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card"><div class="stat-number" style="color:#ff6b6b" id="stat-b">0</div><div class="stat-label">庄（主队胜）</div></div>
+    <div class="stat-card"><div class="stat-number" style="color:#4dabf7" id="stat-p">0</div><div class="stat-label">闲（客队胜）</div></div>
+    <div class="stat-card"><div class="stat-number" style="color:#4dd0a8" id="stat-t">0</div><div class="stat-label">和（平局）</div></div>
+    <div class="stat-card"><div class="stat-number" style="color:#ffd700" id="stat-total">0</div><div class="stat-label">总场次</div></div>
+  </div>
+
+  <div id="multi-roads" class="multi-roads" style="display:none;"></div>
+
+  <div class="road-wrapper" id="single-road-wrapper">
+    <div class="road" id="road"></div>
+  </div>
+
+  <div class="match-list">
+    <h2>完整赛果列表</h2>
+    <table>
+      <thead><tr><th>#</th><th>年份</th><th>日期</th><th>左队（庄）</th><th>比分</th><th>右队（闲）</th><th>结果</th></tr></thead>
+      <tbody id="match-table-body">
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer" id="footer">数据来源：football-data.co.uk · 五大联赛 2014-2026</div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<div id="multi-panel" class="modal-overlay" onclick="if(event.target === this) closeMultiPanel()">
+  <div class="modal-panel" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3>多窗口对比</h3>
+      <button class="modal-close" onclick="closeMultiPanel()">&times;</button>
+    </div>
+    <div class="modal-add-row">
+      <select class="year-select" id="multi-add-league" onchange="onMultiLeagueChange()"></select>
+      <select class="year-select" id="multi-add-select"></select>
+      <button class="export-btn" onclick="addSelectedSeason()">添加</button>
+    </div>
+    <div id="multi-selected-list" class="modal-list"></div>
+    <div class="modal-actions">
+      <button class="export-btn" onclick="clearMultiSeasons()">清空</button>
+      <button class="export-btn" onclick="closeMultiPanel()">完成</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// 五大联赛数据（启动时从 matches.json 加载，再由 football_latest.json 合并增量）
+const allData = {};
+
+let currentLeague = 'E0';
+let currentSeason = 'all';
+const resultLabels = {'B': '庄', 'P': '闲', 'T': '和'};
+let addedSeasons = [];
+
+// 赛季起始年 "2014" -> "2014-15" 显示格式
+function fmtSeason(y) {
+  const n = parseInt(y, 10);
+  if (isNaN(n)) return y;
+  return n + '-' + String((n + 1) % 100).padStart(2, '0');
+}
+
+function getCurrentMatches() {
+  return (allData[currentLeague] ? allData[currentLeague].matches : []).map((m, i) => ({...m, _idx: i, _league: currentLeague}));
+}
+
+function getFilteredMatches() {
+  let seq = 0;
+  const base = getCurrentMatches();
+  return base.filter(m => {
+    if (currentSeason === 'all') return true;
+    return m.season === currentSeason;
+  }).map(m => ({...m, _seq: seq++}));
+}
+
+function generateStandardRoad(results, maxRows = 6) {
+  const grid = {};
+  const cellMatches = {};
+  let lastPos = null;
+  let currentCol = -1;
+  let pendingTies = [];
+
+  results.forEach((r) => {
+    const res = r.result;
+    const ref = { idx: r._idx, seq: r._seq };
+    if (res === 'T') {
+      if (lastPos) {
+        const key = lastPos.join(',');
+        cellMatches[key] = cellMatches[key] || [];
+        cellMatches[key].push(ref);
+      } else {
+        pendingTies.push(ref);
+      }
+      return;
+    }
+
+    if (Object.keys(grid).length === 0) {
+      currentCol = 0;
+      grid['0,0'] = res;
+      lastPos = [0, 0];
+      cellMatches['0,0'] = [ref, ...pendingTies];
+      pendingTies = [];
+      return;
+    }
+
+    const lastRes = grid[lastPos.join(',')];
+    if (res === lastRes) {
+      const [col, row] = lastPos;
+      let newRow = row + 1;
+      while (newRow < maxRows && grid[col + ',' + newRow]) newRow++;
+      if (newRow < maxRows && !grid[col + ',' + newRow]) {
+        grid[col + ',' + newRow] = res;
+        lastPos = [col, newRow];
+        cellMatches[col + ',' + newRow] = [ref];
+      } else {
+        let newCol = col + 1;
+        while (grid[newCol + ',' + row]) newCol++;
+        grid[newCol + ',' + row] = res;
+        lastPos = [newCol, row];
+        cellMatches[newCol + ',' + row] = [ref];
+      }
+    } else {
+      const newCol = currentCol + 1;
+      grid[newCol + ',0'] = res;
+      lastPos = [newCol, 0];
+      currentCol = newCol;
+      cellMatches[newCol + ',0'] = [ref];
+    }
+  });
+
+  if (pendingTies.length > 0 && Object.keys(grid).length === 0) {
+    grid['0,0'] = 'T';
+    lastPos = [0, 0];
+    cellMatches['0,0'] = pendingTies;
+  }
+
+  return { grid, cellMatches };
+}
+
+function getTooltipContent(refs) {
+  return refs.map(ref => {
+    const league = ref._league || currentLeague;
+    const m = allData[league].matches[ref.idx];
+    const label = resultLabels[m.result];
+    const cls = 'result-' + m.result;
+    return `<div class="match-row">
+      <div class="match-date">#${ref.seq + 1} · ${m.date}</div>
+      <div>${m.team1_cn} ${m.s1}–${m.s2} ${m.team2_cn} <span class="${cls}">[${label}]</span></div>
+    </div>`;
+  }).join('');
+}
+
+function renderRoadInto(roadEl, matches, league) {
+  const roadData = generateStandardRoad(matches);
+
+  const grid = roadData.grid;
+  const cellMatches = roadData.cellMatches;
+
+  let maxCol = 0, maxRow = 0;
+  for (const key in grid) {
+    const [c, r] = key.split(',').map(Number);
+    maxCol = Math.max(maxCol, c);
+    maxRow = Math.max(maxRow, r);
+  }
+
+  roadEl.style.gridTemplateColumns = `repeat(${maxCol + 1}, 40px)`;
+  roadEl.style.gridTemplateRows = `repeat(${maxRow + 1}, 40px)`;
+  roadEl.innerHTML = '';
+
+  for (let r = 0; r <= maxRow; r++) {
+    for (let c = 0; c <= maxCol; c++) {
+      const key = c + ',' + r;
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+
+      if (grid[key]) {
+        const circle = document.createElement('div');
+        circle.className = 'cell-circle cell-' + grid[key];
+        circle.textContent = grid[key];
+        cell.appendChild(circle);
+
+        const refs = cellMatches[key] || [];
+        const mainRef = refs[0];
+        const tieRefs = refs.slice(1).filter(ref => allData[league].matches[ref.idx].result === 'T');
+
+        // tooltip 显示该单元格所有相关比赛（包括和局）
+        const tooltipRefs = refs;
+        if (mainRef !== undefined) {
+          circle.addEventListener('mouseenter', (e) => showTooltip(e, tooltipRefs));
+          circle.addEventListener('mousemove', moveTooltip);
+          circle.addEventListener('mouseleave', hideTooltip);
+        }
+
+        // 显示和局斜杠（叠加在庄/闲格上）
+        const tieCount = tieRefs.length;
+        const maxVisible = 4;
+        const visibleCount = Math.min(tieCount, maxVisible);
+
+        // 根据和局数量动态调整斜杠长度/角度，防止过多时溢出或重叠
+        const lineWidth = tieCount >= 4 ? '64%' : '76%';
+        const lineLeft = tieCount >= 4 ? '18%' : '12%';
+        const angleStep = tieCount <= 2 ? 35 : (tieCount <= 3 ? 23 : 20);
+        const startAngle = tieCount <= 2 ? -27 : (tieCount <= 3 ? -22 : -18);
+        const offsetStep = tieCount >= 4 ? 2.5 : 3.5;
+
+        tieRefs.forEach((ref, i) => {
+          if (i >= maxVisible) return;
+          const slash = document.createElement('div');
+          slash.className = 'cell-tie';
+          const line = document.createElement('div');
+          line.className = 'cell-tie-line';
+          const angle = startAngle - (i * angleStep);
+          const offset = (i - (visibleCount - 1) / 2) * offsetStep;
+          line.style.width = lineWidth;
+          line.style.left = lineLeft;
+          line.style.transform = `rotate(${angle}deg) translateY(${offset}px)`;
+          line.addEventListener('mouseenter', (e) => showTooltip(e, [ref]));
+          line.addEventListener('mousemove', moveTooltip);
+          line.addEventListener('mouseleave', hideTooltip);
+          slash.appendChild(line);
+          cell.appendChild(slash);
+        });
+
+        // 超过显示上限时添加 +N 角标
+        if (tieCount > maxVisible) {
+          const badge = document.createElement('div');
+          badge.className = 'cell-tie-badge';
+          badge.textContent = '+' + (tieCount - maxVisible);
+          cell.appendChild(badge);
+        }
+      }
+
+      roadEl.appendChild(cell);
+    }
+  }
+}
+
+function renderRoad() {
+  renderRoadInto(document.getElementById('road'), getFilteredMatches(), currentLeague);
+}
+
+const tooltip = document.getElementById('tooltip');
+
+function showTooltip(e, refs) {
+  tooltip.innerHTML = getTooltipContent(refs);
+  tooltip.style.display = 'block';
+  moveTooltip(e);
+}
+
+function moveTooltip(e) {
+  const x = e.clientX + 15;
+  const y = e.clientY + 15;
+  const rect = tooltip.getBoundingClientRect();
+  const winW = window.innerWidth;
+  const winH = window.innerHeight;
+  let finalX = x;
+  let finalY = y;
+  if (finalX + rect.width > winW) finalX = e.clientX - rect.width - 10;
+  if (finalY + rect.height > winH) finalY = e.clientY - rect.height - 10;
+  tooltip.style.left = finalX + 'px';
+  tooltip.style.top = finalY + 'px';
+}
+
+function hideTooltip() {
+  tooltip.style.display = 'none';
+}
+
+function setSeason(season) {
+  currentSeason = season;
+  renderAll();
+}
+
+function populateSeasonSelect() {
+  const select = document.getElementById('season-select');
+  while (select.options.length > 1) {
+    select.remove(1);
+  }
+  if (!allData[currentLeague]) return;
+  const years = [...new Set(allData[currentLeague].matches.map(m => m.season))].sort();
+  years.forEach(y => {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = fmtSeason(y) + ' 赛季';
+    select.appendChild(opt);
+  });
+}
+
+function getAvailableYearsForLeague(league) {
+  if (!allData[league]) return [];
+  return [...new Set(allData[league].matches.map(m => m.season))].sort();
+}
+
+function getMatchesForLeagueYear(league, year) {
+  let seq = 0;
+  const base = (allData[league] ? allData[league].matches : []).map((m, i) => ({...m, _idx: i, _league: league}));
+  return base.filter(m => m.season === year).map(m => ({...m, _seq: seq++}));
+}
+
+function openMultiPanel() {
+  populateMultiLeagueSelect();
+  populateMultiAddSelect();
+  updateMultiPanelList();
+  document.getElementById('multi-panel').classList.add('active');
+}
+
+function closeMultiPanel() {
+  document.getElementById('multi-panel').classList.remove('active');
+}
+
+function populateMultiLeagueSelect() {
+  const select = document.getElementById('multi-add-league');
+  select.innerHTML = '';
+  const leagues = [
+    { value: 'E0', label: '英超' },
+    { value: 'SP1', label: '西甲' },
+    { value: 'D1', label: '德甲' },
+    { value: 'I1', label: '意甲' },
+    { value: 'F1', label: '法甲' }
+  ];
+  leagues.forEach(l => {
+    const opt = document.createElement('option');
+    opt.value = l.value;
+    opt.textContent = l.label;
+    select.appendChild(opt);
+  });
+  select.value = currentLeague;
+}
+
+function onMultiLeagueChange() {
+  populateMultiAddSelect();
+}
+
+function populateMultiAddSelect() {
+  const leagueSelect = document.getElementById('multi-add-league');
+  const seasonSelect = document.getElementById('multi-add-select');
+  const league = leagueSelect.value || currentLeague;
+  seasonSelect.innerHTML = '';
+  const available = getAvailableYearsForLeague(league).filter(y => !addedSeasons.some(s => s.league === league && s.year === y));
+  if (available.length === 0) {
+    const opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = '已添加全部赛季';
+    seasonSelect.appendChild(opt);
+    seasonSelect.disabled = true;
+  } else {
+    seasonSelect.disabled = false;
+    available.forEach(y => {
+      const opt = document.createElement('option');
+      opt.value = y;
+      opt.textContent = fmtSeason(y) + ' 赛季';
+      seasonSelect.appendChild(opt);
+    });
+  }
+}
+
+function updateMultiPanelList() {
+  const container = document.getElementById('multi-selected-list');
+  container.innerHTML = '';
+  if (addedSeasons.length === 0) {
+    container.innerHTML = '<div class="modal-empty">尚未添加任何赛季</div>';
+    return;
+  }
+  addedSeasons.forEach(({ league, year }) => {
+    const info = allData[league];
+    const label = (info ? info.cn : league) + ' ' + fmtSeason(year) + ' 赛季';
+    const div = document.createElement('div');
+    div.className = 'modal-list-item';
+    div.innerHTML = `<span>${label}</span><button onclick="removeSeasonWindow('${league}', '${year}')">移除</button>`;
+    container.appendChild(div);
+  });
+}
+
+function addSelectedSeason() {
+  const leagueSelect = document.getElementById('multi-add-league');
+  const seasonSelect = document.getElementById('multi-add-select');
+  const league = leagueSelect.value;
+  const year = seasonSelect.value;
+  if (!year) return;
+  if (!addedSeasons.some(s => s.league === league && s.year === year)) {
+    addedSeasons.push({ league, year });
+    renderMultiRoads();
+  }
+  populateMultiAddSelect();
+  updateMultiPanelList();
+}
+
+function removeSeasonWindow(league, year) {
+  addedSeasons = addedSeasons.filter(s => !(s.league === league && s.year === year));
+  renderMultiRoads();
+  populateMultiAddSelect();
+  updateMultiPanelList();
+}
+
+function clearMultiSeasons() {
+  addedSeasons = [];
+  renderMultiRoads();
+  populateMultiAddSelect();
+  updateMultiPanelList();
+}
+
+function renderMultiRoads() {
+  const container = document.getElementById('multi-roads');
+  const single = document.getElementById('single-road-wrapper');
+
+  if (addedSeasons.length === 0) {
+    container.style.display = 'none';
+    single.style.display = '';
+    return;
+  }
+
+  container.style.display = '';
+  single.style.display = 'none';
+  container.innerHTML = '';
+
+  addedSeasons.forEach(({ league, year }) => {
+    const matches = getMatchesForLeagueYear(league, year);
+    const info = allData[league];
+    const item = document.createElement('div');
+    item.className = 'multi-road-item';
+
+    const header = document.createElement('div');
+    header.className = 'multi-road-header';
+
+    const title = document.createElement('div');
+    title.className = 'multi-road-title';
+    title.textContent = `${info ? info.cn : league} ${fmtSeason(year)} 赛季 · ${matches.length} 场`;
+
+    const close = document.createElement('button');
+    close.className = 'multi-road-close';
+    close.innerHTML = '&times;';
+    close.onclick = () => removeSeasonWindow(league, year);
+
+    header.appendChild(title);
+    header.appendChild(close);
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'road-wrapper';
+    const road = document.createElement('div');
+    road.className = 'road';
+    wrapper.appendChild(road);
+
+    item.appendChild(header);
+    item.appendChild(wrapper);
+    container.appendChild(item);
+
+    renderRoadInto(road, matches, league);
+  });
+}
+
+function setLeague(league) {
+  currentLeague = league;
+  currentSeason = 'all';
+
+  document.getElementById('season-select').value = 'all';
+
+  populateSeasonSelect();
+  populateMultiAddSelect();
+  renderMultiRoads();
+
+  updatePageInfo();
+  renderAll();
+}
+
+function setMode(btn) {
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderRoad();
+  renderMultiRoads();
+}
+
+function renderStats() {
+  const filtered = getFilteredMatches();
+  const counts = { B: 0, P: 0, T: 0 };
+  for (const m of filtered) counts[m.result]++;
+  document.getElementById('stat-b').textContent = counts.B;
+  document.getElementById('stat-p').textContent = counts.P;
+  document.getElementById('stat-t').textContent = counts.T;
+  document.getElementById('stat-total').textContent = filtered.length;
+}
+
+function renderTable() {
+  const filtered = getFilteredMatches();
+  const tbody = document.getElementById('match-table-body');
+  tbody.innerHTML = '';
+  let lastGroup = '';
+  filtered.forEach((m, i) => {
+    const year = m.date.split('-')[0];
+    const groupLabel = year + ' 年';
+    if (currentSeason === 'all' && year !== lastGroup) {
+      const sep = document.createElement('tr');
+      sep.className = 'year-separator';
+      sep.innerHTML = `<td colspan="7">${groupLabel}</td>`;
+      tbody.appendChild(sep);
+      lastGroup = year;
+    }
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i + 1}</td><td>${year}</td><td>${m.date}</td><td>${m.team1_cn}</td><td>${m.s1}–${m.s2}</td><td>${m.team2_cn}</td><td class="result-${m.result}">${resultLabels[m.result]}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function updatePageInfo() {
+  const leagueInfo = allData[currentLeague];
+  if (!leagueInfo) return;
+  document.getElementById('page-title').textContent = leagueInfo.cn + ' · 百家乐路单';
+  document.getElementById('footer').textContent =
+    '数据来源：football-data.co.uk · 五大联赛 2014-2026 · ' + leagueInfo.cn + ' 共 ' + leagueInfo.matches.length + ' 场比赛';
+}
+
+function renderAll() {
+  renderRoad();
+  renderStats();
+  renderTable();
+}
+
+// 启动时加载五大联赛基础数据（matches.json）
+async function loadBaseData() {
+  const statusEl = document.getElementById('api-status');
+  const response = await fetch('matches.json?_=' + Date.now(), { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error('HTTP ' + response.status);
+  }
+  const data = await response.json();
+  ['E0', 'SP1', 'D1', 'I1', 'F1'].forEach(k => {
+    if (data[k] && Array.isArray(data[k].matches)) {
+      allData[k] = data[k];
+    }
+  });
+  if (Object.keys(allData).length === 0) {
+    throw new Error('matches.json 数据为空或格式不正确');
+  }
+  statusEl.textContent = '正在检查本地最新战绩数据...';
+}
+
+// 从本地 JSON 加载 API 更新的最新战绩，并合并到现有数据中
+async function loadLatestData() {
+  const statusEl = document.getElementById('api-status');
+  try {
+    const response = await fetch('football_latest.json?_=' + Date.now(), { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error('未找到本地最新数据文件');
+    }
+    const data = await response.json();
+    if (!data || !Array.isArray(data.matches)) {
+      throw new Error('数据格式不正确');
+    }
+
+    let added = 0;
+    let updated = 0;
+
+    data.matches.forEach(m => {
+      const league = m._league;
+      if (!allData[league]) return;
+
+      // 用 日期+主队+客队 作为唯一键去重
+      const key = `${m.date}|${m.team1}|${m.team2}`;
+      const existingIdx = allData[league].matches.findIndex(
+        ex => `${ex.date}|${ex.team1}|${ex.team2}` === key
+      );
+
+      if (existingIdx >= 0) {
+        // 已存在则更新比分/结果
+        allData[league].matches[existingIdx] = { ...allData[league].matches[existingIdx], ...m };
+        updated++;
+      } else {
+        // 不存在则追加
+        allData[league].matches.push(m);
+        added++;
+      }
+    });
+
+    // 按日期排序
+    Object.keys(allData).forEach(k => {
+      allData[k].matches.sort((a, b) => new Date(a.date) - new Date(b.date));
+    });
+
+    const updatedTime = data.updated_at
+      ? new Date(data.updated_at).toLocaleString('zh-CN')
+      : '未知时间';
+    statusEl.textContent = `✅ 已加载最新战绩（${data.matches.length} 条，新增 ${added}，更新 ${updated}）· 更新时间：${updatedTime}`;
+  } catch (err) {
+    statusEl.textContent = 'ℹ️ 未检测到 football_latest.json，使用基础历史数据。运行 update_scores.py 可获取最新战绩。';
+    console.log('加载最新数据失败:', err.message);
+  }
+}
+
+async function initApp() {
+  const statusEl = document.getElementById('api-status');
+  try {
+    await loadBaseData();
+  } catch (err) {
+    statusEl.textContent = '❌ 无法加载 matches.json 基础数据（' + err.message + '）。请确认 matches.json 与本页面在同一目录，并通过本地服务器访问。';
+    statusEl.style.color = '#ff6b6b';
+    console.error('加载基础数据失败:', err);
+    return;
+  }
+  await loadLatestData();
+  populateSeasonSelect();
+  populateMultiLeagueSelect();
+  updatePageInfo();
+  renderAll();
+}
+
+initApp();
+</script>
+</body>
+</html>
