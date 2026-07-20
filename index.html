@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>五大联赛 · 百家乐路单</title>
+<title>五大联赛 · 赛果路图</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
@@ -204,6 +204,7 @@
   }
   .road-wrapper {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     background: linear-gradient(180deg, rgba(13, 30, 24, 0.92), rgba(7, 16, 13, 0.95));
     border: 1px solid rgba(212, 175, 55, 0.22);
     border-radius: 14px;
@@ -307,11 +308,30 @@
     line-height: 1.6;
     pointer-events: none;
     z-index: 1000;
-    max-width: 320px;
+    max-width: min(320px, calc(100vw - 24px));
     box-shadow: 0 10px 34px rgba(0, 0, 0, 0.65);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     display: none;
+  }
+  /* 点击固定（手机端）时可交互，供 ✕ 按钮接收点击 */
+  .tooltip.sticky { pointer-events: auto; }
+  .tooltip-close {
+    display: none;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    background: rgba(212, 175, 55, 0.14);
+    color: var(--gold-bright);
+    font-size: 12px;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
   .tooltip .match-row {
     margin-bottom: 4px;
@@ -380,6 +400,8 @@
     padding: 14px;
     max-height: 600px;
     overflow-y: auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     animation: riseIn 0.5s ease 0.12s both;
   }
@@ -401,6 +423,9 @@
     text-align: left;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
+  /* 序号 / 年份 / 日期 / 比分列不折行；表头同样不折行 */
+  th { white-space: nowrap; }
+  td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(5) { white-space: nowrap; }
   th {
     color: var(--gold);
     font-weight: 600;
@@ -469,17 +494,47 @@
   @media (max-width: 640px) {
     body { padding: 12px 8px 8px; }
     h1 { font-size: 23px; letter-spacing: 3px; }
-    .controls { gap: 10px; padding: 10px 14px; }
+    .controls {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+      padding: 12px 14px;
+      width: 100%;
+    }
+    .controls > label { font-size: 13px; }
+    .year-select { width: 100%; min-width: 0; }
+    #season-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    #season-wrapper > label { font-size: 13px; }
     .stats { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .stat-number { font-size: 28px; }
+    .stat-card { padding: 14px 10px 12px; }
+    .stat-number { font-size: 26px; }
     .legend { gap: 14px; padding: 8px 16px; }
     .legend-item { font-size: 12px; }
+    .road-wrapper { padding: 10px; }
+    /* 手机端 tooltip：显示 ✕ 关闭按钮并留出位置，宽度不超出屏幕 */
+    .tooltip { max-width: calc(100vw - 24px); padding-right: 36px; }
+    .tooltip.sticky .tooltip-close { display: block; }
+    /* 赛果表格手机端更紧凑，宁可横向滚动也不折行 */
+    .match-list { padding: 10px; }
+    .match-list h2 { font-size: 15px; }
+    table { font-size: 12.5px; }
+    th, td { padding: 5px 7px; }
+    th { top: -10px; font-size: 11.5px; }
+    td.result-B::before, td.result-P::before, td.result-T::before {
+      left: 7px;
+      padding: 1px 8px;
+      font-size: 11px;
+    }
   }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1 id="page-title">五大联赛 · 百家乐路单</h1>
+  <h1 id="page-title">五大联赛</h1>
   <div class="subtitle" id="subtitle">选择赛事、赛季和显示模式 · v3.0</div>
 
   <div class="controls">
@@ -674,9 +729,24 @@ function renderRoadInto(roadEl, matches, league) {
         // tooltip 显示该单元格所有相关比赛（包括和局）
         const tooltipRefs = refs;
         if (mainRef !== undefined) {
-          circle.addEventListener('mouseenter', (e) => showTooltip(e, tooltipRefs));
-          circle.addEventListener('mousemove', moveTooltip);
-          circle.addEventListener('mouseleave', hideTooltip);
+          circle.addEventListener('mouseenter', (e) => {
+            if (isRecentTouch()) return;
+            tooltipPinned = false;
+            showTooltip(e, tooltipRefs);
+          });
+          circle.addEventListener('mousemove', (e) => {
+            if (isRecentTouch() || tooltipPinned) return;
+            moveTooltip(e);
+          });
+          circle.addEventListener('mouseleave', () => {
+            if (isRecentTouch() || tooltipPinned) return;
+            hideTooltip();
+          });
+          // 点击（手机触摸）切换显示/隐藏
+          circle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleTooltipAt(e, tooltipRefs);
+          });
         }
 
         // 显示和局斜杠（叠加在庄/闲格上）
@@ -702,9 +772,23 @@ function renderRoadInto(roadEl, matches, league) {
           line.style.width = lineWidth;
           line.style.left = lineLeft;
           line.style.transform = `rotate(${angle}deg) translateY(${offset}px)`;
-          line.addEventListener('mouseenter', (e) => showTooltip(e, [ref]));
-          line.addEventListener('mousemove', moveTooltip);
-          line.addEventListener('mouseleave', hideTooltip);
+          line.addEventListener('mouseenter', (e) => {
+            if (isRecentTouch()) return;
+            tooltipPinned = false;
+            showTooltip(e, [ref]);
+          });
+          line.addEventListener('mousemove', (e) => {
+            if (isRecentTouch() || tooltipPinned) return;
+            moveTooltip(e);
+          });
+          line.addEventListener('mouseleave', () => {
+            if (isRecentTouch() || tooltipPinned) return;
+            hideTooltip();
+          });
+          line.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleTooltipAt(e, [ref]);
+          });
           slash.appendChild(line);
           cell.appendChild(slash);
         });
@@ -725,32 +809,83 @@ function renderRoadInto(roadEl, matches, league) {
 
 function renderRoad() {
   renderRoadInto(document.getElementById('road'), getFilteredMatches(), currentLeague);
+  hideTooltip();
+  // 渲染完成后立即定位到最新比赛（路图按时间从左到右排列，即滚动到最右端）
+  requestAnimationFrame(() => {
+    const wrapper = document.getElementById('single-road-wrapper');
+    wrapper.scrollLeft = wrapper.scrollWidth;
+  });
 }
 
 const tooltip = document.getElementById('tooltip');
 
+let tooltipPinned = false;   // 点击固定状态（手机端）
+let tooltipKey = null;       // 当前固定 tooltip 对应的格子标识
+let lastTouchTs = 0;         // 最近一次触摸时间，用于在触屏上抑制 hover
+
+document.addEventListener('touchstart', () => { lastTouchTs = Date.now(); }, { passive: true, capture: true });
+function isRecentTouch() {
+  return Date.now() - lastTouchTs < 700;
+}
+
+// 触摸滚动页面/路图时关闭 tooltip
+document.addEventListener('touchmove', () => {
+  if (tooltip.style.display === 'block') hideTooltip();
+}, { passive: true });
+
+// 点击页面其他任何地方关闭 tooltip（格子上的 click 已 stopPropagation）
+document.addEventListener('click', (e) => {
+  if (tooltip.style.display !== 'block') return;
+  if (tooltip.contains(e.target)) return;
+  hideTooltip();
+});
+
+function refsKey(refs) {
+  return refs.map(r => r.idx + ':' + r.seq).join('|');
+}
+
+function toggleTooltipAt(e, refs) {
+  const key = refsKey(refs);
+  if (tooltipPinned && tooltipKey === key && tooltip.style.display === 'block') {
+    hideTooltip();
+    return;
+  }
+  tooltipPinned = true;
+  tooltipKey = key;
+  showTooltip(e, refs);
+}
+
 function showTooltip(e, refs) {
-  tooltip.innerHTML = getTooltipContent(refs);
+  tooltip.innerHTML = '<button type="button" class="tooltip-close" aria-label="关闭">✕</button>' + getTooltipContent(refs);
+  tooltip.querySelector('.tooltip-close').addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    hideTooltip();
+  });
   tooltip.style.display = 'block';
+  tooltip.classList.toggle('sticky', tooltipPinned);
   moveTooltip(e);
 }
 
 function moveTooltip(e) {
-  const x = e.clientX + 15;
-  const y = e.clientY + 15;
   const rect = tooltip.getBoundingClientRect();
   const winW = window.innerWidth;
   const winH = window.innerHeight;
-  let finalX = x;
-  let finalY = y;
-  if (finalX + rect.width > winW) finalX = e.clientX - rect.width - 10;
-  if (finalY + rect.height > winH) finalY = e.clientY - rect.height - 10;
+  let finalX = e.clientX + 15;
+  let finalY = e.clientY + 15;
+  if (finalX + rect.width > winW - 8) finalX = e.clientX - rect.width - 10;
+  if (finalY + rect.height > winH - 8) finalY = e.clientY - rect.height - 10;
+  // 视口边界约束，保证不超出屏幕边缘
+  finalX = Math.max(8, Math.min(finalX, winW - rect.width - 8));
+  finalY = Math.max(8, Math.min(finalY, winH - rect.height - 8));
   tooltip.style.left = finalX + 'px';
   tooltip.style.top = finalY + 'px';
 }
 
 function hideTooltip() {
   tooltip.style.display = 'none';
+  tooltip.classList.remove('sticky');
+  tooltipPinned = false;
+  tooltipKey = null;
 }
 
 function setSeason(season) {
@@ -819,7 +954,8 @@ function renderTable() {
 function updatePageInfo() {
   const leagueInfo = allData[currentLeague];
   if (!leagueInfo) return;
-  document.getElementById('page-title').textContent = leagueInfo.cn + ' · 百家乐路单';
+  document.getElementById('page-title').textContent = leagueInfo.cn;
+  document.title = leagueInfo.cn + ' · 赛果路图';
   document.getElementById('footer').textContent =
     '数据来源：football-data.co.uk · 五大联赛 2014-2026 · ' + leagueInfo.cn + ' 共 ' + leagueInfo.matches.length + ' 场比赛';
 }
