@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>五大联赛 · 赛果路图</title>
+<title>全球27国联赛 · 赛果路图</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
@@ -132,6 +132,106 @@
     background: #0c1a15;
     color: var(--txt);
   }
+  /* ===== 联赛选择器 ===== */
+  .league-btn {
+    text-align: left;
+    min-width: 190px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .league-btn .lb-en { color: var(--muted); font-size: 12px; margin-left: 4px; }
+  .league-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 10, 8, 0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .league-overlay.open { display: flex; }
+  .league-panel {
+    width: min(780px, 100%);
+    max-height: min(84vh, 720px);
+    background: linear-gradient(180deg, #10231c, #0a1712);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+    animation: riseIn 0.3s ease both;
+  }
+  .league-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: 15px;
+  }
+  .league-panel-close {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    background: rgba(212, 175, 55, 0.12);
+    color: var(--gold-bright);
+    font-size: 13px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .league-panel-body {
+    overflow-y: auto;
+    padding: 8px 16px 18px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .league-group-title {
+    color: var(--gold);
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin: 14px 4px 8px;
+  }
+  .league-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 8px;
+  }
+  .league-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border: 1px solid rgba(212, 175, 55, 0.16);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .league-item:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.08); }
+  .league-item.active {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.14);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.22);
+  }
+  .league-item .lflag { font-size: 20px; line-height: 1; }
+  .league-item .ltext { display: flex; flex-direction: column; min-width: 0; }
+  .league-item .lcn { font-size: 14px; font-weight: 600; white-space: nowrap; }
+  .league-item .len {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .league-item .lcount { margin-left: auto; font-size: 11px; color: var(--muted); white-space: nowrap; }
   .export-btn {
     padding: 9px 16px;
     border: 1px solid rgba(212, 175, 55, 0.35);
@@ -514,6 +614,11 @@
     .stat-number { font-size: 26px; }
     .legend { gap: 14px; padding: 8px 16px; }
     .legend-item { font-size: 12px; }
+    /* 手机端联赛选择器：全屏弹层 */
+    .league-overlay { padding: 0; align-items: stretch; justify-content: stretch; }
+    .league-panel { width: 100%; max-height: none; height: 100%; border-radius: 0; border: none; }
+    .league-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    .league-btn { width: 100%; min-width: 0; }
     .road-wrapper { padding: 10px; }
     /* 手机端 tooltip：显示 ✕ 关闭按钮并留出位置，宽度不超出屏幕 */
     .tooltip { max-width: calc(100vw - 24px); padding-right: 36px; }
@@ -534,18 +639,12 @@
 </head>
 <body>
 <div class="container">
-  <h1 id="page-title">五大联赛</h1>
-  <div class="subtitle" id="subtitle">选择赛事、赛季和显示模式 · v3.0</div>
+  <h1 id="page-title">全球 27 国联赛</h1>
+  <div class="subtitle" id="subtitle">27 国 38 项赛事 · 赛果大路图 · v4.0</div>
 
   <div class="controls">
-    <label for="league-select" style="color:#778da9;font-size:14px;">选择赛事：</label>
-    <select class="year-select" id="league-select" onchange="setLeague(this.value)">
-      <option value="E0">英超</option>
-      <option value="SP1">西甲</option>
-      <option value="D1">德甲</option>
-      <option value="I1">意甲</option>
-      <option value="F1">法甲</option>
-    </select>
+    <label for="league-btn" style="color:#778da9;font-size:14px;">选择赛事：</label>
+    <button type="button" class="year-select league-btn" id="league-btn" onclick="openLeaguePanel()">加载中...</button>
 
     <span id="season-wrapper">
       <label for="season-select" style="color:#778da9;font-size:14px;">选择赛季：</label>
@@ -581,30 +680,49 @@
     </table>
   </div>
 
-  <div class="subtitle" id="api-status" style="font-size:12px;color:#4dd0a8;min-height:18px;margin-top:18px;">正在加载五大联赛历史数据...</div>
+  <div class="subtitle" id="api-status" style="font-size:12px;color:#4dd0a8;min-height:18px;margin-top:18px;">正在加载联赛目录...</div>
 
-  <div class="footer" id="footer">数据来源：football-data.co.uk · 五大联赛 2014-2026</div>
+  <div class="footer" id="footer">数据来源：football-data.co.uk · 全球 27 国联赛 2014 起</div>
+</div>
+
+<!-- 联赛选择器弹层 -->
+<div class="league-overlay" id="league-overlay" onclick="if(event.target===this)closeLeaguePanel()">
+  <div class="league-panel" role="dialog" aria-label="选择联赛">
+    <div class="league-panel-head">
+      <span>选择联赛 · 27 国 38 项赛事</span>
+      <button type="button" class="league-panel-close" onclick="closeLeaguePanel()" aria-label="关闭">✕</button>
+    </div>
+    <div class="league-panel-body" id="league-panel-body"></div>
+  </div>
 </div>
 
 <div class="tooltip" id="tooltip"></div>
 
 <script>
-// 五大联赛数据（启动时从 matches.js 加载，再由 football_latest.js 合并增量）
-const allData = {};
+// 联赛数据按需懒加载：leagues.js（目录）启动加载，data/{code}.js 选中时加载，
+// football_latest.js（全部联赛当前赛季增量）按联赛码暂存，联赛数据加载后合并。
+const allData = {};              // 已加载联赛缓存 {code: {code,name,cn,season_type,matches}}
+const latestByLeague = {};       // 增量数据按联赛码分组暂存
+let latestMeta = null;           // {count, updated_at}
+const leagueMetaMap = {};        // code -> manifest 条目
 
 let currentLeague = 'E0';
 let currentSeason = 'all';
+let leagueLoadToken = 0;         // 防止快速切换联赛时的异步竞态
 const resultLabels = {'B': '庄', 'P': '闲', 'T': '和'};
 
-// 赛季起始年 "2014" -> "2014-15" 显示格式
+// 赛季显示：跨年联赛 "2014" -> "2014-15"；自然年联赛 "2026" -> "2026"
 function fmtSeason(y) {
   const n = parseInt(y, 10);
   if (isNaN(n)) return y;
+  const meta = leagueMetaMap[currentLeague];
+  if (meta && meta.season_type === 'calendar') return String(n);
   return n + '-' + String((n + 1) % 100).padStart(2, '0');
 }
 
 function getCurrentMatches() {
-  return (allData[currentLeague] ? allData[currentLeague].matches : []).map((m, i) => ({...m, _idx: i, _league: currentLeague}));
+  if (!allData[currentLeague]) return [];
+  return allData[currentLeague].matches.map((m, i) => ({...m, _idx: i, _league: currentLeague}));
 }
 
 function getFilteredMatches() {
@@ -908,15 +1026,41 @@ function populateSeasonSelect() {
   });
 }
 
-function setLeague(league) {
+// 切换联赛：懒加载数据文件后渲染（带竞态保护）
+async function setLeague(league) {
+  closeLeaguePanel();
+  if (league === currentLeague && allData[league]) return;
+  const token = ++leagueLoadToken;
   currentLeague = league;
   currentSeason = 'all';
+  updateLeagueButton();
+
+  const statusEl = document.getElementById('api-status');
+  let merge = null;
+  try {
+    merge = await ensureLeagueLoaded(league);
+  } catch (err) {
+    if (token !== leagueLoadToken) return;
+    statusEl.textContent = '❌ 联赛数据加载失败（' + err.message + '）。请确认 data/' + league + '.js 存在。';
+    statusEl.style.color = '#ff6b6b';
+    return;
+  }
+  if (token !== leagueLoadToken) return;  // 加载期间又切换了其他联赛
 
   document.getElementById('season-select').value = 'all';
-
   populateSeasonSelect();
-
   updatePageInfo();
+
+  statusEl.style.color = '#4dd0a8';
+  let msg = leagueMetaMap[league].flag + ' ' + allData[league].cn + ' 共 ' + allData[league].matches.length + ' 场';
+  if (merge && (merge.added > 0 || merge.updated > 0)) {
+    msg += ' · 最新战绩新增 ' + merge.added + '、更新 ' + merge.updated;
+  }
+  if (latestMeta && latestMeta.updated_at) {
+    msg += ' · 更新时间：' + new Date(latestMeta.updated_at).toLocaleString('zh-CN');
+  }
+  statusEl.textContent = '✅ ' + msg;
+
   renderAll();
 }
 
@@ -957,7 +1101,7 @@ function updatePageInfo() {
   document.getElementById('page-title').textContent = leagueInfo.cn;
   document.title = leagueInfo.cn + ' · 赛果路图';
   document.getElementById('footer').textContent =
-    '数据来源：football-data.co.uk · 五大联赛 2014-2026 · ' + leagueInfo.cn + ' 共 ' + leagueInfo.matches.length + ' 场比赛';
+    '数据来源：football-data.co.uk · 全球 27 国联赛 2014 起 · ' + leagueInfo.cn + ' 共 ' + leagueInfo.matches.length + ' 场比赛';
 }
 
 function renderAll() {
@@ -977,88 +1121,137 @@ function loadScript(src) {
   });
 }
 
-// 启动时加载五大联赛基础数据（matches.js -> window.MATCHES_DATA）
-async function loadBaseData() {
-  const statusEl = document.getElementById('api-status');
-  await loadScript('matches.js');
-  const data = window.MATCHES_DATA;
-  if (!data || typeof data !== 'object') {
-    throw new Error('matches.js 中未找到 MATCHES_DATA');
+// ===== 联赛选择器弹层 =====
+function updateLeagueButton() {
+  const meta = leagueMetaMap[currentLeague];
+  const btn = document.getElementById('league-btn');
+  if (meta) {
+    btn.innerHTML = meta.flag + ' ' + meta.cn + ' <span class="lb-en">' + meta.name + '</span>';
   }
-  ['E0', 'SP1', 'D1', 'I1', 'F1'].forEach(k => {
-    if (data[k] && Array.isArray(data[k].matches)) {
-      allData[k] = data[k];
-    }
-  });
-  if (Object.keys(allData).length === 0) {
-    throw new Error('matches.js 数据为空或格式不正确');
-  }
-  statusEl.textContent = '正在检查本地最新战绩数据...';
 }
 
-// 加载 update_scores.py 生成的最新战绩（football_latest.js -> window.LATEST_DATA），并合并到现有数据中
+function buildLeaguePanel() {
+  const body = document.getElementById('league-panel-body');
+  body.innerHTML = '';
+  let lastGroup = null;
+  let grid = null;
+  (window.LEAGUES_MANIFEST || []).forEach(meta => {
+    leagueMetaMap[meta.code] = meta;
+    if (meta.group !== lastGroup) {
+      const h = document.createElement('div');
+      h.className = 'league-group-title';
+      h.textContent = meta.group;
+      body.appendChild(h);
+      grid = document.createElement('div');
+      grid.className = 'league-grid';
+      body.appendChild(grid);
+      lastGroup = meta.group;
+    }
+    const item = document.createElement('div');
+    item.className = 'league-item' + (meta.code === currentLeague ? ' active' : '');
+    item.dataset.code = meta.code;
+    item.innerHTML = '<span class="lflag">' + meta.flag + '</span>' +
+      '<span class="ltext"><span class="lcn">' + meta.cn + '</span>' +
+      '<span class="len">' + meta.country_cn + ' · ' + meta.name + '</span></span>' +
+      '<span class="lcount">' + (meta.matches > 0 ? meta.matches + ' 场' : '') + '</span>';
+    item.addEventListener('click', () => { setLeague(meta.code); });
+    grid.appendChild(item);
+  });
+}
+
+function openLeaguePanel() {
+  // 同步高亮当前联赛
+  document.querySelectorAll('.league-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.code === currentLeague);
+  });
+  document.getElementById('league-overlay').classList.add('open');
+}
+
+function closeLeaguePanel() {
+  document.getElementById('league-overlay').classList.remove('open');
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeLeaguePanel();
+});
+
+// ===== 数据加载 =====
+// 加载 update_scores.py 生成的最新战绩（football_latest.js -> window.LATEST_DATA），按联赛码暂存
 async function loadLatestData() {
-  const statusEl = document.getElementById('api-status');
   try {
     await loadScript('football_latest.js');
     const data = window.LATEST_DATA;
     if (!data || !Array.isArray(data.matches)) {
       throw new Error('数据格式不正确');
     }
-
-    let added = 0;
-    let updated = 0;
-
     data.matches.forEach(m => {
-      const league = m._league;
-      if (!allData[league]) return;
-
-      // 用 日期+主队+客队 作为唯一键去重
-      const key = `${m.date}|${m.team1}|${m.team2}`;
-      const existingIdx = allData[league].matches.findIndex(
-        ex => `${ex.date}|${ex.team1}|${ex.team2}` === key
-      );
-
-      if (existingIdx >= 0) {
-        // 已存在则更新比分/结果
-        allData[league].matches[existingIdx] = { ...allData[league].matches[existingIdx], ...m };
-        updated++;
-      } else {
-        // 不存在则追加
-        allData[league].matches.push(m);
-        added++;
-      }
+      if (!m._league) return;
+      (latestByLeague[m._league] = latestByLeague[m._league] || []).push(m);
     });
-
-    // 按日期排序
-    Object.keys(allData).forEach(k => {
-      allData[k].matches.sort((a, b) => new Date(a.date) - new Date(b.date));
-    });
-
-    const updatedTime = data.updated_at
-      ? new Date(data.updated_at).toLocaleString('zh-CN')
-      : '未知时间';
-    statusEl.textContent = `✅ 已加载最新战绩（${data.matches.length} 条，新增 ${added}，更新 ${updated}）· 更新时间：${updatedTime}`;
+    latestMeta = { count: data.matches.length, updated_at: data.updated_at || null };
   } catch (err) {
-    statusEl.textContent = 'ℹ️ 未检测到 football_latest.js，使用基础历史数据。运行 update_scores.py 可生成最新战绩。';
+    latestMeta = null;
     console.log('加载最新数据失败:', err.message);
   }
+}
+
+// 把暂存的增量数据合并进指定联赛（日期+主队+客队为唯一键去重），返回 {added, updated}
+function mergeLatestInto(league) {
+  const list = latestByLeague[league];
+  if (!list || !allData[league]) return { added: 0, updated: 0 };
+  const matches = allData[league].matches;
+  const idx = new Map();
+  matches.forEach((m, i) => idx.set(m.date + '|' + m.team1 + '|' + m.team2, i));
+
+  let added = 0, updated = 0;
+  list.forEach(m => {
+    const key = m.date + '|' + m.team1 + '|' + m.team2;
+    if (idx.has(key)) {
+      matches[idx.get(key)] = { ...matches[idx.get(key)], ...m };
+      updated++;
+    } else {
+      matches.push(m);
+      added++;
+    }
+  });
+  matches.sort((a, b) => new Date(a.date) - new Date(b.date));
+  return { added, updated };
+}
+
+// 懒加载单个联赛数据文件（data/{code}.js -> window.LEAGUE_DATA），内存缓存
+async function ensureLeagueLoaded(code) {
+  if (allData[code]) return { added: 0, updated: 0 };
+  const statusEl = document.getElementById('api-status');
+  const meta = leagueMetaMap[code];
+  statusEl.style.color = '#4dd0a8';
+  statusEl.textContent = '⏳ 正在加载 ' + (meta ? meta.cn : code) + ' 历史数据...';
+  await loadScript('data/' + code + '.js');
+  const d = window.LEAGUE_DATA;
+  if (!d || d.code !== code || !Array.isArray(d.matches)) {
+    throw new Error('data/' + code + '.js 数据格式不正确');
+  }
+  allData[code] = d;
+  return mergeLatestInto(code);
 }
 
 async function initApp() {
   const statusEl = document.getElementById('api-status');
   try {
-    await loadBaseData();
+    await loadScript('leagues.js');
+    if (!Array.isArray(window.LEAGUES_MANIFEST) || window.LEAGUES_MANIFEST.length === 0) {
+      throw new Error('leagues.js 中未找到 LEAGUES_MANIFEST');
+    }
+    buildLeaguePanel();
   } catch (err) {
-    statusEl.textContent = '❌ 无法加载 matches.js 基础数据（' + err.message + '）。请确认 matches.js 与本页面在同一目录。';
+    statusEl.textContent = '❌ 无法加载 leagues.js 联赛目录（' + err.message + '）。请先运行 fetch_history.py 生成数据文件。';
     statusEl.style.color = '#ff6b6b';
-    console.error('加载基础数据失败:', err);
+    console.error('加载联赛目录失败:', err);
     return;
   }
+  updateLeagueButton();
+  statusEl.textContent = '正在检查最新战绩数据...';
   await loadLatestData();
-  populateSeasonSelect();
-  updatePageInfo();
-  renderAll();
+  await setLeague(currentLeague);
 }
 
 initApp();
