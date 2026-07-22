@@ -452,16 +452,16 @@
   .tooltip .result-T { color: var(--tie); }
   .stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 14px;
-    margin-bottom: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
     animation: riseIn 0.5s ease 0.05s both;
   }
   .stat-card {
     position: relative;
     background: linear-gradient(160deg, rgba(21, 42, 35, 0.9), rgba(9, 20, 16, 0.92));
-    padding: 18px 15px 15px;
-    border-radius: 14px;
+    padding: 9px 10px 8px;
+    border-radius: 10px;
     text-align: center;
     border: 1px solid rgba(212, 175, 55, 0.15);
     box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -483,14 +483,14 @@
   }
   .stat-number {
     font-family: "Oswald", "Noto Sans SC", sans-serif;
-    font-size: 34px;
+    font-size: 22px;
     font-weight: 600;
     letter-spacing: 1px;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
   .stat-label {
     color: var(--muted);
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 1px;
   }
   .match-list {
@@ -609,11 +609,10 @@
       gap: 8px;
     }
     #season-wrapper > label { font-size: 13px; }
-    .stats { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .stat-card { padding: 14px 10px 12px; }
-    .stat-number { font-size: 26px; }
-    .legend { gap: 14px; padding: 8px 16px; }
-    .legend-item { font-size: 12px; }
+    .stats { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .stat-card { padding: 7px 4px 6px; }
+    .stat-number { font-size: 17px; }
+    .stat-label { font-size: 10px; letter-spacing: 0; }
     /* 手机端联赛选择器：全屏弹层 */
     .league-overlay { padding: 0; align-items: stretch; justify-content: stretch; }
     .league-panel { width: 100%; max-height: none; height: 100%; border-radius: 0; border: none; }
@@ -652,12 +651,6 @@
         <option value="all">全部赛季</option>
       </select>
     </span>
-  </div>
-
-  <div class="legend" id="legend">
-    <div class="legend-item"><div class="legend-circle banker"></div>庄（主队胜）</div>
-    <div class="legend-item"><div class="legend-circle player"></div>闲（客队胜）</div>
-    <div class="legend-item"><div class="tie-slash"></div>和（平局）— 斜杠叠加</div>
   </div>
 
   <div class="stats">
@@ -1075,7 +1068,8 @@ function renderStats() {
 }
 
 function renderTable() {
-  const filtered = getFilteredMatches();
+  // 最近的比赛排在最上面
+  const filtered = getFilteredMatches().slice().reverse();
   const tbody = document.getElementById('match-table-body');
   tbody.innerHTML = '';
   let lastGroup = '';
