@@ -639,7 +639,6 @@
 <body>
 <div class="container">
   <h1 id="page-title">全球 27 国联赛</h1>
-  <div class="subtitle" id="subtitle">27 国 38 项赛事 · 赛果大路图 · v4.0</div>
 
   <div class="controls">
     <label for="league-btn" style="color:#778da9;font-size:14px;">选择赛事：</label>
@@ -676,6 +675,7 @@
   <div class="subtitle" id="api-status" style="font-size:12px;color:#4dd0a8;min-height:18px;margin-top:18px;">正在加载联赛目录...</div>
 
   <div class="footer" id="footer">数据来源：football-data.co.uk · 全球 27 国联赛 2014 起</div>
+  <div class="footer" style="margin-top:8px;color:#c9a227;opacity:0.85;">数据仅供参考，不构成投资建议</div>
 </div>
 
 <!-- 联赛选择器弹层 -->
@@ -1011,12 +1011,17 @@ function populateSeasonSelect() {
   }
   if (!allData[currentLeague]) return;
   const years = [...new Set(allData[currentLeague].matches.map(m => m.season))].sort();
-  years.forEach(y => {
+  // 默认选中最新赛季
+  const latest = years[years.length - 1];
+  // 下拉列表新赛季排在前面
+  years.slice().reverse().forEach(y => {
     const opt = document.createElement('option');
     opt.value = y;
     opt.textContent = fmtSeason(y) + ' 赛季';
     select.appendChild(opt);
   });
+  currentSeason = latest;
+  select.value = latest;
 }
 
 // 切换联赛：懒加载数据文件后渲染（带竞态保护）
@@ -1040,7 +1045,6 @@ async function setLeague(league) {
   }
   if (token !== leagueLoadToken) return;  // 加载期间又切换了其他联赛
 
-  document.getElementById('season-select').value = 'all';
   populateSeasonSelect();
   updatePageInfo();
 
