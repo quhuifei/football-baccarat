@@ -268,8 +268,8 @@
     <!-- ============ 登录 ============ -->
     <div id="pane-login" class="pane">
       <div class="field">
-        <label for="l-email">邮箱</label>
-        <input id="l-email" type="email" placeholder="you@example.com" autocomplete="email">
+        <label for="l-email">邮箱 / 用户名</label>
+        <input id="l-email" type="text" placeholder="邮箱或用户名" autocomplete="username">
       </div>
       <div class="field">
         <label for="l-pwd">密码</label>
@@ -471,7 +471,7 @@
   function doLogin() {
     var email = $('l-email').value.trim();
     var pwd = $('l-pwd').value;
-    if (!validEmail(email)) { say('请输入正确的邮箱地址'); $('l-email').focus(); return; }
+    if (!validEmail(email) && !/^[a-zA-Z0-9_]{3,32}$/.test(email)) { say('请输入正确的邮箱或用户名'); $('l-email').focus(); return; }
     if (!pwd) { say('请输入密码'); $('l-pwd').focus(); return; }
     var btn = $('l-btn');
     setLoading(btn, true, '正在登录');
