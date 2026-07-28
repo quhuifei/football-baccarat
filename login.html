@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>登录 · 赛先知足球</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Oswald:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #d4af37;
+    --gold-bright: #f0d57a;
+    --gold-line: rgba(212, 175, 55, 0.25);
+    --txt: #e9e7de;
+    --muted: #8fa39b;
+    --panel: rgba(15, 32, 27, 0.85);
+    --err: #ff8585;
+    --ok: #3fd3b6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--txt);
+    background:
+      radial-gradient(1100px 550px at 50% -8%, rgba(212, 175, 55, 0.08), transparent 62%),
+      radial-gradient(900px 520px at 88% 8%, rgba(42, 157, 143, 0.09), transparent 60%),
+      radial-gradient(1000px 700px at 8% 92%, rgba(24, 68, 110, 0.22), transparent 60%),
+      linear-gradient(180deg, #0b211a 0%, #071510 46%, #050d0a 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+  .card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--gold-line);
+    border-radius: 18px;
+    padding: 34px 30px 28px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  }
+  .logo {
+    font-family: Oswald, "Noto Sans SC", sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-align: center;
+  }
+  .slogan {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin: 8px 0 22px;
+  }
+  /* Tabs */
+  .tabs {
+    display: flex;
+    background: rgba(5, 13, 10, 0.6);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 22px;
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 9px 0;
+    font-size: 14px;
+    color: var(--muted);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .2s;
+    user-select: none;
+  }
+  .tab.active {
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--gold);
+    font-weight: 700;
+  }
+  /* Steps bar */
+  .steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 22px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .steps .dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .steps .dot.on {
+    background: var(--gold);
+    color: #071510;
+    font-weight: 700;
+    border-color: var(--gold);
+  }
+  .steps .bar { width: 26px; height: 1px; background: rgba(212, 175, 55, 0.3); }
+  .steps .lbl { white-space: nowrap; }
+  .steps .lbl.on { color: var(--gold-bright); }
+
+  label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .field { margin-bottom: 16px; }
+  .row { display: flex; gap: 10px; }
+  .input-wrap { position: relative; width: 100%; }
+  input {
+    width: 100%;
+    background: rgba(5, 13, 10, 0.7);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 10px;
+    color: var(--txt);
+    font-size: 16px;
+    padding: 13px 14px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    font-family: inherit;
+  }
+  input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+  }
+  input::placeholder { color: #54665f; }
+  input.code-input {
+    font-size: 26px;
+    letter-spacing: 9px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--gold-bright);
+  }
+  .eye {
+    position: absolute;
+    right: 10px; top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 15px;
+    padding: 6px;
+    user-select: none;
+  }
+  .eye:hover { color: var(--gold); }
+  .hint { font-size: 12px; color: #5c6f68; margin-top: 6px; line-height: 1.5; }
+  .btn {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    transition: opacity .2s, transform .1s, filter .2s;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-send {
+    flex-shrink: 0;
+    padding: 0 14px;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid var(--gold-line);
+    color: var(--gold);
+    font-size: 13px;
+    white-space: nowrap;
+    min-width: 108px;
+  }
+  .btn-send:not(:disabled):hover { background: rgba(212, 175, 55, 0.22); }
+  .btn-main {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    background: linear-gradient(135deg, var(--gold), #b8952e);
+    color: #071510;
+    letter-spacing: 3px;
+    margin-top: 6px;
+  }
+  .btn-main:not(:disabled):hover { filter: brightness(1.08); }
+  .btn-back {
+    width: 100%;
+    padding: 11px;
+    margin-top: 10px;
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .btn-back:hover { color: var(--gold); border-color: var(--gold-line); }
+  .remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    margin: 2px 0 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .remember input { width: auto; accent-color: var(--gold); cursor: pointer; }
+  .msg {
+    min-height: 20px;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+  .msg.err { color: var(--err); }
+  .msg.ok  { color: var(--ok); }
+  .pane-title {
+    font-size: 15px;
+    color: var(--txt);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .footer {
+    margin-top: 24px;
+    color: #5c6f68;
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.7;
+  }
+  .hidden { display: none !important; }
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(7,21,16,.3);
+    border-top-color: #071510;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    vertical-align: -2px;
+    margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (max-width: 420px) {
+    .card { padding: 28px 20px 24px; }
+    input.code-input { font-size: 22px; letter-spacing: 7px; }
+    .steps .lbl { display: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">赛先知足球</div>
+    <div class="slogan">登录后查看全球 27 国联赛路图</div>
+
+    <div class="tabs">
+      <div class="tab active" data-pane="login">登录</div>
+      <div class="tab" data-pane="register">注册</div>
+      <div class="tab" data-pane="reset">忘记密码</div>
+    </div>
+
+    <div id="msg" class="msg"></div>
+
+    <!-- ============ 登录 ============ -->
+    <div id="pane-login" class="pane">
+      <div class="field">
+        <label for="l-email">邮箱</label>
+        <input id="l-email" type="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="l-pwd">密码</label>
+        <div class="input-wrap">
+          <input id="l-pwd" type="password" placeholder="请输入密码" autocomplete="current-password">
+          <span class="eye" data-for="l-pwd">👁</span>
+        </div>
+      </div>
+      <label class="remember">
+        <input id="l-remember" type="checkbox" checked> 记住我 30 天（不勾选则关闭浏览器后需重新登录）
+      </label>
+      <button id="l-btn" class="btn btn-main">登 录</button>
+    </div>
+
+    <!-- ============ 注册（三步） ============ -->
+    <div id="pane-register" class="pane hidden">
+      <div class="steps" id="r-steps">
+        <span class="dot on">1</span><span class="lbl on">验证邮箱</span>
+        <span class="bar"></span>
+        <span class="dot">2</span><span class="lbl">设置密码</span>
+        <span class="bar"></span>
+        <span class="dot">3</span><span class="lbl">绑定手机</span>
+      </div>
+
+      <!-- 第 1 步：邮箱 + 验证码 -->
+      <div id="r-step1">
+        <div class="field">
+          <label for="r-email">邮箱</label>
+          <input id="r-email" type="email" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="r-code">验证码</label>
+          <div class="row">
+            <input id="r-code" class="code-input" type="text" inputmode="numeric" maxlength="6" placeholder="——————">
+            <button id="r-send" class="btn btn-send">发送验证码</button>
+          </div>
+        </div>
+        <button id="r-next1" class="btn btn-main">下一步</button>
+      </div>
+
+      <!-- 第 2 步：设置密码 -->
+      <div id="r-step2" class="hidden">
+        <div class="field">
+          <label for="r-pwd">设置密码</label>
+          <div class="input-wrap">
+            <input id="r-pwd" type="password" placeholder="至少 8 位，含字母和数字" autocomplete="new-password">
+            <span class="eye" data-for="r-pwd">👁</span>
+          </div>
+          <div class="hint">密码要求：不少于 8 位，必须同时包含字母和数字。</div>
+        </div>
+        <div class="field">
+          <label for="r-pwd2">确认密码</label>
+          <div class="input-wrap">
+            <input id="r-pwd2" type="password" placeholder="再次输入密码" autocomplete="new-password">
+            <span class="eye" data-for="r-pwd2">👁</span>
+          </div>
+        </div>
+        <button id="r-next2" class="btn btn-main">下一步</button>
+        <button id="r-back2" class="btn btn-back">上一步</button>
+      </div>
+
+      <!-- 第 3 步：绑定手机 -->
+      <div id="r-step3" class="hidden">
+        <div class="field">
+          <label for="r-phone">手机号</label>
+          <input id="r-phone" type="tel" inputmode="numeric" maxlength="11" placeholder="请输入 11 位手机号">
+          <div class="hint">仅用于账号安全留存，不会发送短信验证。</div>
+        </div>
+        <button id="r-submit" class="btn btn-main">完成注册</button>
+        <button id="r-back3" class="btn btn-back">上一步</button>
+      </div>
+    </div>
+
+    <!-- ============ 忘记密码 ============ -->
+    <div id="pane-reset" class="pane hidden">
+      <div class="pane-title">通过邮箱验证码重置密码</div>
+      <div class="field">
+        <label for="f-email">邮箱</label>
+        <input id="f-email" type="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="f-code">验证码</label>
+        <div class="row">
+          <input id="f-code" class="code-input" type="text" inputmode="numeric" maxlength="6" placeholder="——————">
+          <button id="f-send" class="btn btn-send">发送验证码</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-pwd">新密码</label>
+        <div class="input-wrap">
+          <input id="f-pwd" type="password" placeholder="至少 8 位，含字母和数字" autocomplete="new-password">
+          <span class="eye" data-for="f-pwd">👁</span>
+        </div>
+      </div>
+      <button id="f-btn" class="btn btn-main">重置并登录</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    登录即表示同意本站使用条款<br>
+    数据仅供参考，不构成投资建议
+  </div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var msg = $('msg');
+
+  function say(text, ok) {
+    msg.textContent = text || '';
+    msg.className = 'msg ' + (text ? (ok ? 'ok' : 'err') : '');
+  }
+  function validEmail(v) { return /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(v); }
+  function validPwd(v) { return v.length >= 8 && /[A-Za-z]/.test(v) && /\d/.test(v); }
+  function validPhone(v) { return /^1\d{10}$/.test(v); }
+
+  function post(path, body) {
+    return fetch(path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (d) { return { st: r.status, d: d }; });
+    });
+  }
+  function setLoading(btn, loading, text) {
+    if (loading) {
+      btn.dataset.orig = btn.textContent;
+      btn.innerHTML = '<span class="spinner"></span>' + (text || '请稍候');
+      btn.disabled = true;
+    } else {
+      btn.textContent = btn.dataset.orig || btn.textContent;
+      btn.disabled = false;
+    }
+  }
+  function startCountdown(btn) {
+    var n = 60;
+    btn.disabled = true;
+    btn.textContent = n + ' 秒后重发';
+    var t = setInterval(function () {
+      n--;
+      if (n <= 0) { clearInterval(t); btn.disabled = false; btn.textContent = '重新发送'; }
+      else btn.textContent = n + ' 秒后重发';
+    }, 1000);
+  }
+  function sendCode(btn, emailEl, purpose, codeEl) {
+    var email = emailEl.value.trim();
+    if (!validEmail(email)) { say('请输入正确的邮箱地址'); emailEl.focus(); return; }
+    setLoading(btn, true, '发送中');
+    say('');
+    post('/api/auth/send-code', { email: email, purpose: purpose }).then(function (res) {
+      setLoading(btn, false);
+      if (res.d && res.d.ok) {
+        say('验证码已发送，请查收邮箱（10 分钟内有效）', true);
+        startCountdown(btn);
+        if (codeEl) codeEl.focus();
+      } else {
+        say((res.d && res.d.error) || '发送失败，请稍后重试');
+      }
+    }).catch(function () { setLoading(btn, false); say('网络异常，请稍后重试'); });
+  }
+
+  /* ---------- Tab 切换 ---------- */
+  var tabs = document.querySelectorAll('.tab');
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      tabs.forEach(function (t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      ['login', 'register', 'reset'].forEach(function (p) {
+        $('pane-' + p).classList.toggle('hidden', p !== tab.dataset.pane);
+      });
+      say('');
+    });
+  });
+
+  /* ---------- 密码显示/隐藏 ---------- */
+  document.querySelectorAll('.eye').forEach(function (eye) {
+    eye.addEventListener('click', function () {
+      var input = $(eye.dataset.for);
+      var show = input.type === 'password';
+      input.type = show ? 'text' : 'password';
+      eye.style.color = show ? 'var(--gold)' : '';
+    });
+  });
+
+  /* ---------- 登录 ---------- */
+  function doLogin() {
+    var email = $('l-email').value.trim();
+    var pwd = $('l-pwd').value;
+    if (!validEmail(email)) { say('请输入正确的邮箱地址'); $('l-email').focus(); return; }
+    if (!pwd) { say('请输入密码'); $('l-pwd').focus(); return; }
+    var btn = $('l-btn');
+    setLoading(btn, true, '正在登录');
+    say('');
+    post('/api/auth/login', { email: email, password: pwd, remember: $('l-remember').checked })
+      .then(function (res) {
+        if (res.d && res.d.ok) {
+          say('登录成功，正在进入…', true);
+          window.location.href = '/';
+        } else {
+          setLoading(btn, false);
+          say((res.d && res.d.error) || '登录失败');
+        }
+      }).catch(function () { setLoading(btn, false); say('网络异常，请稍后重试'); });
+  }
+  $('l-btn').addEventListener('click', doLogin);
+  $('l-pwd').addEventListener('keydown', function (e) { if (e.key === 'Enter') doLogin(); });
+
+  /* ---------- 注册三步向导 ---------- */
+  var reg = { email: '', code: '', password: '' };
+  function gotoStep(n) {
+    [1, 2, 3].forEach(function (i) {
+      $('r-step' + i).classList.toggle('hidden', i !== n);
+    });
+    var dots = $('r-steps').querySelectorAll('.dot');
+    var lbls = $('r-steps').querySelectorAll('.lbl');
+    dots.forEach(function (d, i) { d.classList.toggle('on', i < n); });
+    lbls.forEach(function (l, i) { l.classList.toggle('on', i < n); });
+    say('');
+  }
+
+  $('r-send').addEventListener('click', function () {
+    sendCode($('r-send'), $('r-email'), 'register', $('r-code'));
+  });
+
+  $('r-next1').addEventListener('click', function () {
+    var email = $('r-email').value.trim();
+    var code = $('r-code').value.trim();
+    if (!validEmail(email)) { say('请输入正确的邮箱地址'); $('r-email').focus(); return; }
+    if (!/^\d{6}$/.test(code)) { say('请输入 6 位数字验证码'); $('r-code').focus(); return; }
+    reg.email = email; reg.code = code;
+    gotoStep(2);
+    $('r-pwd').focus();
+  });
+
+  $('r-back2').addEventListener('click', function () { gotoStep(1); });
+  $('r-next2').addEventListener('click', function () {
+    var p1 = $('r-pwd').value, p2 = $('r-pwd2').value;
+    if (!validPwd(p1)) { say('密码至少 8 位，且需同时包含字母和数字'); $('r-pwd').focus(); return; }
+    if (p1 !== p2) { say('两次输入的密码不一致'); $('r-pwd2').focus(); return; }
+    reg.password = p1;
+    gotoStep(3);
+    $('r-phone').focus();
+  });
+
+  $('r-back3').addEventListener('click', function () { gotoStep(2); });
+  $('r-submit').addEventListener('click', function () {
+    var phone = $('r-phone').value.trim();
+    if (!validPhone(phone)) { say('请输入正确的 11 位手机号'); $('r-phone').focus(); return; }
+    var btn = $('r-submit');
+    setLoading(btn, true, '注册中');
+    say('');
+    post('/api/auth/register', {
+      email: reg.email, code: reg.code, password: reg.password, phone: phone
+    }).then(function (res) {
+      if (res.d && res.d.ok) {
+        say('注册成功，正在进入…', true);
+        window.location.href = '/';
+      } else {
+        setLoading(btn, false);
+        var err = (res.d && res.d.error) || '注册失败';
+        say(err);
+        if (res.d && res.d.already) { /* 已注册：引导去登录 */ }
+        else if (/验证码/.test(err)) { gotoStep(1); }
+      }
+    }).catch(function () { setLoading(btn, false); say('网络异常，请稍后重试'); });
+  });
+
+  /* ---------- 忘记密码 ---------- */
+  $('f-send').addEventListener('click', function () {
+    sendCode($('f-send'), $('f-email'), 'reset', $('f-code'));
+  });
+  $('f-btn').addEventListener('click', function () {
+    var email = $('f-email').value.trim();
+    var code = $('f-code').value.trim();
+    var pwd = $('f-pwd').value;
+    if (!validEmail(email)) { say('请输入正确的邮箱地址'); $('f-email').focus(); return; }
+    if (!/^\d{6}$/.test(code)) { say('请输入 6 位数字验证码'); $('f-code').focus(); return; }
+    if (!validPwd(pwd)) { say('新密码至少 8 位，且需同时包含字母和数字'); $('f-pwd').focus(); return; }
+    var btn = $('f-btn');
+    setLoading(btn, true, '重置中');
+    say('');
+    post('/api/auth/reset-password', { email: email, code: code, password: pwd })
+      .then(function (res) {
+        if (res.d && res.d.ok) {
+          say('密码已重置，正在进入…', true);
+          window.location.href = '/';
+        } else {
+          setLoading(btn, false);
+          say((res.d && res.d.error) || '重置失败');
+        }
+      }).catch(function () { setLoading(btn, false); say('网络异常，请稍后重试'); });
+  });
+
+  /* 手机号只留数字 */
+  $('r-phone').addEventListener('input', function () {
+    this.value = this.value.replace(/\D/g, '').slice(0, 11);
+  });
+})();
+</script>
+</body>
+</html>
