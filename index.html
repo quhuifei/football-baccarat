@@ -717,6 +717,29 @@
 </style>
 </head>
 <body>
+<!-- 顶部公告横幅（管理后台发布，可关闭，同一公告只弹一次） -->
+<div id="ann-banner" class="hidden">
+  <span id="ann-banner-text"></span>
+  <button type="button" id="ann-banner-close" aria-label="关闭公告">✕</button>
+</div>
+<style>
+  #ann-banner {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 2300;
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    padding: 8px 44px 8px 16px;
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.16), rgba(212, 175, 55, 0.24), rgba(212, 175, 55, 0.16));
+    border-bottom: 1px solid rgba(212, 175, 55, 0.45);
+    backdrop-filter: blur(8px);
+    color: #f0d57a; font-size: 13px; line-height: 1.6; text-align: center;
+  }
+  #ann-banner.hidden { display: none; }
+  #ann-banner-text { white-space: pre-wrap; word-break: break-word; }
+  #ann-banner-close {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: #d4af37; font-size: 14px; cursor: pointer; opacity: .8;
+  }
+  #ann-banner-close:hover { opacity: 1; }
+</style>
 <!-- 品牌标 -->
 <a id="brand-mark" href="/">⚽ 首页</a>
 <!-- 账户角标：游客显示登录/注册，登录后显示头像+昵称+退出 -->
@@ -856,6 +879,8 @@
     </div>
     <div class="support-msgs" id="support-msgs"></div>
     <div class="support-input-row">
+      <input type="file" id="support-img-file" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none">
+      <button type="button" id="support-img-btn" title="发送图片（≤30MB）">📷</button>
       <input type="text" id="support-text" maxlength="500" placeholder="描述你的问题…">
       <button type="button" id="support-submit" onclick="submitSupport()">发送</button>
     </div>
@@ -898,27 +923,35 @@
   .support-empty { color: var(--muted); font-size: 12px; text-align: center; margin: auto; line-height: 1.8; }
   .sp-item { display: flex; }
   .sp-item.mine { justify-content: flex-end; }
+  /* 宽度约束加在包装层，避免 flex 把气泡压成窄条 */
+  .sp-item > div { max-width: 80%; min-width: 0; }
   .sp-bubble {
-    max-width: 80%; padding: 7px 11px; border-radius: 10px;
+    padding: 7px 11px; border-radius: 10px;
     font-size: 13px; line-height: 1.6; word-break: break-word; white-space: pre-wrap;
     background: rgba(5, 13, 10, 0.7); border: 1px solid rgba(212, 175, 55, 0.15);
   }
+  .sp-bubble img { display: block; max-width: 200px; max-height: 200px; border-radius: 8px; cursor: zoom-in; }
   .sp-item.mine .sp-bubble { background: rgba(212, 175, 55, 0.14); border-color: rgba(212, 175, 55, 0.4); }
   .sp-meta { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
-  .support-input-row { display: flex; gap: 8px; margin-top: 10px; flex-shrink: 0; }
-  .support-input-row input {
+  .support-input-row { display: flex; gap: 8px; margin-top: 10px; flex-shrink: 0; align-items: center; }
+  .support-input-row input[type="text"] {
     flex: 1; min-width: 0;
     background: rgba(5, 13, 10, 0.7); border: 1px solid rgba(212, 175, 55, 0.2);
     border-radius: 10px; color: var(--txt); font-size: 14px; padding: 9px 11px;
     outline: none; font-family: inherit;
   }
-  .support-input-row input:focus { border-color: var(--gold); }
+  .support-input-row input[type="text"]:focus { border-color: var(--gold); }
   .support-input-row button {
-    flex-shrink: 0; border: none; border-radius: 10px; cursor: pointer; padding: 0 14px;
+    flex-shrink: 0; border: none; border-radius: 10px; cursor: pointer; padding: 9px 14px;
     background: linear-gradient(135deg, var(--gold), #b8952e);
     color: #071510; font-weight: 700; font-size: 13px; font-family: inherit;
   }
   .support-input-row button:disabled { opacity: 0.45; cursor: not-allowed; }
+  #support-img-btn {
+    background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3);
+    color: #d4af37; font-size: 15px; padding: 8px 11px;
+  }
+  #support-img-btn:hover { background: rgba(212, 175, 55, 0.22); }
   @media (max-width: 640px) {
     #support-modal { right: 8px; left: 8px; }
     .support-card { width: 100%; }
@@ -1670,7 +1703,16 @@ function renderSupportMsg(m) {
   }
   const bubble = document.createElement('div');
   bubble.className = 'sp-bubble';
-  bubble.textContent = m.text;
+  if (m.kind === 'image') {
+    const img = document.createElement('img');
+    img.src = m.text;
+    img.loading = 'lazy';
+    img.alt = '图片';
+    img.addEventListener('click', () => openLightbox(m.text));
+    bubble.appendChild(img);
+  } else {
+    bubble.textContent = m.text;
+  }
   wrap.appendChild(bubble);
   item.appendChild(wrap);
   spMsgsEl.appendChild(item);
@@ -1735,6 +1777,65 @@ async function submitSupport() {
 document.getElementById('support-text').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') submitSupport();
 });
+
+// 客服发图（游客/用户均可，≤30MB，复用聊天室的 base64 模式）
+const supportImgBtn = document.getElementById('support-img-btn');
+const supportImgFile = document.getElementById('support-img-file');
+supportImgBtn.addEventListener('click', () => supportImgFile.click());
+supportImgFile.addEventListener('change', function () {
+  const file = this.files && this.files[0];
+  this.value = '';
+  if (!file) return;
+  if (file.size > 30 * 1024 * 1024) {
+    const input = document.getElementById('support-text');
+    input.placeholder = '图片过大（超过 30MB）';
+    setTimeout(() => { input.placeholder = '描述你的问题…'; }, 2000);
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = async () => {
+    supportImgBtn.disabled = true;
+    try {
+      const r = await fetch('/api/support/upload', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: reader.result })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (d && d.ok) {
+        if (spMsgsEl.querySelector('.support-empty')) spMsgsEl.innerHTML = '';
+        renderSupportMsg(d.message);
+        supportState.lastId = Math.max(supportState.lastId, d.message.id);
+        spMsgsEl.scrollTop = spMsgsEl.scrollHeight;
+      } else {
+        const input = document.getElementById('support-text');
+        input.placeholder = (d && d.error) || '图片发送失败';
+        setTimeout(() => { input.placeholder = '描述你的问题…'; }, 2000);
+      }
+    } catch (e) {} finally { supportImgBtn.disabled = false; }
+  };
+  reader.readAsDataURL(file);
+});
+
+// ===== 顶部公告横幅 =====
+(async function initAnnouncement() {
+  try {
+    const r = await fetch('/api/announcement', { credentials: 'same-origin' });
+    const d = r.ok ? await r.json() : null;
+    if (!d || !d.ok || !d.announcement) return;
+    const ann = d.announcement;
+    if (localStorage.getItem('ann_dismissed') === String(ann.id)) return;
+    const banner = document.getElementById('ann-banner');
+    document.getElementById('ann-banner-text').textContent = '📢 ' + ann.text;
+    banner.classList.remove('hidden');
+    document.body.style.paddingTop = banner.offsetHeight + 'px';
+    document.getElementById('ann-banner-close').addEventListener('click', () => {
+      banner.classList.add('hidden');
+      document.body.style.paddingTop = '';
+      localStorage.setItem('ann_dismissed', String(ann.id));
+    });
+  } catch (e) {}
+})();
 
 // 账户角标：显示当前登录邮箱，退出登录
 (async function initAccountChip() {

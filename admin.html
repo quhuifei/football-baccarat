@@ -46,10 +46,10 @@
   .topbar a:hover, .topbar button:hover { background: rgba(212, 175, 55, 0.22); }
   .wrap { max-width: 1100px; margin: 0 auto; }
   .tabs {
-    display: flex; gap: 8px; margin-bottom: 16px;
+    display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
   }
   .tab {
-    padding: 9px 22px; border-radius: 10px; cursor: pointer; user-select: none;
+    padding: 9px 18px; border-radius: 10px; cursor: pointer; user-select: none;
     font-size: 14px; color: var(--muted);
     background: rgba(5, 13, 10, 0.6); border: 1px solid rgba(212, 175, 55, 0.15);
   }
@@ -61,17 +61,17 @@
     border: 1px solid var(--gold-line);
     border-radius: 16px; padding: 20px;
   }
-  .msg { min-height: 20px; font-size: 13px; text-align: center; margin-bottom: 10px; }
+  .msg { min-height: 20px; font-size: 13px; text-align: center; margin-bottom: 10px; word-break: break-all; }
   .msg.err { color: var(--err); }
   .msg.ok { color: var(--ok); }
-  /* 用户管理 */
-  .users-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
-  .users-head h2 { font-size: 16px; color: var(--gold); letter-spacing: 2px; }
+  .pane-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+  .pane-head h2 { font-size: 16px; color: var(--gold); letter-spacing: 2px; }
   .btn-gold {
     background: linear-gradient(135deg, var(--gold), #b8952e); color: #071510;
     border: none; border-radius: 10px; padding: 9px 18px;
     font-weight: 700; font-size: 13px; cursor: pointer; font-family: inherit;
   }
+  .btn-gold:disabled { opacity: .45; cursor: not-allowed; }
   .table-wrap { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th, td { padding: 9px 10px; text-align: left; border-bottom: 1px solid rgba(212, 175, 55, 0.1); white-space: nowrap; }
@@ -82,13 +82,26 @@
   }
   td .role-tag.staff { background: rgba(63, 211, 182, 0.15); color: var(--ok); }
   td .role-tag.admin { background: rgba(212, 175, 55, 0.2); color: var(--gold); }
+  .flag-tag {
+    display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11px; margin-right: 4px;
+    background: rgba(255, 107, 107, 0.16); color: var(--err);
+  }
   .btn-mini {
-    padding: 5px 12px; font-size: 12px; border-radius: 8px; cursor: pointer;
+    padding: 5px 10px; font-size: 12px; border-radius: 8px; cursor: pointer; margin: 2px 2px;
     background: rgba(212, 175, 55, 0.12); border: 1px solid var(--gold-line);
     color: var(--gold); font-family: inherit;
   }
   .btn-mini:hover { background: rgba(212, 175, 55, 0.25); }
   .btn-mini:disabled { opacity: .4; cursor: not-allowed; }
+  .btn-mini.danger { color: var(--err); border-color: rgba(255, 133, 133, 0.35); background: rgba(255, 107, 107, 0.08); }
+  .btn-mini.danger:hover { background: rgba(255, 107, 107, 0.2); }
+  .search-row { display: flex; gap: 8px; align-items: center; }
+  .search-row input {
+    background: rgba(5, 13, 10, 0.7); border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 10px; color: var(--txt); font-size: 13px; padding: 8px 12px;
+    outline: none; font-family: inherit; width: 220px;
+  }
+  .search-row input:focus { border-color: var(--gold); }
   /* 客服工作台 */
   .support-grid { display: flex; gap: 14px; height: 560px; }
   .thread-list {
@@ -113,31 +126,110 @@
   .chat-empty { color: var(--muted); font-size: 13px; text-align: center; margin: auto; }
   .s-item { display: flex; }
   .s-item.mine { justify-content: flex-end; }
+  /* 关键：宽度约束加在消息包装层，否则 flex 会把气泡压成窄条逐字竖排 */
+  .s-item > div { max-width: 75%; min-width: 0; }
   .s-bubble {
-    max-width: 75%; padding: 8px 12px; border-radius: 10px;
+    padding: 8px 12px; border-radius: 10px;
     font-size: 13px; line-height: 1.6; word-break: break-word; white-space: pre-wrap;
     background: rgba(5, 13, 10, 0.7); border: 1px solid rgba(212, 175, 55, 0.15);
   }
   .s-item.mine .s-bubble { background: rgba(212, 175, 55, 0.14); border-color: rgba(212, 175, 55, 0.4); }
+  .s-bubble img { display: block; max-width: 240px; max-height: 240px; border-radius: 8px; cursor: zoom-in; }
   .s-meta { font-size: 11px; color: var(--muted); margin-bottom: 3px; }
-  .s-input-row { display: flex; gap: 8px; margin-top: 10px; }
-  .s-input-row input {
+  .s-input-row { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+  .s-input-row input[type="text"] {
     flex: 1; min-width: 0; background: rgba(5, 13, 10, 0.7);
     border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 10px;
     color: var(--txt); font-size: 14px; padding: 10px 12px; outline: none; font-family: inherit;
   }
-  .s-input-row input:focus { border-color: var(--gold); }
-  .s-input-row button {
-    border: none; border-radius: 10px; cursor: pointer; padding: 0 18px;
+  .s-input-row input[type="text"]:focus { border-color: var(--gold); }
+  .s-input-row .btn-send {
+    border: none; border-radius: 10px; cursor: pointer; padding: 10px 18px;
     background: linear-gradient(135deg, var(--gold), #b8952e);
     color: #071510; font-weight: 700; font-family: inherit;
   }
-  .s-input-row button:disabled { opacity: .45; cursor: not-allowed; }
+  .s-input-row .btn-send:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-img {
+    border: 1px solid var(--gold-line); border-radius: 10px; cursor: pointer;
+    background: rgba(212, 175, 55, 0.1); color: var(--gold);
+    font-size: 16px; padding: 8px 12px; font-family: inherit;
+  }
+  .btn-img:disabled { opacity: .45; cursor: not-allowed; }
+  /* 聊天室管理 */
+  .chat-admin-item {
+    display: flex; align-items: center; gap: 10px; padding: 9px 6px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.08); font-size: 13px;
+  }
+  .chat-admin-item .c-text { flex: 1; min-width: 0; word-break: break-word; white-space: pre-wrap; }
+  .chat-admin-item .c-text img { max-width: 160px; max-height: 120px; border-radius: 6px; display: block; }
+  .chat-admin-item .c-meta { color: var(--muted); font-size: 12px; white-space: nowrap; }
+  .pager { display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 12px; font-size: 13px; color: var(--muted); }
+  /* 敏感词 */
+  .word-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .word-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(5, 13, 10, 0.7); border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 999px; padding: 5px 12px; font-size: 13px;
+  }
+  .word-tag button {
+    background: none; border: none; color: var(--err); cursor: pointer; font-size: 13px; padding: 0 2px;
+  }
+  /* 统计 */
+  .stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .stat-card {
+    background: rgba(5, 13, 10, 0.6); border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 12px; padding: 14px;
+  }
+  .stat-card .s-num { font-size: 24px; font-weight: 700; color: var(--gold); font-family: Oswald, sans-serif; }
+  .stat-card .s-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .chart { display: flex; align-items: flex-end; gap: 3px; height: 120px; margin-top: 10px; }
+  .chart .bar {
+    flex: 1; min-width: 4px; background: linear-gradient(180deg, var(--gold), rgba(212, 175, 55, 0.25));
+    border-radius: 3px 3px 0 0; position: relative;
+  }
+  .chart .bar:hover::after {
+    content: attr(data-tip); position: absolute; bottom: 105%; left: 50%; transform: translateX(-50%);
+    background: #0e1f1a; border: 1px solid var(--gold-line); border-radius: 6px;
+    font-size: 11px; color: var(--txt); padding: 3px 8px; white-space: nowrap; z-index: 2;
+  }
+  .sub-h { font-size: 14px; color: var(--gold); margin: 18px 0 8px; font-weight: 700; }
+  .ua-list { font-size: 12px; color: var(--muted); line-height: 1.9; word-break: break-all; }
+  /* 数据更新 / 公告 */
+  .kv { font-size: 13px; line-height: 2.1; color: var(--txt); }
+  .kv b { color: var(--muted); font-weight: 500; display: inline-block; min-width: 96px; }
+  pre.out {
+    margin-top: 12px; background: rgba(5, 13, 10, 0.8); border: 1px solid rgba(212, 175, 55, 0.12);
+    border-radius: 10px; padding: 12px; font-size: 12px; color: var(--muted);
+    max-height: 220px; overflow: auto; white-space: pre-wrap; word-break: break-all;
+  }
+  textarea {
+    width: 100%; min-height: 90px; resize: vertical;
+    background: rgba(5, 13, 10, 0.7); border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 10px; color: var(--txt); font-size: 14px; padding: 10px 12px;
+    outline: none; font-family: inherit;
+  }
+  textarea:focus { border-color: var(--gold); }
+  .ann-item {
+    padding: 12px 14px; border: 1px solid rgba(212, 175, 55, 0.12); border-radius: 10px;
+    margin-top: 10px; font-size: 13px; line-height: 1.7;
+  }
+  .ann-item .a-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .ann-item .a-time { color: var(--muted); font-size: 12px; }
+  .ann-item .a-text { margin-top: 6px; white-space: pre-wrap; word-break: break-word; }
+  .ann-on {
+    display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11px;
+    background: rgba(63, 211, 182, 0.15); color: var(--ok);
+  }
+  .ann-off {
+    display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11px;
+    background: rgba(143, 163, 155, 0.15); color: var(--muted);
+  }
   .hidden { display: none !important; }
   @media (max-width: 760px) {
     .support-grid { flex-direction: column; height: auto; }
     .thread-list { width: 100%; max-height: 200px; }
     .chat-side { height: 420px; }
+    .search-row input { width: 140px; }
   }
 </style>
 </head>
@@ -152,22 +244,58 @@
   <div class="wrap">
     <div class="tabs">
       <div class="tab active" data-pane="users" id="tabUsers">用户管理</div>
+      <div class="tab" data-pane="chat" id="tabChat">聊天室管理</div>
+      <div class="tab" data-pane="words" id="tabWords">敏感词</div>
       <div class="tab" data-pane="support" id="tabSupport">客服工作台</div>
+      <div class="tab" data-pane="stats" id="tabStats">数据统计</div>
+      <div class="tab" data-pane="data" id="tabData">数据更新</div>
+      <div class="tab" data-pane="ann" id="tabAnn">公告</div>
     </div>
     <div id="msg" class="msg"></div>
 
     <!-- 用户管理 -->
     <div class="card" id="pane-users">
-      <div class="users-head">
+      <div class="pane-head">
         <h2>用户管理</h2>
-        <button class="btn-gold" onclick="window.location.href='/api/auth/admin/users.csv'">📥 导出 CSV</button>
+        <div class="search-row">
+          <input type="text" id="userQ" placeholder="搜索邮箱 / 手机号 / 昵称">
+          <button class="btn-mini" id="userSearchBtn">搜索</button>
+          <button class="btn-gold" onclick="window.location.href='/api/auth/admin/users.csv'">📥 导出 CSV</button>
+        </div>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>邮箱</th><th>昵称</th><th>用户 ID</th><th>手机号</th><th>角色</th><th>注册时间</th><th>最近登录</th><th>操作</th></tr></thead>
-          <tbody id="usersBody"><tr><td colspan="8" style="color:var(--muted)">加载中…</td></tr></tbody>
+          <thead><tr><th>邮箱</th><th>昵称</th><th>用户 ID</th><th>手机号</th><th>角色</th><th>状态</th><th>注册时间</th><th>最近登录</th><th>操作</th></tr></thead>
+          <tbody id="usersBody"><tr><td colspan="9" style="color:var(--muted)">加载中…</td></tr></tbody>
         </table>
       </div>
+    </div>
+
+    <!-- 聊天室管理 -->
+    <div class="card hidden" id="pane-chat">
+      <div class="pane-head">
+        <h2>聊天室管理</h2>
+        <span style="font-size:12px;color:var(--muted)" id="chatTotal"></span>
+      </div>
+      <div id="chatAdminList"><div class="chat-empty">加载中…</div></div>
+      <div class="pager">
+        <button class="btn-mini" id="chatPrev">← 上一页</button>
+        <span id="chatPageInfo">第 1 页</span>
+        <button class="btn-mini" id="chatNext">下一页 →</button>
+      </div>
+    </div>
+
+    <!-- 敏感词 -->
+    <div class="card hidden" id="pane-words">
+      <div class="pane-head">
+        <h2>敏感词库</h2>
+        <div class="search-row">
+          <input type="text" id="wordInput" maxlength="30" placeholder="新增敏感词（≤30 字）">
+          <button class="btn-gold" id="wordAddBtn">添加</button>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--muted)">聊天室发言命中敏感词会替换为 *，增删后立即生效。</div>
+      <div class="word-tags" id="wordList"><div class="chat-empty">加载中…</div></div>
     </div>
 
     <!-- 客服工作台 -->
@@ -178,11 +306,47 @@
           <div class="chat-title" id="chatTitle">选择左侧会话开始回复</div>
           <div class="chat-msgs" id="sMsgs"><div class="chat-empty">未选择会话</div></div>
           <div class="s-input-row">
+            <input type="file" id="sImgFile" accept="image/jpeg,image/png,image/webp,image/gif" class="hidden">
+            <button type="button" class="btn-img" id="sImgBtn" title="发送图片（≤30MB）" disabled>📷</button>
             <input type="text" id="sInput" maxlength="500" placeholder="输入回复…" disabled>
-            <button type="button" id="sSend" disabled>回复</button>
+            <button type="button" class="btn-send" id="sSend" disabled>回复</button>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- 数据统计 -->
+    <div class="card hidden" id="pane-stats">
+      <div class="pane-head">
+        <h2>数据统计</h2>
+        <button class="btn-mini" id="statsRefresh">刷新</button>
+      </div>
+      <div class="stat-cards" id="statCards"></div>
+      <div class="sub-h">近 30 天首页访问量（去爬虫）</div>
+      <div class="chart" id="visitChart"><div class="chat-empty">暂无数据</div></div>
+      <div class="sub-h">访问量 Top UA</div>
+      <div class="ua-list" id="uaList">—</div>
+    </div>
+
+    <!-- 数据更新 -->
+    <div class="card hidden" id="pane-data">
+      <div class="pane-head">
+        <h2>足球数据更新</h2>
+        <button class="btn-gold" id="dataUpdateBtn">立即更新</button>
+      </div>
+      <div class="kv" id="dataStatus">加载中…</div>
+      <pre class="out hidden" id="dataOut"></pre>
+    </div>
+
+    <!-- 公告 -->
+    <div class="card hidden" id="pane-ann">
+      <div class="pane-head"><h2>发布公告</h2></div>
+      <textarea id="annText" maxlength="500" placeholder="公告内容（≤500 字），发布后网站顶部出现金色横幅，新公告会自动下架旧公告"></textarea>
+      <div style="margin-top:10px;text-align:right">
+        <button class="btn-gold" id="annAddBtn">发布</button>
+      </div>
+      <div class="sub-h">历史公告</div>
+      <div id="annList"><div class="chat-empty">加载中…</div></div>
     </div>
   </div>
 
@@ -211,6 +375,9 @@
       return r.json().catch(function () { return {}; }).then(function (d) { return { st: r.status, d: d }; });
     });
   }
+  function errMsg(res, fallback) {
+    return (res && res.d && (res.d.error || res.d.detail)) || fallback;
+  }
 
   /* ---------- 访问控制 ---------- */
   fetch('/api/auth/me', { credentials: 'same-origin' }).then(function (r) {
@@ -223,10 +390,13 @@
     $('whoAmI').textContent = (d.nickname || d.email) + (d.is_admin ? '（管理员）' : '（客服）');
     if (!d.is_admin) {
       // staff 只看客服工作台
-      $('tabUsers').classList.add('hidden');
+      ['tabUsers', 'tabChat', 'tabWords', 'tabStats', 'tabData', 'tabAnn'].forEach(function (id) {
+        $(id).classList.add('hidden');
+      });
       switchPane('support');
+    } else {
+      loadUsers();
     }
-    loadUsers();
     startSupportPoll();
   });
 
@@ -237,56 +407,238 @@
   });
 
   /* ---------- Tab ---------- */
+  var PANES = ['users', 'chat', 'words', 'support', 'stats', 'data', 'ann'];
   function switchPane(name) {
     document.querySelectorAll('.tab').forEach(function (t) {
       t.classList.toggle('active', t.dataset.pane === name);
     });
-    $('pane-users').classList.toggle('hidden', name !== 'users');
-    $('pane-support').classList.toggle('hidden', name !== 'support');
+    PANES.forEach(function (p) {
+      $('pane-' + p).classList.toggle('hidden', p !== name);
+    });
     say('');
+    if (name === 'chat') loadChatAdmin();
+    if (name === 'words') loadWords();
+    if (name === 'stats') loadStats();
+    if (name === 'data') loadDataStatus();
+    if (name === 'ann') loadAnns();
   }
   document.querySelectorAll('.tab').forEach(function (t) {
     t.addEventListener('click', function () { switchPane(t.dataset.pane); });
   });
 
   /* ---------- 用户管理 ---------- */
-  function loadUsers() {
+  function loadUsers(q) {
     if (!me || !me.is_admin) return;
-    api('/api/auth/admin/users').then(function (res) {
+    api('/api/auth/admin/users-search' + (q ? '?q=' + encodeURIComponent(q) : '')).then(function (res) {
       if (!res.d || !res.d.ok) {
-        $('usersBody').innerHTML = '<tr><td colspan="8" style="color:var(--err)">加载失败</td></tr>';
+        $('usersBody').innerHTML = '<tr><td colspan="9" style="color:var(--err)">' + errMsg(res, '加载失败') + '</td></tr>';
         return;
       }
       var body = $('usersBody');
       body.innerHTML = '';
       res.d.users.forEach(function (u) {
         var tr = document.createElement('tr');
-        var roleTag = u.role === 'staff'
-          ? '<span class="role-tag staff">客服</span>'
-          : '<span class="role-tag">用户</span>';
-        var btn = u.role === 'staff'
-          ? '<button class="btn-mini" data-act="user">取消客服</button>'
-          : '<button class="btn-mini" data-act="staff">设为客服</button>';
-        tr.innerHTML = '<td></td><td></td><td></td><td></td><td>' + roleTag + '</td><td>' + fmt(u.created_at) + '</td><td>' + fmt(u.last_login) + '</td><td>' + btn + '</td>';
+        var roleTag = u.role === 'admin'
+          ? '<span class="role-tag admin">管理员</span>'
+          : (u.role === 'staff' ? '<span class="role-tag staff">客服</span>' : '<span class="role-tag">用户</span>');
+        var flags = (u.banned ? '<span class="flag-tag">已禁言</span>' : '') +
+                    (u.disabled ? '<span class="flag-tag">已封号</span>' : '');
+        tr.innerHTML =
+          '<td></td><td></td><td></td><td></td>' +
+          '<td>' + roleTag + '</td>' +
+          '<td>' + (flags || '<span style="color:var(--muted)">正常</span>') + '</td>' +
+          '<td>' + fmt(u.created_at) + '</td><td>' + fmt(u.last_login) + '</td>' +
+          '<td class="ops"></td>';
         tr.children[0].textContent = u.email;
         tr.children[1].textContent = u.nickname || '—';
         tr.children[2].textContent = u.public_id || '—';
         tr.children[3].textContent = u.phone || '—';
-        var b = tr.querySelector('button');
-        b.addEventListener('click', function () {
-          b.disabled = true;
-          api('/api/auth/admin/set-role', { email: u.email, role: b.dataset.act }).then(function (r2) {
-            if (r2.d && r2.d.ok) { say('已更新：' + u.email, true); loadUsers(); }
-            else { say((r2.d && r2.d.error) || '操作失败'); b.disabled = false; }
+        var ops = tr.querySelector('.ops');
+        function addBtn(label, danger, fn) {
+          var b = document.createElement('button');
+          b.className = 'btn-mini' + (danger ? ' danger' : '');
+          b.textContent = label;
+          b.addEventListener('click', function () { fn(b); });
+          ops.appendChild(b);
+        }
+        if (u.role !== 'admin') {
+          addBtn(u.role === 'staff' ? '取消客服' : '设为客服', false, function (b) {
+            b.disabled = true;
+            api('/api/auth/admin/set-role', { email: u.email, role: u.role === 'staff' ? 'user' : 'staff' }).then(function (r2) {
+              if (r2.d && r2.d.ok) { say('已更新：' + u.email, true); loadUsers(q); }
+              else { say(errMsg(r2, '操作失败')); b.disabled = false; }
+            });
           });
-        });
+          addBtn(u.banned ? '解除禁言' : '禁言', !u.banned, function (b) {
+            b.disabled = true;
+            api('/api/auth/admin/ban', { email: u.email, banned: !u.banned }).then(function (r2) {
+              if (r2.d && r2.d.ok) { say((u.banned ? '已解禁：' : '已禁言：') + u.email, true); loadUsers(q); }
+              else { say(errMsg(r2, '操作失败')); b.disabled = false; }
+            });
+          });
+          addBtn(u.disabled ? '解封' : '封号', !u.disabled, function (b) {
+            if (!u.disabled && !confirm('确定封号 ' + u.email + '？该用户将立即掉线且无法登录。')) return;
+            b.disabled = true;
+            api('/api/auth/admin/disable', { email: u.email, disabled: !u.disabled }).then(function (r2) {
+              if (r2.d && r2.d.ok) { say((u.disabled ? '已解封：' : '已封号：') + u.email, true); loadUsers(q); }
+              else { say(errMsg(r2, '操作失败')); b.disabled = false; }
+            });
+          });
+          addBtn('重置密码', false, function (b) {
+            if (!confirm('确定重置 ' + u.email + ' 的密码？旧密码与所有登录态立即失效。')) return;
+            b.disabled = true;
+            api('/api/auth/admin/reset-user-password', { email: u.email }).then(function (r2) {
+              b.disabled = false;
+              if (r2.d && r2.d.ok) {
+                alert('新密码（仅显示这一次，请立即转交用户）：\n\n' + r2.d.password);
+                say('已重置：' + u.email, true);
+              } else {
+                say(errMsg(r2, '操作失败'));
+              }
+            });
+          });
+          addBtn('注销', true, function (b) {
+            if (!confirm('确定永久注销 ' + u.email + '？账号、登录态、客服会话都会被删除，不可恢复！')) return;
+            b.disabled = true;
+            api('/api/auth/admin/delete-user', { email: u.email }).then(function (r2) {
+              if (r2.d && r2.d.ok) { say('已注销：' + u.email, true); loadUsers(q); }
+              else { say(errMsg(r2, '操作失败')); b.disabled = false; }
+            });
+          });
+        }
         body.appendChild(tr);
       });
       if (!res.d.users.length) {
-        body.innerHTML = '<tr><td colspan="8" style="color:var(--muted)">暂无用户</td></tr>';
+        body.innerHTML = '<tr><td colspan="9" style="color:var(--muted)">' + (q ? '没有匹配的用户' : '暂无用户') + '</td></tr>';
       }
     });
   }
+  $('userSearchBtn').addEventListener('click', function () { loadUsers($('userQ').value.trim()); });
+  $('userQ').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') loadUsers($('userQ').value.trim());
+  });
+
+  /* ---------- 聊天室管理 ---------- */
+  var chatPage = 1, chatSize = 20, chatTotal = 0;
+
+  function loadChatAdmin() {
+    if (!me || !me.is_admin) return;
+    api('/api/auth/admin/chat?page=' + chatPage + '&size=' + chatSize).then(function (res) {
+      var list = $('chatAdminList');
+      if (!res.d || !res.d.ok) {
+        list.innerHTML = '<div class="chat-empty" style="color:var(--err)">' + errMsg(res, '加载失败') + '</div>';
+        return;
+      }
+      chatTotal = res.d.total;
+      $('chatTotal').textContent = '共 ' + chatTotal + ' 条';
+      var pages = Math.max(1, Math.ceil(chatTotal / chatSize));
+      $('chatPageInfo').textContent = '第 ' + chatPage + ' / ' + pages + ' 页';
+      $('chatPrev').disabled = chatPage <= 1;
+      $('chatNext').disabled = chatPage >= pages;
+      list.innerHTML = '';
+      if (!res.d.messages.length) {
+        list.innerHTML = '<div class="chat-empty">暂无消息</div>';
+        return;
+      }
+      res.d.messages.forEach(function (m) {
+        var row = document.createElement('div');
+        row.className = 'chat-admin-item';
+        var meta = document.createElement('div');
+        meta.className = 'c-meta';
+        meta.textContent = fmt(m.created_at);
+        var text = document.createElement('div');
+        text.className = 'c-text';
+        var who = document.createElement('div');
+        who.style.cssText = 'font-size:12px;color:var(--muted);margin-bottom:2px';
+        who.textContent = (m.nickname || '用户') + '（' + m.email + '）';
+        text.appendChild(who);
+        if (m.kind === 'image') {
+          var img = document.createElement('img');
+          img.src = m.text;
+          img.loading = 'lazy';
+          text.appendChild(img);
+        } else {
+          var body = document.createElement('div');
+          body.textContent = m.text;
+          text.appendChild(body);
+        }
+        var banBtn = document.createElement('button');
+        banBtn.className = 'btn-mini';
+        banBtn.textContent = '禁言';
+        banBtn.title = '禁言 ' + m.email;
+        banBtn.addEventListener('click', function () {
+          if (!confirm('确定禁言 ' + m.email + '？（聊天室不可发言，可在用户管理解除）')) return;
+          banBtn.disabled = true;
+          api('/api/auth/admin/ban', { email: m.email, banned: true }).then(function (r2) {
+            banBtn.disabled = false;
+            if (r2.d && r2.d.ok) say('已禁言：' + m.email, true);
+            else say(errMsg(r2, '操作失败'));
+          });
+        });
+        var delBtn = document.createElement('button');
+        delBtn.className = 'btn-mini danger';
+        delBtn.textContent = '删除';
+        delBtn.addEventListener('click', function () {
+          delBtn.disabled = true;
+          api('/api/auth/admin/chat/delete', { id: m.id }).then(function (r2) {
+            if (r2.d && r2.d.ok) { say('已删除消息 #' + m.id, true); loadChatAdmin(); }
+            else { say(errMsg(r2, '删除失败')); delBtn.disabled = false; }
+          });
+        });
+        row.appendChild(meta); row.appendChild(text);
+        row.appendChild(banBtn); row.appendChild(delBtn);
+        list.appendChild(row);
+      });
+    });
+  }
+  $('chatPrev').addEventListener('click', function () { if (chatPage > 1) { chatPage--; loadChatAdmin(); } });
+  $('chatNext').addEventListener('click', function () { chatPage++; loadChatAdmin(); });
+
+  /* ---------- 敏感词 ---------- */
+  function loadWords() {
+    if (!me || !me.is_admin) return;
+    api('/api/auth/admin/words').then(function (res) {
+      var list = $('wordList');
+      list.innerHTML = '';
+      if (!res.d || !res.d.ok) {
+        list.innerHTML = '<div class="chat-empty" style="color:var(--err)">' + errMsg(res, '加载失败') + '</div>';
+        return;
+      }
+      if (!res.d.words.length) {
+        list.innerHTML = '<div class="chat-empty">词库为空</div>';
+        return;
+      }
+      res.d.words.forEach(function (w) {
+        var tag = document.createElement('span');
+        tag.className = 'word-tag';
+        var txt = document.createElement('span');
+        txt.textContent = w;
+        var x = document.createElement('button');
+        x.textContent = '×';
+        x.title = '删除';
+        x.addEventListener('click', function () {
+          x.disabled = true;
+          api('/api/auth/admin/words/delete', { word: w }).then(function (r2) {
+            if (r2.d && r2.d.ok) { say('已删除：' + w, true); loadWords(); }
+            else { say(errMsg(r2, '删除失败')); x.disabled = false; }
+          });
+        });
+        tag.appendChild(txt); tag.appendChild(x);
+        list.appendChild(tag);
+      });
+    });
+  }
+  $('wordAddBtn').addEventListener('click', function () {
+    var w = $('wordInput').value.trim();
+    if (!w) return;
+    $('wordAddBtn').disabled = true;
+    api('/api/auth/admin/words/add', { word: w }).then(function (r2) {
+      $('wordAddBtn').disabled = false;
+      if (r2.d && r2.d.ok) { $('wordInput').value = ''; say('已添加：' + w, true); loadWords(); }
+      else say(errMsg(r2, '添加失败'));
+    });
+  });
+  $('wordInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('wordAddBtn').click(); });
 
   /* ---------- 客服工作台 ---------- */
   var currentTid = 0, lastMsgId = 0;
@@ -334,7 +686,15 @@
     meta.textContent = (m.sender_name || (mine ? '客服' : '用户'));
     var bubble = document.createElement('div');
     bubble.className = 's-bubble';
-    bubble.textContent = m.text;
+    if (m.kind === 'image') {
+      var img = document.createElement('img');
+      img.src = m.text;
+      img.loading = 'lazy';
+      img.addEventListener('click', function () { window.open(m.text, '_blank'); });
+      bubble.appendChild(img);
+    } else {
+      bubble.textContent = m.text;
+    }
     wrap.appendChild(meta); wrap.appendChild(bubble);
     item.appendChild(wrap);
     $('sMsgs').appendChild(item);
@@ -347,6 +707,7 @@
     $('sMsgs').innerHTML = '';
     $('sInput').disabled = false;
     $('sSend').disabled = false;
+    $('sImgBtn').disabled = false;
     $('sInput').focus();
     loadThreads();
     pullMsgs(true);
@@ -380,10 +741,35 @@
         $('sMsgs').scrollTop = $('sMsgs').scrollHeight;
         loadThreads();
       } else {
-        say((res.d && res.d.error) || '发送失败');
+        say(errMsg(res, '发送失败'));
       }
     });
   }
+
+  /* 客服发图 */
+  $('sImgBtn').addEventListener('click', function () { $('sImgFile').click(); });
+  $('sImgFile').addEventListener('change', function () {
+    var f = this.files && this.files[0];
+    this.value = '';
+    if (!f || !currentTid) return;
+    if (f.size > 30 * 1024 * 1024) { say('图片过大（超过 30MB）'); return; }
+    var reader = new FileReader();
+    reader.onload = function () {
+      $('sImgBtn').disabled = true;
+      api('/api/support/thread/' + currentTid + '/upload', { image: reader.result }).then(function (res) {
+        $('sImgBtn').disabled = false;
+        if (res.d && res.d.ok) {
+          renderMsg(res.d.message);
+          lastMsgId = Math.max(lastMsgId, res.d.message.id);
+          $('sMsgs').scrollTop = $('sMsgs').scrollHeight;
+          loadThreads();
+        } else {
+          say(errMsg(res, '图片发送失败'));
+        }
+      });
+    };
+    reader.readAsDataURL(f);
+  });
 
   function startSupportPoll() {
     loadThreads();
@@ -392,6 +778,164 @@
       pullMsgs(false);
     }, 3000);
   }
+
+  /* ---------- 数据统计 ---------- */
+  function loadStats() {
+    if (!me || !me.is_admin) return;
+    api('/api/auth/admin/stats').then(function (res) {
+      if (!res.d || !res.d.ok) {
+        $('statCards').innerHTML = '<div class="chat-empty" style="color:var(--err)">' + errMsg(res, '加载失败') + '</div>';
+        return;
+      }
+      var d = res.d, v = d.visits || { total: 0, unique_ips: 0, days: [], top_uas: [] };
+      var cards = [
+        [d.users, '注册用户'], [v.total, '首页总访问'], [v.unique_ips, '独立 IP'],
+        [d.chat_messages, '聊天室消息'], [d.support_threads, '客服会话'], [d.support_msgs, '客服消息'],
+        [d.banned, '被禁言'], [d.disabled, '被封号']
+      ];
+      $('statCards').innerHTML = '';
+      cards.forEach(function (c) {
+        var div = document.createElement('div');
+        div.className = 'stat-card';
+        var num = document.createElement('div');
+        num.className = 's-num';
+        num.textContent = c[0];
+        var lab = document.createElement('div');
+        lab.className = 's-label';
+        lab.textContent = c[1];
+        div.appendChild(num); div.appendChild(lab);
+        $('statCards').appendChild(div);
+      });
+      var chart = $('visitChart');
+      chart.innerHTML = '';
+      if (v.days.length) {
+        var max = Math.max.apply(null, v.days.map(function (x) { return x.count; })) || 1;
+        v.days.forEach(function (x) {
+          var bar = document.createElement('div');
+          bar.className = 'bar';
+          bar.style.height = Math.max(3, Math.round(x.count / max * 100)) + '%';
+          bar.setAttribute('data-tip', x.day + '：' + x.count + ' 次');
+          chart.appendChild(bar);
+        });
+      } else {
+        chart.innerHTML = '<div class="chat-empty">暂无访问日志（确认 nginx access.log 可读）</div>';
+      }
+      $('uaList').textContent = v.top_uas.length
+        ? v.top_uas.map(function (u) { return u.count + ' 次 · ' + u.ua; }).join('\n')
+        : '—';
+      $('uaList').style.whiteSpace = 'pre-wrap';
+    });
+  }
+  $('statsRefresh').addEventListener('click', loadStats);
+
+  /* ---------- 数据更新 ---------- */
+  function loadDataStatus() {
+    if (!me || !me.is_admin) return;
+    api('/api/auth/admin/data-status').then(function (res) {
+      var el = $('dataStatus');
+      if (!res.d || !res.d.ok) { el.textContent = errMsg(res, '加载失败'); return; }
+      var d = res.d;
+      if (!d.exists) {
+        el.innerHTML = '';
+        el.textContent = '数据目录不存在：' + d.repo + '（在服务器上应指向足球数据 git 仓库）';
+        return;
+      }
+      el.innerHTML =
+        '<div><b>仓库目录</b>' + escapeHtml(d.repo) + '</div>' +
+        '<div><b>数据文件更新</b>' + escapeHtml(d.mtime || '—') + (d.latest_file ? '（' + escapeHtml(d.latest_file) + '）' : '') + '</div>' +
+        '<div><b>最新提交</b>' + escapeHtml(d.commit || '—') + '</div>';
+    });
+  }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  $('dataUpdateBtn').addEventListener('click', function () {
+    if (!confirm('确定从远程仓库拉取最新足球数据？（git fetch && reset --hard origin/main）')) return;
+    var b = $('dataUpdateBtn');
+    b.disabled = true;
+    b.textContent = '更新中…';
+    $('dataOut').classList.add('hidden');
+    api('/api/auth/admin/data-update', {}).then(function (res) {
+      b.disabled = false;
+      b.textContent = '立即更新';
+      if (res.d && res.d.ok) {
+        say('数据已更新', true);
+        if (res.d.output) {
+          $('dataOut').textContent = res.d.output;
+          $('dataOut').classList.remove('hidden');
+        }
+        loadDataStatus();
+      } else {
+        say(errMsg(res, '更新失败'));
+      }
+    });
+  });
+
+  /* ---------- 公告 ---------- */
+  function loadAnns() {
+    if (!me || !me.is_admin) return;
+    api('/api/auth/admin/announcements').then(function (res) {
+      var list = $('annList');
+      list.innerHTML = '';
+      if (!res.d || !res.d.ok) {
+        list.innerHTML = '<div class="chat-empty" style="color:var(--err)">' + errMsg(res, '加载失败') + '</div>';
+        return;
+      }
+      if (!res.d.announcements.length) {
+        list.innerHTML = '<div class="chat-empty">暂无公告</div>';
+        return;
+      }
+      res.d.announcements.forEach(function (a) {
+        var div = document.createElement('div');
+        div.className = 'ann-item';
+        var head = document.createElement('div');
+        head.className = 'a-head';
+        var left = document.createElement('span');
+        left.className = 'a-time';
+        left.textContent = '#' + a.id + ' · ' + fmt(a.created_at) + ' ';
+        var tag = document.createElement('span');
+        tag.className = a.active ? 'ann-on' : 'ann-off';
+        tag.textContent = a.active ? '展示中' : '已下架';
+        left.appendChild(tag);
+        head.appendChild(left);
+        if (a.active) {
+          var off = document.createElement('button');
+          off.className = 'btn-mini danger';
+          off.textContent = '下架';
+          off.addEventListener('click', function () {
+            off.disabled = true;
+            api('/api/auth/admin/announcements/deactivate', { id: a.id }).then(function (r2) {
+              if (r2.d && r2.d.ok) { say('已下架公告 #' + a.id, true); loadAnns(); }
+              else { say(errMsg(r2, '操作失败')); off.disabled = false; }
+            });
+          });
+          head.appendChild(off);
+        }
+        var text = document.createElement('div');
+        text.className = 'a-text';
+        text.textContent = a.text;
+        div.appendChild(head); div.appendChild(text);
+        list.appendChild(div);
+      });
+    });
+  }
+  $('annAddBtn').addEventListener('click', function () {
+    var t = $('annText').value.trim();
+    if (!t) { say('公告内容不能为空'); return; }
+    $('annAddBtn').disabled = true;
+    api('/api/auth/admin/announcements/add', { text: t }).then(function (r2) {
+      $('annAddBtn').disabled = false;
+      if (r2.d && r2.d.ok) {
+        $('annText').value = '';
+        say('公告已发布', true);
+        loadAnns();
+      } else {
+        say(errMsg(r2, '发布失败'));
+      }
+    });
+  });
 })();
 </script>
 </body>
