@@ -512,6 +512,81 @@
     font-family: "Oswald", "Noto Sans SC", sans-serif;
     letter-spacing: 2px;
   }
+  /* ===== 赛果列表 + 聊天室 双栏布局 ===== */
+  .match-chat-row { display: flex; flex-direction: column; gap: 16px; }
+  @media (min-width: 900px) {
+    .match-chat-row { flex-direction: row; align-items: stretch; }
+    .match-chat-row .match-list { flex: 1 1 0; min-width: 0; }
+    .match-chat-row .chat-panel { flex: 1 1 0; min-width: 0; height: 600px; }
+  }
+  /* ===== 聊天室 ===== */
+  .chat-panel {
+    background: linear-gradient(180deg, rgba(15, 32, 27, 0.85), rgba(8, 18, 14, 0.9));
+    border: 1px solid var(--gold-line);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex; flex-direction: column;
+    height: 480px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    animation: riseIn 0.5s ease 0.12s both;
+  }
+  .chat-panel h2 {
+    font-size: 17px;
+    margin-bottom: 10px;
+    color: var(--gold);
+    font-family: "Oswald", "Noto Sans SC", sans-serif;
+    letter-spacing: 2px;
+    flex-shrink: 0;
+  }
+  .chat-msgs {
+    flex: 1; overflow-y: auto; min-height: 0;
+    display: flex; flex-direction: column; gap: 10px;
+    padding: 4px 2px;
+  }
+  .chat-empty { color: var(--muted); font-size: 13px; text-align: center; margin: auto; }
+  .chat-item { display: flex; gap: 8px; align-items: flex-start; }
+  .chat-item.mine { flex-direction: row-reverse; }
+  .chat-av {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    background: rgba(212, 175, 55, 0.2); border: 1px solid rgba(212, 175, 55, 0.4);
+    color: var(--gold); font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .chat-av img { width: 100%; height: 100%; object-fit: cover; }
+  .chat-body { max-width: 78%; min-width: 0; }
+  .chat-item.mine .chat-body { text-align: right; }
+  .chat-meta { font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+  .chat-meta .nick { color: var(--gold); font-weight: 700; margin-right: 6px; }
+  .chat-text {
+    display: inline-block;
+    background: rgba(5, 13, 10, 0.7);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 10px;
+    padding: 7px 11px;
+    font-size: 13px; line-height: 1.6; color: var(--txt);
+    text-align: left; word-break: break-word; white-space: pre-wrap;
+  }
+  .chat-item.mine .chat-text {
+    background: rgba(212, 175, 55, 0.14);
+    border-color: rgba(212, 175, 55, 0.4);
+  }
+  .chat-input-row { display: flex; gap: 8px; margin-top: 10px; flex-shrink: 0; }
+  .chat-input-row input {
+    flex: 1; min-width: 0;
+    background: rgba(5, 13, 10, 0.7);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 10px; color: var(--txt); font-size: 14px;
+    padding: 10px 12px; outline: none; font-family: inherit;
+  }
+  .chat-input-row input:focus { border-color: var(--gold); }
+  .chat-input-row input:disabled, .chat-input-row input[readonly] { opacity: 0.55; cursor: pointer; }
+  .chat-input-row button {
+    flex-shrink: 0; border: none; border-radius: 10px; cursor: pointer;
+    background: linear-gradient(135deg, var(--gold), #b8952e);
+    color: #071510; font-weight: 700; font-size: 14px; padding: 0 18px;
+    font-family: inherit;
+  }
+  .chat-input-row button:disabled { opacity: 0.45; cursor: not-allowed; }
   table {
     width: 100%;
     border-collapse: separate;
@@ -716,6 +791,7 @@
     <div class="road" id="road"></div>
   </div>
 
+  <div class="match-chat-row">
   <div class="match-list">
     <h2>完整赛果列表</h2>
     <table>
@@ -723,6 +799,16 @@
       <tbody id="match-table-body">
       </tbody>
     </table>
+  </div>
+
+  <div class="chat-panel" id="chat-panel">
+    <h2>球迷聊天室</h2>
+    <div class="chat-msgs" id="chat-msgs"></div>
+    <div class="chat-input-row">
+      <input type="text" id="chat-input" maxlength="200" placeholder="加载中…" readonly>
+      <button type="button" id="chat-send">发送</button>
+    </div>
+  </div>
   </div>
 
   <div class="subtitle" id="api-status" style="font-size:12px;color:#4dd0a8;min-height:18px;margin-top:18px;">正在加载联赛目录...</div>
@@ -743,6 +829,69 @@
 </div>
 
 <div class="tooltip" id="tooltip"></div>
+
+<!-- 悬浮客服求助 -->
+<button type="button" id="support-fab" onclick="toggleSupport()">💬 求助</button>
+<div id="support-modal" class="hidden" onclick="if(event.target===this)toggleSupport(false)">
+  <div class="support-card">
+    <div class="support-head">
+      <span>联系客服</span>
+      <button type="button" onclick="toggleSupport(false)" aria-label="关闭">✕</button>
+    </div>
+    <div id="support-msg" class="support-msg"></div>
+    <textarea id="support-text" maxlength="500" rows="4" placeholder="描述你的问题（必填，500 字以内）"></textarea>
+    <input type="text" id="support-contact" maxlength="100" placeholder="联系方式（选填：邮箱 / 微信 / QQ）">
+    <button type="button" id="support-submit" onclick="submitSupport()">提交</button>
+  </div>
+</div>
+<style>
+  #support-fab {
+    position: fixed; right: 18px; bottom: 24px; z-index: 2100;
+    width: 88px; height: 44px; border-radius: 999px;
+    background: rgba(13, 30, 24, 0.95); border: 1px solid rgba(212, 175, 55, 0.5);
+    color: #d4af37; font-size: 14px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px);
+    font-family: inherit; letter-spacing: 1px;
+  }
+  #support-fab:hover { background: rgba(212, 175, 55, 0.18); }
+  #support-modal {
+    position: fixed; inset: 0; z-index: 2200;
+    background: rgba(4, 10, 8, 0.7); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center; padding: 16px;
+  }
+  #support-modal.hidden { display: none; }
+  .support-card {
+    width: 100%; max-width: 400px;
+    background: linear-gradient(180deg, rgba(15, 32, 27, 0.97), rgba(8, 18, 14, 0.97));
+    border: 1px solid var(--gold-line); border-radius: 16px; padding: 22px;
+  }
+  .support-head {
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--gold); font-weight: 700; font-size: 16px; letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+  .support-head button {
+    background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer;
+  }
+  .support-head button:hover { color: var(--gold); }
+  .support-card textarea, .support-card input {
+    width: 100%; box-sizing: border-box;
+    background: rgba(5, 13, 10, 0.7); border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 10px; color: var(--txt); font-size: 14px; padding: 11px 12px;
+    outline: none; font-family: inherit; margin-bottom: 12px; resize: vertical;
+  }
+  .support-card textarea:focus, .support-card input:focus { border-color: var(--gold); }
+  .support-card #support-submit {
+    width: 100%; padding: 12px; border: none; border-radius: 10px; cursor: pointer;
+    background: linear-gradient(135deg, var(--gold), #b8952e);
+    color: #071510; font-weight: 700; font-size: 15px; letter-spacing: 3px;
+    font-family: inherit;
+  }
+  .support-card #support-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+  .support-msg { min-height: 18px; font-size: 13px; text-align: center; margin-bottom: 10px; }
+  .support-msg.err { color: #ff8585; }
+  .support-msg.ok { color: #3fd3b6; }
+</style>
 
 <script>
 // 联赛数据按需懒加载：leagues.js（目录）启动加载，data/{code}.js 选中时加载，
@@ -1306,6 +1455,157 @@ async function initApp() {
 }
 
 initApp();
+
+// ===== 球迷聊天室 =====
+const chatState = { me: null, lastId: 0, timer: null };
+const chatMsgsEl = document.getElementById('chat-msgs');
+const chatInputEl = document.getElementById('chat-input');
+const chatSendEl = document.getElementById('chat-send');
+
+function chatScrollBottom() { chatMsgsEl.scrollTop = chatMsgsEl.scrollHeight; }
+
+function renderChatMsg(m) {
+  const mine = chatState.me && m.email === chatState.me.email;
+  const item = document.createElement('div');
+  item.className = 'chat-item' + (mine ? ' mine' : '');
+
+  const av = document.createElement('div');
+  av.className = 'chat-av';
+  if (m.avatar) {
+    const img = document.createElement('img');
+    img.src = m.avatar; img.alt = '';
+    av.appendChild(img);
+  } else {
+    av.textContent = (m.nickname || m.email || '?').charAt(0).toUpperCase();
+  }
+
+  const body = document.createElement('div');
+  body.className = 'chat-body';
+  const meta = document.createElement('div');
+  meta.className = 'chat-meta';
+  const nick = document.createElement('span');
+  nick.className = 'nick';
+  nick.textContent = m.nickname || m.email;
+  const time = document.createElement('span');
+  const d = new Date(m.created_at * 1000);
+  time.textContent = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+  meta.appendChild(nick); meta.appendChild(time);
+  const text = document.createElement('div');
+  text.className = 'chat-text';
+  text.textContent = m.text;  // 纯文本插入，防 XSS
+  body.appendChild(meta); body.appendChild(text);
+
+  item.appendChild(av); item.appendChild(body);
+  chatMsgsEl.appendChild(item);
+}
+
+async function chatPoll(initial) {
+  try {
+    const url = '/api/chat/messages' + (chatState.lastId ? '?after_id=' + chatState.lastId : '');
+    const r = await fetch(url, { credentials: 'same-origin' });
+    const d = r.ok ? await r.json() : null;
+    if (d && d.ok && d.messages.length) {
+      if (initial) chatMsgsEl.innerHTML = '';
+      d.messages.forEach(renderChatMsg);
+      chatState.lastId = d.messages[d.messages.length - 1].id;
+      chatScrollBottom();
+    } else if (initial) {
+      chatMsgsEl.innerHTML = '<div class="chat-empty">还没有消息，来说第一句吧</div>';
+    }
+  } catch (e) {}
+}
+
+function chatApplyLoginState() {
+  if (chatState.me) {
+    chatInputEl.readOnly = false;
+    chatInputEl.placeholder = '说点什么…（200 字以内）';
+  } else {
+    chatInputEl.readOnly = true;
+    chatInputEl.placeholder = '登录后参与聊天';
+  }
+}
+
+async function chatSend() {
+  if (!chatState.me) { location.href = '/login.html'; return; }
+  const text = chatInputEl.value.trim();
+  if (!text) return;
+  chatSendEl.disabled = true;
+  try {
+    const r = await fetch('/api/chat/send', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+    const d = await r.json().catch(() => ({}));
+    if (d && d.ok) {
+      chatInputEl.value = '';
+      renderChatMsg(d.message);
+      chatState.lastId = Math.max(chatState.lastId, d.message.id);
+      chatScrollBottom();
+    } else if (d && d.need_login) {
+      location.href = '/login.html';
+      return;
+    } else {
+      chatInputEl.placeholder = (d && d.error) || '发送失败';
+      setTimeout(() => { chatInputEl.placeholder = '说点什么…（200 字以内）'; }, 2000);
+    }
+  } catch (e) {} finally { chatSendEl.disabled = false; }
+}
+
+(async function initChat() {
+  try {
+    const r = await fetch('/api/auth/me', { credentials: 'same-origin' });
+    const d = r.ok ? await r.json() : null;
+    if (d && d.ok && d.email) chatState.me = d;
+  } catch (e) {}
+  chatApplyLoginState();
+  chatPoll(true);
+  chatState.timer = setInterval(() => chatPoll(false), 3000);
+})();
+chatSendEl.addEventListener('click', chatSend);
+chatInputEl.addEventListener('click', () => { if (!chatState.me) location.href = '/login.html'; });
+chatInputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') chatSend(); });
+
+// ===== 悬浮客服求助 =====
+function toggleSupport(show) {
+  const modal = document.getElementById('support-modal');
+  const open = typeof show === 'boolean' ? show : modal.classList.contains('hidden');
+  modal.classList.toggle('hidden', !open);
+  if (open) {
+    document.getElementById('support-msg').textContent = '';
+    document.getElementById('support-msg').className = 'support-msg';
+  }
+}
+async function submitSupport() {
+  const msgEl = document.getElementById('support-msg');
+  const text = document.getElementById('support-text').value.trim();
+  const contact = document.getElementById('support-contact').value.trim();
+  if (!text) {
+    msgEl.textContent = '请描述你的问题'; msgEl.className = 'support-msg err'; return;
+  }
+  const btn = document.getElementById('support-submit');
+  btn.disabled = true; btn.textContent = '提交中…';
+  try {
+    const r = await fetch('/api/support', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text, contact })
+    });
+    const d = await r.json().catch(() => ({}));
+    if (d && d.ok) {
+      msgEl.textContent = '已收到，我们会尽快联系你'; msgEl.className = 'support-msg ok';
+      document.getElementById('support-text').value = '';
+      setTimeout(() => toggleSupport(false), 1500);
+    } else {
+      msgEl.textContent = (d && d.error) || '提交失败，请稍后重试';
+      msgEl.className = 'support-msg err';
+    }
+  } catch (e) {
+    msgEl.textContent = '网络异常，请稍后重试'; msgEl.className = 'support-msg err';
+  } finally {
+    btn.disabled = false; btn.textContent = '提交';
+  }
+}
 
 // 账户角标：显示当前登录邮箱，退出登录
 (async function initAccountChip() {

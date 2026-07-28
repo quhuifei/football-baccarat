@@ -286,6 +286,9 @@
     <div class="info-row"><span class="k">手机号</span><span class="v" id="infoPhone"></span></div>
     <div class="info-row"><span class="k">注册时间</span><span class="v" id="infoCreated"></span></div>
     <div class="info-row"><span class="k">最近登录</span><span class="v" id="infoLogin"></span></div>
+    <div id="adminExport" class="hidden" style="margin-top:14px;">
+      <button class="btn btn-main" onclick="window.location.href='/api/auth/admin/users.csv'">📥 导出用户列表（管理员）</button>
+    </div>
   </div>
 
   <div class="footer-links">
@@ -349,6 +352,7 @@
     $('infoPhone').textContent = profile.phone || '—';
     $('infoCreated').textContent = fmt(profile.created_at);
     $('infoLogin').textContent = fmt(profile.last_login);
+    if (profile.is_admin) $('adminExport').classList.remove('hidden');
   }
 
   /* ---------- 加载 ---------- */
