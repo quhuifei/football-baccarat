@@ -150,12 +150,13 @@
     right: 10px; top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
-    color: var(--muted);
-    font-size: 15px;
     padding: 6px;
     user-select: none;
+    display: flex; align-items: center;
+    opacity: .75;
   }
-  .eye:hover { color: var(--gold); }
+  .eye:hover { opacity: 1; }
+  .eye svg { display: block; }
   .hint { font-size: 12px; color: #5c6f68; margin-top: 6px; line-height: 1.5; }
   .btn {
     border: none;
@@ -274,7 +275,7 @@
         <label for="l-pwd">密码</label>
         <div class="input-wrap">
           <input id="l-pwd" type="password" placeholder="请输入密码" autocomplete="current-password">
-          <span class="eye" data-for="l-pwd">👁</span>
+          <span class="eye" data-for="l-pwd"></span>
         </div>
       </div>
       <label class="remember">
@@ -302,7 +303,7 @@
         <div class="field">
           <label for="r-code">验证码</label>
           <div class="row">
-            <input id="r-code" class="code-input" type="text" inputmode="numeric" maxlength="6" placeholder="6 位数字">
+            <input id="r-code" class="code-input" type="text" inputmode="numeric" maxlength="6" placeholder="">
             <button id="r-send" class="btn btn-send">发送验证码</button>
           </div>
         </div>
@@ -315,7 +316,7 @@
           <label for="r-pwd">设置密码</label>
           <div class="input-wrap">
             <input id="r-pwd" type="password" placeholder="至少 8 位，含字母和数字" autocomplete="new-password">
-            <span class="eye" data-for="r-pwd">👁</span>
+            <span class="eye" data-for="r-pwd"></span>
           </div>
           <div class="hint">密码要求：不少于 8 位，必须同时包含字母和数字。</div>
         </div>
@@ -323,7 +324,7 @@
           <label for="r-pwd2">确认密码</label>
           <div class="input-wrap">
             <input id="r-pwd2" type="password" placeholder="再次输入密码" autocomplete="new-password">
-            <span class="eye" data-for="r-pwd2">👁</span>
+            <span class="eye" data-for="r-pwd2"></span>
           </div>
         </div>
         <button id="r-next2" class="btn btn-main">下一步</button>
@@ -352,7 +353,7 @@
       <div class="field">
         <label for="f-code">验证码</label>
         <div class="row">
-          <input id="f-code" class="code-input" type="text" inputmode="numeric" maxlength="6" placeholder="6 位数字">
+          <input id="f-code" class="code-input" type="text" inputmode="numeric" maxlength="6" placeholder="">
           <button id="f-send" class="btn btn-send">发送验证码</button>
         </div>
       </div>
@@ -360,7 +361,7 @@
         <label for="f-pwd">新密码</label>
         <div class="input-wrap">
           <input id="f-pwd" type="password" placeholder="至少 8 位，含字母和数字" autocomplete="new-password">
-          <span class="eye" data-for="f-pwd">👁</span>
+          <span class="eye" data-for="f-pwd"></span>
         </div>
       </div>
       <button id="f-btn" class="btn btn-main">重置并登录</button>
@@ -444,14 +445,25 @@
       say('');
     });
   });
+  /* 支持 #register / #reset 哈希直接切 Tab */
+  (function () {
+    var h = (location.hash || '').replace('#', '');
+    if (h === 'register' || h === 'reset') {
+      var target = document.querySelector('.tab[data-pane="' + h + '"]');
+      if (target) target.click();
+    }
+  })();
 
-  /* ---------- 密码显示/隐藏 ---------- */
+  /* ---------- 密码显示/隐藏（白色线条 SVG 眼睛） ---------- */
+  var SVG_EYE = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e9e7de" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var SVG_EYE_OFF = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e9e7de" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
   document.querySelectorAll('.eye').forEach(function (eye) {
+    eye.innerHTML = SVG_EYE_OFF;
     eye.addEventListener('click', function () {
       var input = $(eye.dataset.for);
       var show = input.type === 'password';
       input.type = show ? 'text' : 'password';
-      eye.style.color = show ? 'var(--gold)' : '';
+      eye.innerHTML = show ? SVG_EYE : SVG_EYE_OFF;
     });
   });
 

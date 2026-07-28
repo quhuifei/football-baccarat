@@ -713,7 +713,7 @@
 </head>
 <body>
 <!-- 品牌标 -->
-<a id="brand-mark" href="/">⚽ 赛先知足球</a>
+<a id="brand-mark" href="/">⚽ 首页</a>
 <!-- 账户角标：游客显示登录/注册，登录后显示头像+昵称+退出 -->
 <div id="account-chip">
   <a id="account-profile" href="/profile.html" title="个人中心">
@@ -763,7 +763,15 @@
   #account-chip #login-link {
     color: #c9a227; text-decoration: none; font-size: 13px; font-weight: 700;
     padding: 4px 14px; letter-spacing: 1px;
+    border: 1px solid rgba(201, 162, 39, 0.5); border-radius: 999px;
   }
+  #account-chip #login-link:hover { background: rgba(201, 162, 39, 0.15); }
+  #account-chip #register-link {
+    color: #071510; text-decoration: none; font-size: 13px; font-weight: 700;
+    padding: 5px 14px; letter-spacing: 1px; border-radius: 999px;
+    background: linear-gradient(135deg, #d4af37, #b8952e);
+  }
+  #account-chip #register-link:hover { filter: brightness(1.1); }
 </style>
 <div class="container">
   <h1 id="page-title">全球 27 国联赛</h1>
@@ -830,18 +838,19 @@
 
 <div class="tooltip" id="tooltip"></div>
 
-<!-- 悬浮客服求助 -->
+<!-- 悬浮客服求助（聊天窗） -->
 <button type="button" id="support-fab" onclick="toggleSupport()">💬 求助</button>
-<div id="support-modal" class="hidden" onclick="if(event.target===this)toggleSupport(false)">
+<div id="support-modal" class="hidden">
   <div class="support-card">
     <div class="support-head">
-      <span>联系客服</span>
+      <span>在线客服</span>
       <button type="button" onclick="toggleSupport(false)" aria-label="关闭">✕</button>
     </div>
-    <div id="support-msg" class="support-msg"></div>
-    <textarea id="support-text" maxlength="500" rows="4" placeholder="描述你的问题（必填，500 字以内）"></textarea>
-    <input type="text" id="support-contact" maxlength="100" placeholder="联系方式（选填：邮箱 / 微信 / QQ）">
-    <button type="button" id="support-submit" onclick="submitSupport()">提交</button>
+    <div class="support-msgs" id="support-msgs"></div>
+    <div class="support-input-row">
+      <input type="text" id="support-text" maxlength="500" placeholder="描述你的问题…">
+      <button type="button" id="support-submit" onclick="submitSupport()">发送</button>
+    </div>
   </div>
 </div>
 <style>
@@ -855,42 +864,57 @@
   }
   #support-fab:hover { background: rgba(212, 175, 55, 0.18); }
   #support-modal {
-    position: fixed; inset: 0; z-index: 2200;
-    background: rgba(4, 10, 8, 0.7); backdrop-filter: blur(4px);
-    display: flex; align-items: center; justify-content: center; padding: 16px;
+    position: fixed; right: 18px; bottom: 80px; z-index: 2200;
   }
   #support-modal.hidden { display: none; }
   .support-card {
-    width: 100%; max-width: 400px;
+    width: 340px; max-width: calc(100vw - 36px);
+    height: 440px; display: flex; flex-direction: column;
     background: linear-gradient(180deg, rgba(15, 32, 27, 0.97), rgba(8, 18, 14, 0.97));
-    border: 1px solid var(--gold-line); border-radius: 16px; padding: 22px;
+    border: 1px solid var(--gold-line); border-radius: 16px; padding: 14px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
   }
   .support-head {
     display: flex; justify-content: space-between; align-items: center;
-    color: var(--gold); font-weight: 700; font-size: 16px; letter-spacing: 2px;
-    margin-bottom: 14px;
+    color: var(--gold); font-weight: 700; font-size: 15px; letter-spacing: 2px;
+    margin-bottom: 10px; flex-shrink: 0;
   }
   .support-head button {
     background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer;
   }
   .support-head button:hover { color: var(--gold); }
-  .support-card textarea, .support-card input {
-    width: 100%; box-sizing: border-box;
+  .support-msgs {
+    flex: 1; overflow-y: auto; min-height: 0;
+    display: flex; flex-direction: column; gap: 9px; padding: 4px 2px;
+  }
+  .support-empty { color: var(--muted); font-size: 12px; text-align: center; margin: auto; line-height: 1.8; }
+  .sp-item { display: flex; }
+  .sp-item.mine { justify-content: flex-end; }
+  .sp-bubble {
+    max-width: 80%; padding: 7px 11px; border-radius: 10px;
+    font-size: 13px; line-height: 1.6; word-break: break-word; white-space: pre-wrap;
+    background: rgba(5, 13, 10, 0.7); border: 1px solid rgba(212, 175, 55, 0.15);
+  }
+  .sp-item.mine .sp-bubble { background: rgba(212, 175, 55, 0.14); border-color: rgba(212, 175, 55, 0.4); }
+  .sp-meta { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+  .support-input-row { display: flex; gap: 8px; margin-top: 10px; flex-shrink: 0; }
+  .support-input-row input {
+    flex: 1; min-width: 0;
     background: rgba(5, 13, 10, 0.7); border: 1px solid rgba(212, 175, 55, 0.2);
-    border-radius: 10px; color: var(--txt); font-size: 14px; padding: 11px 12px;
-    outline: none; font-family: inherit; margin-bottom: 12px; resize: vertical;
+    border-radius: 10px; color: var(--txt); font-size: 14px; padding: 9px 11px;
+    outline: none; font-family: inherit;
   }
-  .support-card textarea:focus, .support-card input:focus { border-color: var(--gold); }
-  .support-card #support-submit {
-    width: 100%; padding: 12px; border: none; border-radius: 10px; cursor: pointer;
+  .support-input-row input:focus { border-color: var(--gold); }
+  .support-input-row button {
+    flex-shrink: 0; border: none; border-radius: 10px; cursor: pointer; padding: 0 14px;
     background: linear-gradient(135deg, var(--gold), #b8952e);
-    color: #071510; font-weight: 700; font-size: 15px; letter-spacing: 3px;
-    font-family: inherit;
+    color: #071510; font-weight: 700; font-size: 13px; font-family: inherit;
   }
-  .support-card #support-submit:disabled { opacity: 0.45; cursor: not-allowed; }
-  .support-msg { min-height: 18px; font-size: 13px; text-align: center; margin-bottom: 10px; }
-  .support-msg.err { color: #ff8585; }
-  .support-msg.ok { color: #3fd3b6; }
+  .support-input-row button:disabled { opacity: 0.45; cursor: not-allowed; }
+  @media (max-width: 640px) {
+    #support-modal { right: 8px; left: 8px; }
+    .support-card { width: 100%; }
+  }
 </style>
 
 <script>
@@ -1566,46 +1590,88 @@ chatSendEl.addEventListener('click', chatSend);
 chatInputEl.addEventListener('click', () => { if (!chatState.me) location.href = '/login.html'; });
 chatInputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') chatSend(); });
 
-// ===== 悬浮客服求助 =====
+// ===== 悬浮客服求助（双向聊天） =====
+const supportState = { lastId: 0, open: false, started: false };
+const spMsgsEl = document.getElementById('support-msgs');
+
+function renderSupportMsg(m) {
+  const mine = m.sender === 'user';
+  const item = document.createElement('div');
+  item.className = 'sp-item' + (mine ? ' mine' : '');
+  const wrap = document.createElement('div');
+  if (!mine) {
+    const meta = document.createElement('div');
+    meta.className = 'sp-meta';
+    meta.textContent = m.sender_name || '客服';
+    wrap.appendChild(meta);
+  }
+  const bubble = document.createElement('div');
+  bubble.className = 'sp-bubble';
+  bubble.textContent = m.text;
+  wrap.appendChild(bubble);
+  item.appendChild(wrap);
+  spMsgsEl.appendChild(item);
+}
+
+async function supportPoll(initial) {
+  try {
+    const url = '/api/support/my' + (supportState.lastId ? '?after_id=' + supportState.lastId : '');
+    const r = await fetch(url, { credentials: 'same-origin' });
+    const d = r.ok ? await r.json() : null;
+    if (d && d.ok) {
+      if (d.messages.length) {
+        if (initial) spMsgsEl.innerHTML = '';
+        d.messages.forEach(renderSupportMsg);
+        supportState.lastId = d.messages[d.messages.length - 1].id;
+        spMsgsEl.scrollTop = spMsgsEl.scrollHeight;
+      } else if (initial) {
+        spMsgsEl.innerHTML = '<div class="support-empty">你好，有什么问题可以留言，<br>客服会尽快回复（游客也可使用）</div>';
+      }
+    }
+  } catch (e) {}
+}
+
 function toggleSupport(show) {
   const modal = document.getElementById('support-modal');
   const open = typeof show === 'boolean' ? show : modal.classList.contains('hidden');
   modal.classList.toggle('hidden', !open);
-  if (open) {
-    document.getElementById('support-msg').textContent = '';
-    document.getElementById('support-msg').className = 'support-msg';
+  supportState.open = open;
+  if (open && !supportState.started) {
+    supportState.started = true;
+    supportPoll(true);
+    setInterval(() => { if (supportState.open) supportPoll(false); }, 3000);
+    document.getElementById('support-text').focus();
   }
 }
+
 async function submitSupport() {
-  const msgEl = document.getElementById('support-msg');
-  const text = document.getElementById('support-text').value.trim();
-  const contact = document.getElementById('support-contact').value.trim();
-  if (!text) {
-    msgEl.textContent = '请描述你的问题'; msgEl.className = 'support-msg err'; return;
-  }
+  const input = document.getElementById('support-text');
+  const text = input.value.trim();
+  if (!text) return;
   const btn = document.getElementById('support-submit');
-  btn.disabled = true; btn.textContent = '提交中…';
+  btn.disabled = true;
   try {
-    const r = await fetch('/api/support', {
+    const r = await fetch('/api/support/send', {
       method: 'POST', credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text, contact })
+      body: JSON.stringify({ text })
     });
     const d = await r.json().catch(() => ({}));
     if (d && d.ok) {
-      msgEl.textContent = '已收到，我们会尽快联系你'; msgEl.className = 'support-msg ok';
-      document.getElementById('support-text').value = '';
-      setTimeout(() => toggleSupport(false), 1500);
+      input.value = '';
+      if (spMsgsEl.querySelector('.support-empty')) spMsgsEl.innerHTML = '';
+      renderSupportMsg(d.message);
+      supportState.lastId = Math.max(supportState.lastId, d.message.id);
+      spMsgsEl.scrollTop = spMsgsEl.scrollHeight;
     } else {
-      msgEl.textContent = (d && d.error) || '提交失败，请稍后重试';
-      msgEl.className = 'support-msg err';
+      input.placeholder = (d && d.error) || '发送失败';
+      setTimeout(() => { input.placeholder = '描述你的问题…'; }, 2000);
     }
-  } catch (e) {
-    msgEl.textContent = '网络异常，请稍后重试'; msgEl.className = 'support-msg err';
-  } finally {
-    btn.disabled = false; btn.textContent = '提交';
-  }
+  } catch (e) {} finally { btn.disabled = false; }
 }
+document.getElementById('support-text').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') submitSupport();
+});
 
 // 账户角标：显示当前登录邮箱，退出登录
 (async function initAccountChip() {
@@ -1627,13 +1693,18 @@ async function submitSupport() {
       return;  // 登录态：头像+昵称+退出
     }
   } catch (e) {}
-  // 游客态：显示「登录 / 注册」入口
+  // 游客态：显示「登录」「注册」两个按钮
   chip.classList.add('guest');
-  const link = document.createElement('a');
-  link.id = 'login-link';
-  link.href = '/login.html';
-  link.textContent = '登录 / 注册';
-  chip.appendChild(link);
+  const loginLink = document.createElement('a');
+  loginLink.id = 'login-link';
+  loginLink.href = '/login.html';
+  loginLink.textContent = '登录';
+  chip.appendChild(loginLink);
+  const regLink = document.createElement('a');
+  regLink.id = 'register-link';
+  regLink.href = '/login.html#register';
+  regLink.textContent = '注册';
+  chip.appendChild(regLink);
 })();
 async function doLogout() {
   try { await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' }); } catch (e) {}
