@@ -637,12 +637,21 @@
 </style>
 </head>
 <body>
-<!-- 账户角标：登录后显示邮箱，点退出 -->
+<!-- 品牌标 -->
+<a id="brand-mark" href="/">⚽ 赛先知足球</a>
+<!-- 账户角标：游客显示登录/注册，登录后显示邮箱+退出 -->
 <div id="account-chip">
   <span id="account-email">…</span>
   <button type="button" id="logout-btn" onclick="doLogout()">退出</button>
 </div>
 <style>
+  #brand-mark {
+    position: fixed; top: 10px; left: 12px; z-index: 2000;
+    background: rgba(13, 30, 24, 0.92); border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 999px; padding: 7px 16px;
+    font-size: 13px; font-weight: 700; letter-spacing: 1px; color: #c9a227;
+    text-decoration: none; backdrop-filter: blur(8px);
+  }
   #account-chip {
     position: fixed; top: 10px; right: 12px; z-index: 2000;
     display: flex; align-items: center; gap: 8px;
@@ -658,6 +667,12 @@
     border-radius: 999px; padding: 3px 12px; font-size: 12px; cursor: pointer;
   }
   #account-chip #logout-btn:hover { background: rgba(201, 162, 39, 0.3); }
+  #account-chip.guest { padding: 5px; }
+  #account-chip.guest #account-email, #account-chip.guest #logout-btn { display: none; }
+  #account-chip #login-link {
+    color: #c9a227; text-decoration: none; font-size: 13px; font-weight: 700;
+    padding: 4px 14px; letter-spacing: 1px;
+  }
 </style>
 <div class="container">
   <h1 id="page-title">全球 27 国联赛</h1>
@@ -1278,14 +1293,22 @@ initApp();
 
 // 账户角标：显示当前登录邮箱，退出登录
 (async function initAccountChip() {
+  const chip = document.getElementById('account-chip');
   try {
     const r = await fetch('/api/auth/me', { credentials: 'same-origin' });
-    if (!r.ok) return;  // 未登录时登录墙本来就会拦住，这里静默即可
-    const d = await r.json();
-    if (d && d.email) document.getElementById('account-email').textContent = d.email;
-  } catch (e) { /* 接口不可用时隐藏角标 */
-    document.getElementById('account-chip').style.display = 'none';
-  }
+    const d = r.ok ? await r.json() : null;
+    if (d && d.ok && d.email) {
+      document.getElementById('account-email').textContent = d.email;
+      return;  // 登录态：显示邮箱+退出
+    }
+  } catch (e) {}
+  // 游客态：显示「登录 / 注册」入口
+  chip.classList.add('guest');
+  const link = document.createElement('a');
+  link.id = 'login-link';
+  link.href = '/login.html';
+  link.textContent = '登录 / 注册';
+  chip.appendChild(link);
 })();
 async function doLogout() {
   try { await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' }); } catch (e) {}
