@@ -164,8 +164,8 @@
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>邮箱</th><th>昵称</th><th>手机号</th><th>角色</th><th>注册时间</th><th>最近登录</th><th>操作</th></tr></thead>
-          <tbody id="usersBody"><tr><td colspan="7" style="color:var(--muted)">加载中…</td></tr></tbody>
+          <thead><tr><th>邮箱</th><th>昵称</th><th>用户 ID</th><th>手机号</th><th>角色</th><th>注册时间</th><th>最近登录</th><th>操作</th></tr></thead>
+          <tbody id="usersBody"><tr><td colspan="8" style="color:var(--muted)">加载中…</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -254,7 +254,7 @@
     if (!me || !me.is_admin) return;
     api('/api/auth/admin/users').then(function (res) {
       if (!res.d || !res.d.ok) {
-        $('usersBody').innerHTML = '<tr><td colspan="7" style="color:var(--err)">加载失败</td></tr>';
+        $('usersBody').innerHTML = '<tr><td colspan="8" style="color:var(--err)">加载失败</td></tr>';
         return;
       }
       var body = $('usersBody');
@@ -267,10 +267,11 @@
         var btn = u.role === 'staff'
           ? '<button class="btn-mini" data-act="user">取消客服</button>'
           : '<button class="btn-mini" data-act="staff">设为客服</button>';
-        tr.innerHTML = '<td></td><td></td><td></td><td>' + roleTag + '</td><td>' + fmt(u.created_at) + '</td><td>' + fmt(u.last_login) + '</td><td>' + btn + '</td>';
+        tr.innerHTML = '<td></td><td></td><td></td><td></td><td>' + roleTag + '</td><td>' + fmt(u.created_at) + '</td><td>' + fmt(u.last_login) + '</td><td>' + btn + '</td>';
         tr.children[0].textContent = u.email;
         tr.children[1].textContent = u.nickname || '—';
-        tr.children[2].textContent = u.phone || '—';
+        tr.children[2].textContent = u.public_id || '—';
+        tr.children[3].textContent = u.phone || '—';
         var b = tr.querySelector('button');
         b.addEventListener('click', function () {
           b.disabled = true;
@@ -282,7 +283,7 @@
         body.appendChild(tr);
       });
       if (!res.d.users.length) {
-        body.innerHTML = '<tr><td colspan="7" style="color:var(--muted)">暂无用户</td></tr>';
+        body.innerHTML = '<tr><td colspan="8" style="color:var(--muted)">暂无用户</td></tr>';
       }
     });
   }

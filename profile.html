@@ -193,6 +193,21 @@
   .info-row:last-child { border-bottom: none; }
   .info-row .k { color: var(--muted); }
   .info-row .v { color: var(--txt); text-align: right; word-break: break-all; }
+  /* 系统默认头像 */
+  .default-avatars { margin-top: 4px; }
+  .da-label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .da-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .da-row .da-item {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 2px solid rgba(212, 175, 55, 0.2);
+    cursor: pointer; overflow: hidden; flex-shrink: 0;
+    transition: border-color .15s, transform .15s;
+    background: rgba(5, 13, 10, 0.6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; padding: 0;
+  }
+  .da-row .da-item:hover { border-color: var(--gold); transform: scale(1.08); }
+  .da-row .da-item img { width: 100%; height: 100%; object-fit: cover; }
   .footer-links {
     width: 100%;
     max-width: 440px;
@@ -257,6 +272,10 @@
         </div>
       </div>
     </div>
+    <div class="default-avatars" id="defaultAvatars">
+      <div class="da-label">选择系统头像：</div>
+      <div class="da-row" id="daRow"></div>
+    </div>
     <input type="file" id="avatarFile" accept="image/*" class="hidden">
   </div>
 
@@ -283,6 +302,7 @@
   <div class="card">
     <h2>账户信息</h2>
     <div class="info-row"><span class="k">邮箱</span><span class="v" id="infoEmail"></span></div>
+    <div class="info-row"><span class="k">用户 ID</span><span class="v" id="infoPid"></span></div>
     <div class="info-row"><span class="k">手机号</span><span class="v" id="infoPhone"></span></div>
     <div class="info-row"><span class="k">注册时间</span><span class="v" id="infoCreated"></span></div>
     <div class="info-row"><span class="k">最近登录</span><span class="v" id="infoLogin"></span></div>
@@ -349,6 +369,7 @@
       $('avatarLetter').textContent = nick.charAt(0).toUpperCase();
     }
     $('infoEmail').textContent = profile.email;
+    $('infoPid').textContent = profile.public_id ? ('用户 ' + profile.public_id) : '—';
     $('infoPhone').textContent = profile.phone || '—';
     $('infoCreated').textContent = fmt(profile.created_at);
     $('infoLogin').textContent = fmt(profile.last_login);
@@ -412,22 +433,67 @@
         canvas.width = canvas.height = 128;
         canvas.getContext('2d').drawImage(img, sx, sy, size, size, 0, 0, 128, 128);
         var dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-        say($('msg1'), '上传中…', true);
-        api('/api/auth/profile/avatar', { avatar: dataUrl }).then(function (res) {
-          if (res.d && res.d.ok) {
-            profile.avatar = dataUrl;
-            render();
-            say($('msg1'), '头像已更新', true);
-          } else {
-            say($('msg1'), (res.d && res.d.error) || '上传失败');
-          }
-        }).catch(function () { say($('msg1'), '网络异常，请稍后重试'); });
+        uploadAvatar(dataUrl);
       };
       img.onerror = function () { say($('msg1'), '图片无法解析'); };
       img.src = reader.result;
     };
     reader.readAsDataURL(file);
   });
+
+  function uploadAvatar(dataUrl) {
+    say($('msg1'), '上传中…', true);
+    api('/api/auth/profile/avatar', { avatar: dataUrl }).then(function (res) {
+      if (res.d && res.d.ok) {
+        profile.avatar = dataUrl;
+        render();
+        say($('msg1'), '头像已更新', true);
+      } else {
+        say($('msg1'), (res.d && res.d.error) || '上传失败');
+      }
+    }).catch(function () { say($('msg1'), '网络异常，请稍后重试'); });
+  }
+
+  /* ---------- 系统默认头像（canvas 生成，不依赖外部图床） ---------- */
+  var DA_LIST = [
+    { emoji: '⚽', bg: '#1d4d3a' }, { emoji: '🏆', bg: '#5a4413' },
+    { emoji: '🔥', bg: '#5c2a1e' }, { emoji: '⭐', bg: '#3a3d14' },
+    { emoji: '🦁', bg: '#4d3a1d' }, { emoji: '🦅', bg: '#1e3a4d' },
+    { emoji: '🐉', bg: '#2a4d1e' }, { emoji: '👑', bg: '#4d1e3a' },
+    { emoji: '🎯', bg: '#1d4d43' }, { emoji: '💎', bg: '#1e2a4d' },
+    { emoji: '🚀', bg: '#3d1e4d' }, { emoji: '🛡️', bg: '#2d3d1e' }
+  ];
+  function drawDefaultAvatar(item) {
+    var canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 128;
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = item.bg;
+    ctx.fillRect(0, 0, 128, 128);
+    // 金色描边圆环
+    ctx.strokeStyle = 'rgba(212,175,55,.6)';
+    ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.arc(64, 64, 56, 0, Math.PI * 2); ctx.stroke();
+    ctx.font = '56px serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(item.emoji, 64, 70);
+    return canvas.toDataURL('image/jpeg', 0.9);
+  }
+  (function initDefaultAvatars() {
+    var row = $('daRow');
+    DA_LIST.forEach(function (item) {
+      var url = drawDefaultAvatar(item);
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'da-item';
+      btn.title = '使用这个头像';
+      var img = document.createElement('img');
+      img.src = url; img.alt = '';
+      btn.appendChild(img);
+      btn.addEventListener('click', function () { uploadAvatar(url); });
+      row.appendChild(btn);
+    });
+  })();
 
   /* ---------- 修改密码 ---------- */
   function validPwd(v) { return v.length >= 8 && /[A-Za-z]/.test(v) && /\d/.test(v); }
