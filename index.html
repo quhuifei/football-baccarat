@@ -44,7 +44,7 @@
       linear-gradient(180deg, #0b211a 0%, #071510 46%, #050d0a 100%);
     background-attachment: fixed;
     color: var(--txt);
-    padding: 18px 12px 10px;
+    padding: 66px 12px 10px;
     min-height: 100vh;
   }
   :focus-visible {
@@ -558,7 +558,7 @@
     cursor: zoom-in;
   }
   .chat-lightbox {
-    position: fixed; inset: 0; z-index: 3000;
+    position: fixed; inset: 0; z-index: 4500;
     background: rgba(4, 10, 8, 0.92);
     display: flex; align-items: center; justify-content: center;
     cursor: zoom-out; padding: 20px;
@@ -724,7 +724,7 @@
 </div>
 <style>
   #ann-banner {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 2300;
+    position: fixed; top: 52px; left: 0; right: 0; z-index: 3900;
     display: flex; align-items: center; justify-content: center; gap: 14px;
     padding: 8px 44px 8px 16px;
     background: linear-gradient(90deg, rgba(212, 175, 55, 0.16), rgba(212, 175, 55, 0.24), rgba(212, 175, 55, 0.16));
@@ -740,16 +740,29 @@
   }
   #ann-banner-close:hover { opacity: 1; }
 </style>
-<!-- 品牌标 -->
-<a id="brand-mark" href="/">⚽ 首页</a>
-<!-- 账户角标：游客显示登录/注册，登录后显示头像+昵称+退出 -->
-<div id="account-chip">
-  <a id="account-profile" href="/profile.html" title="个人中心">
-    <span id="account-avatar"><img id="account-avatar-img" style="display:none" alt=""><span id="account-avatar-letter"></span></span>
-    <span id="account-email">…</span>
-  </a>
-  <button type="button" id="logout-btn" onclick="doLogout()">退出</button>
+<!-- 顶部固定栏：左首页 右账户 -->
+<div id="topbar">
+  <a id="brand-mark" href="/">⚽ 首页</a>
+  <!-- 账户角标：游客显示登录/注册，登录后显示头像+昵称+退出 -->
+  <div id="account-chip">
+    <a id="account-profile" href="/profile.html" title="个人中心">
+      <span id="account-avatar"><img id="account-avatar-img" style="display:none" alt=""><span id="account-avatar-letter"></span></span>
+      <span id="account-email">…</span>
+    </a>
+    <button type="button" id="logout-btn" onclick="doLogout()">退出</button>
+  </div>
 </div>
+<style>
+  #topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 52px; z-index: 4000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 12px;
+    background: rgba(7, 21, 16, 0.98);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  }
+  #topbar #brand-mark { position: static; }
+  #topbar #account-chip { position: static; }
+</style>
 <style>
   #brand-mark {
     position: fixed; top: 10px; left: 12px; z-index: 2000;
@@ -1522,7 +1535,7 @@ async function initApp() {
 initApp();
 
 // ===== 球迷聊天室 =====
-const chatState = { me: null, lastId: 0, timer: null };
+const chatState = { me: null, lastId: 0, timer: null, pollBusy: false, seen: new Set() };
 const chatMsgsEl = document.getElementById('chat-msgs');
 const chatInputEl = document.getElementById('chat-input');
 const chatSendEl = document.getElementById('chat-send');
@@ -1530,6 +1543,8 @@ const chatSendEl = document.getElementById('chat-send');
 function chatScrollBottom() { chatMsgsEl.scrollTop = chatMsgsEl.scrollHeight; }
 
 function renderChatMsg(m) {
+  if (chatState.seen.has(m.id)) return;  // 已渲染过的消息不再重复渲染
+  chatState.seen.add(m.id);
   // 抖音评论区风格：一律靠左、无头像、「昵称：内容」同一行
   const item = document.createElement('div');
   item.className = 'chat-item';
@@ -1574,19 +1589,21 @@ document.getElementById('chat-lightbox').addEventListener('click', function () {
 });
 
 async function chatPoll(initial) {
+  if (chatState.pollBusy) return;  // 上一次拉取未完成就跳过，防止并发重复渲染
+  chatState.pollBusy = true;
   try {
     const url = '/api/chat/messages' + (chatState.lastId ? '?after_id=' + chatState.lastId : '');
     const r = await fetch(url, { credentials: 'same-origin' });
     const d = r.ok ? await r.json() : null;
     if (d && d.ok && d.messages.length) {
-      if (initial) chatMsgsEl.innerHTML = '';
+      if (initial) { chatMsgsEl.innerHTML = ''; chatState.seen.clear(); }
       d.messages.forEach(renderChatMsg);
-      chatState.lastId = d.messages[d.messages.length - 1].id;
+      chatState.lastId = Math.max(chatState.lastId, d.messages[d.messages.length - 1].id);
       chatScrollBottom();
     } else if (initial) {
       chatMsgsEl.innerHTML = '<div class="chat-empty">还没有消息，来说第一句吧</div>';
     }
-  } catch (e) {}
+  } catch (e) {} finally { chatState.pollBusy = false; }
 }
 
 function chatApplyLoginState() {
@@ -1633,7 +1650,7 @@ async function chatSend() {
     if (d && d.ok && d.email) chatState.me = d;
   } catch (e) {}
   chatApplyLoginState();
-  chatPoll(true);
+  await chatPoll(true);  // 首次拉取完成后再启动定时轮询，避免并发拉两遍
   chatState.timer = setInterval(() => chatPoll(false), 3000);
 })();
 chatSendEl.addEventListener('click', chatSend);
