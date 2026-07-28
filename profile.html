@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人中心 · 赛先知足球</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Oswald:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #d4af37;
+    --gold-bright: #f0d57a;
+    --gold-line: rgba(212, 175, 55, 0.25);
+    --txt: #e9e7de;
+    --muted: #8fa39b;
+    --panel: rgba(15, 32, 27, 0.85);
+    --err: #ff8585;
+    --ok: #3fd3b6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--txt);
+    background:
+      radial-gradient(1100px 550px at 50% -8%, rgba(212, 175, 55, 0.08), transparent 62%),
+      radial-gradient(900px 520px at 88% 8%, rgba(42, 157, 143, 0.09), transparent 60%),
+      radial-gradient(1000px 700px at 8% 92%, rgba(24, 68, 110, 0.22), transparent 60%),
+      linear-gradient(180deg, #0b211a 0%, #071510 46%, #050d0a 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 16px 32px;
+  }
+  .logo {
+    font-family: Oswald, "Noto Sans SC", sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .card {
+    width: 100%;
+    max-width: 440px;
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--gold-line);
+    border-radius: 18px;
+    padding: 26px 26px 24px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    margin-bottom: 18px;
+  }
+  .card h2 {
+    font-size: 15px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+    font-weight: 700;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .field { margin-bottom: 16px; }
+  .input-wrap { position: relative; width: 100%; }
+  input[type=text], input[type=password], input[type=email] {
+    width: 100%;
+    background: rgba(5, 13, 10, 0.7);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 10px;
+    color: var(--txt);
+    font-size: 15px;
+    padding: 12px 14px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    font-family: inherit;
+  }
+  input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+  }
+  input::placeholder { color: #54665f; }
+  .btn {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    transition: opacity .2s, transform .1s, filter .2s;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-main {
+    width: 100%;
+    padding: 13px;
+    font-size: 15px;
+    background: linear-gradient(135deg, var(--gold), #b8952e);
+    color: #071510;
+    letter-spacing: 3px;
+  }
+  .btn-main:not(:disabled):hover { filter: brightness(1.08); }
+  .btn-mini {
+    padding: 7px 14px;
+    font-size: 13px;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid var(--gold-line);
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .btn-mini:hover { background: rgba(212, 175, 55, 0.22); }
+  .btn-danger {
+    width: 100%;
+    padding: 13px;
+    font-size: 15px;
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid rgba(255, 107, 107, 0.4);
+    color: #ff8585;
+    letter-spacing: 2px;
+  }
+  .btn-danger:hover { background: rgba(255, 107, 107, 0.2); }
+  .msg {
+    min-height: 20px;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+  .msg.err { color: var(--err); }
+  .msg.ok  { color: var(--ok); }
+  /* 头像区 */
+  .profile-head {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 20px;
+  }
+  .avatar {
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    border: 2px solid var(--gold-line);
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--gold);
+    font-size: 34px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: border-color .2s;
+  }
+  .avatar:hover { border-color: var(--gold); }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .avatar .mask {
+    position: absolute;
+    inset: auto 0 0 0;
+    background: rgba(5, 13, 10, 0.75);
+    font-size: 11px;
+    color: var(--gold-bright);
+    padding: 4px 0;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  .nick-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .nick-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--txt);
+    word-break: break-all;
+  }
+  .nick-edit { display: flex; gap: 8px; width: 100%; }
+  .nick-edit input { flex: 1; }
+  /* 账户信息 */
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+    font-size: 14px;
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-row .k { color: var(--muted); }
+  .info-row .v { color: var(--txt); text-align: right; word-break: break-all; }
+  .footer-links {
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+    margin-top: 4px;
+  }
+  .back-home {
+    display: inline-block;
+    color: var(--muted);
+    font-size: 14px;
+    text-decoration: none;
+    margin-bottom: 14px;
+  }
+  .back-home:hover { color: var(--gold); }
+  .footer {
+    margin-top: 20px;
+    color: #5c6f68;
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.7;
+  }
+  .hidden { display: none !important; }
+  .spinner {
+    display: inline-block;
+    width: 13px; height: 13px;
+    border: 2px solid rgba(7,21,16,.3);
+    border-top-color: #071510;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    vertical-align: -2px;
+    margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (max-width: 420px) {
+    .card { padding: 22px 18px 20px; }
+    .avatar { width: 72px; height: 72px; font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+  <div class="logo">赛先知足球</div>
+
+  <!-- 卡片 1：我的资料 -->
+  <div class="card">
+    <h2>我的资料</h2>
+    <div id="msg1" class="msg"></div>
+    <div class="profile-head">
+      <div class="avatar" id="avatarBox" title="点击更换头像">
+        <span id="avatarLetter"></span>
+        <img id="avatarImg" class="hidden" alt="">
+        <div class="mask">更换</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="nick-row" id="nickShow">
+          <span class="nick-text" id="nickText"></span>
+          <button class="btn btn-mini" id="nickEditBtn">修改</button>
+        </div>
+        <div class="nick-edit hidden" id="nickEdit">
+          <input type="text" id="nickInput" maxlength="20" placeholder="2~20 字符">
+          <button class="btn btn-mini" id="nickSave">保存</button>
+          <button class="btn btn-mini" id="nickCancel">取消</button>
+        </div>
+      </div>
+    </div>
+    <input type="file" id="avatarFile" accept="image/*" class="hidden">
+  </div>
+
+  <!-- 卡片 2：修改密码 -->
+  <div class="card">
+    <h2>修改密码</h2>
+    <div id="msg2" class="msg"></div>
+    <div class="field">
+      <label for="oldPwd">原密码</label>
+      <input type="password" id="oldPwd" autocomplete="current-password" placeholder="请输入原密码">
+    </div>
+    <div class="field">
+      <label for="newPwd">新密码</label>
+      <input type="password" id="newPwd" autocomplete="new-password" placeholder="至少 8 位，含字母和数字">
+    </div>
+    <div class="field">
+      <label for="newPwd2">确认新密码</label>
+      <input type="password" id="newPwd2" autocomplete="new-password" placeholder="再次输入新密码">
+    </div>
+    <button class="btn btn-main" id="pwdBtn">更新密码</button>
+  </div>
+
+  <!-- 卡片 3：账户信息 -->
+  <div class="card">
+    <h2>账户信息</h2>
+    <div class="info-row"><span class="k">邮箱</span><span class="v" id="infoEmail"></span></div>
+    <div class="info-row"><span class="k">手机号</span><span class="v" id="infoPhone"></span></div>
+    <div class="info-row"><span class="k">注册时间</span><span class="v" id="infoCreated"></span></div>
+    <div class="info-row"><span class="k">最近登录</span><span class="v" id="infoLogin"></span></div>
+  </div>
+
+  <div class="footer-links">
+    <a class="back-home" href="/">← 返回首页</a>
+    <button class="btn btn-danger" id="logoutBtn">退出登录</button>
+  </div>
+
+  <div class="footer">数据仅供参考，不构成投资建议</div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var profile = null;
+
+  function say(box, text, ok) {
+    box.textContent = text || '';
+    box.className = 'msg ' + (text ? (ok ? 'ok' : 'err') : '');
+  }
+  function fmt(ts) {
+    if (!ts) return '—';
+    var d = new Date(ts * 1000);
+    function p(n) { return (n < 10 ? '0' : '') + n; }
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) +
+           ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+  }
+  function api(path, body) {
+    var opt = body
+      ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+      : { method: 'GET' };
+    return fetch(path, opt).then(function (r) {
+      if (r.status === 401) { window.location.href = '/login.html'; throw new Error('401'); }
+      return r.json().catch(function () { return {}; }).then(function (d) { return { st: r.status, d: d }; });
+    });
+  }
+  function setLoading(btn, loading, text) {
+    if (loading) {
+      btn.dataset.orig = btn.textContent;
+      btn.innerHTML = '<span class="spinner"></span>' + (text || '请稍候');
+      btn.disabled = true;
+    } else {
+      btn.textContent = btn.dataset.orig || btn.textContent;
+      btn.disabled = false;
+    }
+  }
+
+  /* ---------- 渲染 ---------- */
+  function render() {
+    var nick = profile.nickname || profile.email.split('@')[0];
+    $('nickText').textContent = nick;
+    if (profile.avatar) {
+      $('avatarImg').src = profile.avatar;
+      $('avatarImg').classList.remove('hidden');
+      $('avatarLetter').classList.add('hidden');
+    } else {
+      $('avatarImg').classList.add('hidden');
+      $('avatarLetter').classList.remove('hidden');
+      $('avatarLetter').textContent = nick.charAt(0).toUpperCase();
+    }
+    $('infoEmail').textContent = profile.email;
+    $('infoPhone').textContent = profile.phone || '—';
+    $('infoCreated').textContent = fmt(profile.created_at);
+    $('infoLogin').textContent = fmt(profile.last_login);
+  }
+
+  /* ---------- 加载 ---------- */
+  fetch('/api/auth/profile').then(function (r) {
+    if (r.status === 401) { window.location.href = '/login.html'; return null; }
+    return r.json();
+  }).then(function (d) {
+    if (d && d.ok) { profile = d; render(); }
+  }).catch(function () { say($('msg1'), '加载失败，请刷新重试'); });
+
+  /* ---------- 昵称 ---------- */
+  $('nickEditBtn').addEventListener('click', function () {
+    $('nickShow').classList.add('hidden');
+    $('nickEdit').classList.remove('hidden');
+    $('nickInput').value = $('nickText').textContent;
+    $('nickInput').focus();
+  });
+  $('nickCancel').addEventListener('click', function () {
+    $('nickEdit').classList.add('hidden');
+    $('nickShow').classList.remove('hidden');
+  });
+  $('nickSave').addEventListener('click', function () {
+    var nick = $('nickInput').value.trim();
+    if (nick.length < 2 || nick.length > 20 || /[<>]/.test(nick)) {
+      say($('msg1'), '昵称需 2~20 字符，不能包含 < >'); return;
+    }
+    var btn = $('nickSave');
+    setLoading(btn, true, '');
+    api('/api/auth/profile/nickname', { nickname: nick }).then(function (res) {
+      setLoading(btn, false);
+      if (res.d && res.d.ok) {
+        profile.nickname = nick;
+        render();
+        $('nickEdit').classList.add('hidden');
+        $('nickShow').classList.remove('hidden');
+        say($('msg1'), '昵称已更新', true);
+      } else {
+        say($('msg1'), (res.d && res.d.error) || (res.d && res.d.detail && res.d.detail[0] && res.d.detail[0].msg) || '保存失败');
+      }
+    }).catch(function () { setLoading(btn, false); say($('msg1'), '网络异常，请稍后重试'); });
+  });
+
+  /* ---------- 头像 ---------- */
+  $('avatarBox').addEventListener('click', function () { $('avatarFile').click(); });
+  $('avatarFile').addEventListener('change', function () {
+    var file = this.files && this.files[0];
+    this.value = '';
+    if (!file || !/^image\//.test(file.type)) { say($('msg1'), '请选择图片文件'); return; }
+    var reader = new FileReader();
+    reader.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        // 居中裁方 + 压缩到 128x128 JPEG
+        var size = Math.min(img.width, img.height);
+        var sx = (img.width - size) / 2, sy = (img.height - size) / 2;
+        var canvas = document.createElement('canvas');
+        canvas.width = canvas.height = 128;
+        canvas.getContext('2d').drawImage(img, sx, sy, size, size, 0, 0, 128, 128);
+        var dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        say($('msg1'), '上传中…', true);
+        api('/api/auth/profile/avatar', { avatar: dataUrl }).then(function (res) {
+          if (res.d && res.d.ok) {
+            profile.avatar = dataUrl;
+            render();
+            say($('msg1'), '头像已更新', true);
+          } else {
+            say($('msg1'), (res.d && res.d.error) || '上传失败');
+          }
+        }).catch(function () { say($('msg1'), '网络异常，请稍后重试'); });
+      };
+      img.onerror = function () { say($('msg1'), '图片无法解析'); };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  /* ---------- 修改密码 ---------- */
+  function validPwd(v) { return v.length >= 8 && /[A-Za-z]/.test(v) && /\d/.test(v); }
+  $('pwdBtn').addEventListener('click', function () {
+    var oldP = $('oldPwd').value, p1 = $('newPwd').value, p2 = $('newPwd2').value;
+    if (!oldP) { say($('msg2'), '请输入原密码'); return; }
+    if (!validPwd(p1)) { say($('msg2'), '新密码至少 8 位，且需同时包含字母和数字'); return; }
+    if (p1 !== p2) { say($('msg2'), '两次输入的新密码不一致'); return; }
+    var btn = $('pwdBtn');
+    setLoading(btn, true, '更新中');
+    api('/api/auth/profile/password', { old_password: oldP, new_password: p1 }).then(function (res) {
+      setLoading(btn, false);
+      if (res.d && res.d.ok) {
+        $('oldPwd').value = $('newPwd').value = $('newPwd2').value = '';
+        say($('msg2'), '密码已更新', true);
+      } else {
+        say($('msg2'), (res.d && res.d.error) || '更新失败');
+      }
+    }).catch(function () { setLoading(btn, false); say($('msg2'), '网络异常，请稍后重试'); });
+  });
+
+  /* ---------- 退出登录 ---------- */
+  $('logoutBtn').addEventListener('click', function () {
+    var btn = $('logoutBtn');
+    setLoading(btn, true, '退出中');
+    fetch('/api/auth/logout', { method: 'POST' }).finally(function () {
+      window.location.href = '/login.html';
+    });
+  });
+})();
+</script>
+</body>
+</html>
