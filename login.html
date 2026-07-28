@@ -468,6 +468,11 @@
   });
 
   /* ---------- 登录 ---------- */
+  function nextUrl() {
+    // 登录成功后回跳到来时的页面（仅允许站内路径）
+    var n = new URLSearchParams(location.search).get('next');
+    return (n && n.charAt(0) === '/' && n.charAt(1) !== '/') ? n : '/';
+  }
   function doLogin() {
     var email = $('l-email').value.trim();
     var pwd = $('l-pwd').value;
@@ -480,7 +485,7 @@
       .then(function (res) {
         if (res.d && res.d.ok) {
           say('登录成功，正在进入…', true);
-          window.location.href = '/';
+          window.location.href = nextUrl();
         } else {
           setLoading(btn, false);
           say((res.d && res.d.error) || '登录失败');
@@ -539,7 +544,7 @@
     }).then(function (res) {
       if (res.d && res.d.ok) {
         say('注册成功，正在进入…', true);
-        window.location.href = '/';
+        window.location.href = nextUrl();
       } else {
         setLoading(btn, false);
         var err = (res.d && res.d.error) || '注册失败';
@@ -568,7 +573,7 @@
       .then(function (res) {
         if (res.d && res.d.ok) {
           say('密码已重置，正在进入…', true);
-          window.location.href = '/';
+          window.location.href = nextUrl();
         } else {
           setLoading(btn, false);
           say((res.d && res.d.error) || '重置失败');

@@ -386,11 +386,11 @@
 
   /* ---------- 访问控制 ---------- */
   fetch('/api/auth/me', { credentials: 'same-origin' }).then(function (r) {
-    if (r.status === 401) { window.location.href = '/login.html'; return null; }
+    if (r.status === 401) { window.location.href = '/login.html?next=/admin.html'; return null; }
     return r.json();
   }).then(function (d) {
     if (!d) return;
-    if (!d.ok || (!d.is_admin && d.role !== 'staff')) { window.location.href = '/login.html'; return; }
+    if (!d.ok || (!d.is_admin && d.role !== 'staff')) { window.location.href = '/login.html?next=/admin.html'; return; }
     me = d;
     document.body.classList.add('authed');  // 鉴权通过才显示页面
     $('whoAmI').textContent = (d.nickname || d.email) + (d.is_admin ? '（管理员）' : '（客服）');
@@ -404,11 +404,11 @@
       loadUsers();
     }
     startSupportPoll();
-  }).catch(function () { window.location.href = '/login.html'; });
+  }).catch(function () { window.location.href = '/login.html?next=/admin.html'; });
 
   $('logoutBtn').addEventListener('click', function () {
     fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' }).finally(function () {
-      window.location.href = '/login.html';
+      window.location.href = '/login.html?next=/admin.html';
     });
   });
 
