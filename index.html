@@ -637,6 +637,28 @@
 </style>
 </head>
 <body>
+<!-- 账户角标：登录后显示邮箱，点退出 -->
+<div id="account-chip">
+  <span id="account-email">…</span>
+  <button type="button" id="logout-btn" onclick="doLogout()">退出</button>
+</div>
+<style>
+  #account-chip {
+    position: fixed; top: 10px; right: 12px; z-index: 2000;
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(13, 30, 24, 0.92); border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 999px; padding: 5px 6px 5px 14px;
+    font-size: 12px; color: #9fb3c8; backdrop-filter: blur(8px);
+  }
+  #account-chip #account-email {
+    max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  #account-chip #logout-btn {
+    background: rgba(201, 162, 39, 0.15); color: #c9a227; border: 1px solid rgba(201, 162, 39, 0.4);
+    border-radius: 999px; padding: 3px 12px; font-size: 12px; cursor: pointer;
+  }
+  #account-chip #logout-btn:hover { background: rgba(201, 162, 39, 0.3); }
+</style>
 <div class="container">
   <h1 id="page-title">全球 27 国联赛</h1>
 
@@ -1253,6 +1275,22 @@ async function initApp() {
 }
 
 initApp();
+
+// 账户角标：显示当前登录邮箱，退出登录
+(async function initAccountChip() {
+  try {
+    const r = await fetch('/api/auth/me', { credentials: 'same-origin' });
+    if (!r.ok) return;  // 未登录时登录墙本来就会拦住，这里静默即可
+    const d = await r.json();
+    if (d && d.email) document.getElementById('account-email').textContent = d.email;
+  } catch (e) { /* 接口不可用时隐藏角标 */
+    document.getElementById('account-chip').style.display = 'none';
+  }
+})();
+async function doLogout() {
+  try { await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' }); } catch (e) {}
+  location.href = '/login.html';
+}
 </script>
 </body>
 </html>
