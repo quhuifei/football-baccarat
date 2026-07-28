@@ -221,6 +221,20 @@
     background: rgba(212, 175, 55, 0.14);
     box-shadow: 0 0 12px rgba(212, 175, 55, 0.22);
   }
+  /* 有更新红点 */
+  .league-item { position: relative; }
+  .league-item.has-update::after {
+    content: ''; position: absolute; top: 7px; right: 7px;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: #ff3b30; box-shadow: 0 0 6px rgba(255, 59, 48, 0.8);
+  }
+  .league-btn { position: relative; }
+  #league-btn-dot {
+    position: absolute; top: -4px; right: -4px; width: 10px; height: 10px;
+    border-radius: 50%; background: #ff3b30;
+    box-shadow: 0 0 6px rgba(255, 59, 48, 0.8); z-index: 2;
+  }
+  #league-btn-dot.hidden { display: none; }
   .league-item .lflag { font-size: 20px; line-height: 1; }
   .league-item .ltext { display: flex; flex-direction: column; min-width: 0; }
   .league-item .lcn { font-size: 14px; font-weight: 600; white-space: nowrap; }
@@ -819,7 +833,7 @@
 
   <div class="controls">
     <label for="league-btn" style="color:#778da9;font-size:14px;">选择赛事：</label>
-    <button type="button" class="year-select league-btn" id="league-btn" onclick="openLeaguePanel()">加载中...</button>
+    <button type="button" class="year-select league-btn" id="league-btn" onclick="openLeaguePanel()">加载中...<span id="league-btn-dot" class="hidden"></span></button>
 
     <span id="season-wrapper">
       <label for="season-select" style="color:#778da9;font-size:14px;">选择赛季：</label>
@@ -1307,6 +1321,7 @@ function populateSeasonSelect() {
 // 切换联赛：懒加载数据文件后渲染（带竞态保护）
 async function setLeague(league) {
   closeLeaguePanel();
+  markLeagueSeen(league);
   if (league === currentLeague && allData[league]) return;
   const token = ++leagueLoadToken;
   currentLeague = league;
@@ -1405,6 +1420,11 @@ function updateLeagueButton() {
   const btn = document.getElementById('league-btn');
   if (meta) {
     btn.innerHTML = meta.flag + ' ' + meta.cn + ' <span class="lb-en">' + meta.name + '</span>';
+    // 红点元素会被 innerHTML 冲掉，补回来
+    const dot = document.createElement('span');
+    dot.id = 'league-btn-dot';
+    if (updatedLeagues.size === 0) dot.className = 'hidden';
+    btn.appendChild(dot);
   }
 }
 
@@ -1426,7 +1446,7 @@ function buildLeaguePanel() {
       lastGroup = meta.group;
     }
     const item = document.createElement('div');
-    item.className = 'league-item' + (meta.code === currentLeague ? ' active' : '');
+    item.className = 'league-item' + (meta.code === currentLeague ? ' active' : '') + (updatedLeagues.has(meta.code) ? ' has-update' : '');
     item.dataset.code = meta.code;
     item.innerHTML = '<span class="lflag">' + meta.flag + '</span>' +
       '<span class="ltext"><span class="lcn">' + meta.cn + '</span>' +
@@ -1442,7 +1462,60 @@ function openLeaguePanel() {
   document.querySelectorAll('.league-item').forEach(el => {
     el.classList.toggle('active', el.dataset.code === currentLeague);
   });
+  refreshLeagueDots();
   document.getElementById('league-overlay').classList.add('open');
+}
+
+// ===== 联赛更新红点 =====
+// localStorage 记录每个联赛「上次看到的最新比赛日期」，football_latest.js 里有更新的日期就打红点
+const SEEN_KEY = 'fb_seen_latest_v1';
+let updatedLeagues = new Set();
+
+function loadSeenLatest() {
+  try { return JSON.parse(localStorage.getItem(SEEN_KEY)) || {}; } catch (e) { return {}; }
+}
+function saveSeenLatest(s) {
+  try { localStorage.setItem(SEEN_KEY, JSON.stringify(s)); } catch (e) {}
+}
+function leagueLatestDates() {
+  const out = {};
+  Object.keys(latestByLeague).forEach(code => {
+    let max = '';
+    latestByLeague[code].forEach(m => { if (m.date && m.date > max) max = m.date; });
+    if (max) out[code] = max;
+  });
+  return out;
+}
+// 首次访问静默建立基线（不打点）；之后有更新日期的联赛进 updatedLeagues
+function computeUpdatedLeagues() {
+  const latest = leagueLatestDates();
+  updatedLeagues = new Set();
+  if (localStorage.getItem(SEEN_KEY) === null) {
+    saveSeenLatest(latest);
+    return;
+  }
+  const seen = loadSeenLatest();
+  Object.keys(latest).forEach(code => {
+    if (!seen[code] || latest[code] > seen[code]) updatedLeagues.add(code);
+  });
+}
+// 点进某联赛即视为已读，红点消失
+function markLeagueSeen(code) {
+  const latest = leagueLatestDates();
+  if (!latest[code]) return;
+  const seen = loadSeenLatest();
+  if (seen[code] === latest[code]) { updatedLeagues.delete(code); refreshLeagueDots(); return; }
+  seen[code] = latest[code];
+  saveSeenLatest(seen);
+  updatedLeagues.delete(code);
+  refreshLeagueDots();
+}
+function refreshLeagueDots() {
+  document.querySelectorAll('.league-item').forEach(el => {
+    el.classList.toggle('has-update', updatedLeagues.has(el.dataset.code));
+  });
+  const btnDot = document.getElementById('league-btn-dot');
+  if (btnDot) btnDot.classList.toggle('hidden', updatedLeagues.size === 0);
 }
 
 function closeLeaguePanel() {
@@ -1529,6 +1602,8 @@ async function initApp() {
   updateLeagueButton();
   statusEl.textContent = '正在检查最新战绩数据...';
   await loadLatestData();
+  computeUpdatedLeagues();
+  refreshLeagueDots();
   await setLeague(currentLeague);
 }
 
