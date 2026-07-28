@@ -232,6 +232,11 @@
     .search-row input { width: 140px; }
   }
 </style>
+<style>
+  /* 鉴权完成前隐藏整页，防止未登录时闪出后台内容 */
+  body { display: none; }
+  body.authed { display: block; }
+</style>
 </head>
 <body>
   <div class="topbar">
@@ -387,6 +392,7 @@
     if (!d) return;
     if (!d.ok || (!d.is_admin && d.role !== 'staff')) { window.location.href = '/login.html'; return; }
     me = d;
+    document.body.classList.add('authed');  // 鉴权通过才显示页面
     $('whoAmI').textContent = (d.nickname || d.email) + (d.is_admin ? '（管理员）' : '（客服）');
     if (!d.is_admin) {
       // staff 只看客服工作台
@@ -398,7 +404,7 @@
       loadUsers();
     }
     startSupportPoll();
-  });
+  }).catch(function () { window.location.href = '/login.html'; });
 
   $('logoutBtn').addEventListener('click', function () {
     fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' }).finally(function () {
