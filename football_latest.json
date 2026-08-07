@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T05:55:21+00:00",
+  "updated_at": "2026-08-07T07:49:05+00:00",
   "matches": [
     {
       "date": "2025-02-14",
@@ -95662,6 +95662,42 @@
       "result": "T",
       "team1_cn": "飓风",
       "team2_cn": "图库曼竞技",
+      "season": "2026",
+      "_league": "ARG"
+    },
+    {
+      "date": "2026-08-05",
+      "team1": "Boca Juniors",
+      "s1": 1,
+      "s2": 0,
+      "team2": "Estudiantes L.P.",
+      "result": "B",
+      "team1_cn": "博卡青年",
+      "team2_cn": "拉普拉塔大学生",
+      "season": "2026",
+      "_league": "ARG"
+    },
+    {
+      "date": "2026-08-06",
+      "team1": "Tigre",
+      "s1": 0,
+      "s2": 0,
+      "team2": "Belgrano",
+      "result": "T",
+      "team1_cn": "蒂格雷",
+      "team2_cn": "贝尔格拉诺",
+      "season": "2026",
+      "_league": "ARG"
+    },
+    {
+      "date": "2026-08-06",
+      "team1": "Union de Santa Fe",
+      "s1": 2,
+      "s2": 1,
+      "team2": "Lanus",
+      "result": "B",
+      "team1_cn": "圣菲联合",
+      "team2_cn": "拉努斯",
       "season": "2026",
       "_league": "ARG"
     }
