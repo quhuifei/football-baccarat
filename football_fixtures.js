@@ -1,0 +1,1 @@
+window.FIXTURES_DATA = {"updated_at": "2026-08-11T15:58:11+08:00", "fixtures": [{"date": "2026-08-11", "time": "21:00", "team1": "Talleres Cordoba", "team2": "Lanus", "team1_cn": "塔列雷斯", "team2_cn": "拉努斯", "season": "2026", "_league": "ARG"}]};

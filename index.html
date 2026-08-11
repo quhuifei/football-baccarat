@@ -246,6 +246,28 @@
     text-overflow: ellipsis;
   }
   .league-item .lcount { margin-left: auto; font-size: 11px; color: var(--muted); white-space: nowrap; }
+  /* ===== 近期赛程弹层 ===== */
+  .fixture-date-title {
+    color: var(--gold);
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin: 14px 4px 8px;
+  }
+  .fixture-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    margin-bottom: 6px;
+    border: 1px solid rgba(212, 175, 55, 0.16);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    font-size: 13px;
+  }
+  .fixture-item .fx-league { color: var(--muted); font-size: 11px; white-space: nowrap; flex-shrink: 0; }
+  .fixture-item .fx-teams { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .fixture-item .fx-time { color: var(--gold-bright); font-size: 12px; white-space: nowrap; flex-shrink: 0; }
+  .fixture-empty { color: var(--muted); text-align: center; padding: 32px 0; font-size: 13px; }
   .export-btn {
     padding: 9px 16px;
     border: 1px solid rgba(212, 175, 55, 0.35);
@@ -686,6 +708,8 @@
     letter-spacing: 0.5px;
   }
   @media (max-width: 640px) {
+    /* 防整页横向晃动：页面级禁止横向滚动（卡片内部仍可自行横滚，iOS 滚动链不再带动整页） */
+    html, body { overflow-x: hidden; }
     body { padding: 12px 8px 8px; }
     h1 { font-size: 23px; letter-spacing: 3px; }
     .controls {
@@ -716,16 +740,18 @@
     /* 手机端 tooltip：显示 ✕ 关闭按钮并留出位置，宽度不超出屏幕 */
     .tooltip { max-width: calc(100vw - 24px); padding-right: 36px; }
     .tooltip.sticky .tooltip-close { display: block; }
-    /* 赛果表格手机端更紧凑，宁可横向滚动也不折行 */
+    /* 赛果表格手机端更紧凑：隐藏「年份」列（日期列已含年份），长队名允许任意断行避免撑宽 */
     .match-list { padding: 10px; }
-    .match-list h2 { font-size: 15px; }
-    table { font-size: 12.5px; }
-    th, td { padding: 5px 7px; }
-    th { top: -10px; font-size: 11.5px; }
+    .match-list h2 { font-size: 15px; margin-bottom: 6px; }
+    table { font-size: 12px; }
+    th, td { padding: 4px 5px; }
+    th:nth-child(2), td:nth-child(2) { display: none; }
+    td:nth-child(4), td:nth-child(6) { overflow-wrap: anywhere; }
+    th { top: -10px; font-size: 11px; }
     td.result-B::before, td.result-P::before, td.result-T::before {
-      left: 7px;
-      padding: 1px 8px;
-      font-size: 11px;
+      left: 5px;
+      padding: 1px 6px;
+      font-size: 10.5px;
     }
   }
 </style>
@@ -834,6 +860,7 @@
   <div class="controls">
     <label for="league-btn" style="color:#778da9;font-size:14px;">选择赛事：</label>
     <button type="button" class="year-select league-btn" id="league-btn" onclick="openLeaguePanel()">加载中...<span id="league-btn-dot" class="hidden"></span></button>
+    <button type="button" class="year-select" id="fixtures-btn" onclick="openFixturesPanel()">📅 近期赛程</button>
 
     <span id="season-wrapper">
       <label for="season-select" style="color:#778da9;font-size:14px;">选择赛季：</label>
@@ -891,6 +918,17 @@
       <button type="button" class="league-panel-close" onclick="closeLeaguePanel()" aria-label="关闭">✕</button>
     </div>
     <div class="league-panel-body" id="league-panel-body"></div>
+  </div>
+</div>
+
+<!-- 近期赛程弹层 -->
+<div class="league-overlay" id="fixtures-overlay" onclick="if(event.target===this)closeFixturesPanel()">
+  <div class="league-panel" role="dialog" aria-label="近期赛程">
+    <div class="league-panel-head">
+      <span>近期赛程 · 未来 7 天</span>
+      <button type="button" class="league-panel-close" onclick="closeFixturesPanel()" aria-label="关闭">✕</button>
+    </div>
+    <div class="league-panel-body" id="fixtures-panel-body"></div>
   </div>
 </div>
 
@@ -1522,8 +1560,61 @@ function closeLeaguePanel() {
   document.getElementById('league-overlay').classList.remove('open');
 }
 
+// ===== 近期赛程弹层（懒加载 football_fixtures.js -> window.FIXTURES_DATA） =====
+let fixturesData = undefined;  // undefined=未加载, null=加载失败
+let fixturesLoading = null;
+
+async function openFixturesPanel() {
+  document.getElementById('fixtures-overlay').classList.add('open');
+  if (fixturesData !== undefined) { renderFixturesPanel(); return; }
+  const body = document.getElementById('fixtures-panel-body');
+  body.innerHTML = '<div class="fixture-empty">赛程加载中…</div>';
+  if (!fixturesLoading) {
+    fixturesLoading = loadScript('football_fixtures.js')
+      .then(() => { fixturesData = window.FIXTURES_DATA || null; })
+      .catch(err => { console.log('加载赛程失败:', err.message); fixturesData = null; });
+  }
+  await fixturesLoading;
+  renderFixturesPanel();
+}
+
+function renderFixturesPanel() {
+  const body = document.getElementById('fixtures-panel-body');
+  const list = (fixturesData && Array.isArray(fixturesData.fixtures)) ? fixturesData.fixtures : [];
+  if (!list.length) {
+    body.innerHTML = '<div class="fixture-empty">' +
+      (fixturesData ? '未来 7 天暂无已排期比赛' : '赛程数据加载失败，请稍后再试') + '</div>';
+    return;
+  }
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g,
+    c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+  let html = '';
+  let lastDate = null;
+  list.forEach(fx => {
+    if (fx.date !== lastDate) {
+      const d = new Date(fx.date + 'T00:00:00');
+      const wd = isNaN(d.getTime()) ? '' : ' · ' + weekdays[d.getDay()];
+      html += '<div class="fixture-date-title">' + esc(fx.date) + wd + '</div>';
+      lastDate = fx.date;
+    }
+    const meta = leagueMetaMap[fx._league];
+    const lname = meta ? meta.flag + ' ' + meta.cn : esc(fx._league);
+    html += '<div class="fixture-item">' +
+      '<span class="fx-league">' + lname + '</span>' +
+      '<span class="fx-teams">' + esc(fx.team1_cn || fx.team1) + ' vs ' + esc(fx.team2_cn || fx.team2) + '</span>' +
+      '<span class="fx-time">' + esc(fx.time || '--:--') + '</span>' +
+      '</div>';
+  });
+  body.innerHTML = html;
+}
+
+function closeFixturesPanel() {
+  document.getElementById('fixtures-overlay').classList.remove('open');
+}
+
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeLeaguePanel();
+  if (e.key === 'Escape') { closeLeaguePanel(); closeFixturesPanel(); }
 });
 
 // ===== 数据加载 =====

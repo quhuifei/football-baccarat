@@ -3,14 +3,17 @@
 """
 update_scores.py — 从 football-data.co.uk 抓取 27 国 38 个联赛的当前赛季赛果，
 输出 football_latest.json 与 football_latest.js（window.LATEST_DATA）供 index.html 合并增量使用。
+另从 A 类当前赛季 CSV 中导出「比分为空」的已排期场次，输出 football_fixtures.json /
+football_fixtures.js（window.FIXTURES_DATA），即今天起未来 7 天的近期赛程。
 
   A 类（mmz4281 按赛季分文件）：抓当前赛季，404 回退上一赛季
   B 类（/new/{code}.csv 单一全历史文件）：解析后只取文件内最新赛季的已赛场次
 
 快速通道（可选）：football-data.co.uk 赛果更新滞后 1~3 天，设置环境变量
 API_FOOTBALL_KEY 后，脚本会再从 API-Football（api-sports.io）按天拉取全球比赛，
-过滤出本站 38 个联赛的已赛场次补最新赛果（每天 1 次调用，默认拉 昨天+今天 共 2 天；
-免费版 100 次/天且只开放 [昨天, 明天] 三天窗口，2×24=48 次/天够用；
+过滤出本站 38 个联赛的已赛场次补最新赛果，并把窗口内未开赛（NS）的场次导出为
+近期赛程（默认拉 昨天+今天+明天 共 3 天，多拉的「明天」专为赛程；
+免费版 100 次/天且只开放 [昨天, 明天] 三天窗口，3×24=72 次/天够用；
 升级 Pro 后把 FAST_DAYS 调大即可回溯更多天）。未设置该变量时脚本行为与旧版完全一致。
 队名经 team_aliases.py 显式映射回 football-data.co.uk 短名，未映射的球队整场跳过
 （宁可不更新，也不制造同一场比赛的重复记录）。
@@ -43,6 +46,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEAM_CN_PATH = os.path.join(BASE_DIR, "team_cn.json")
 OUTPUT_PATH = os.path.join(BASE_DIR, "football_latest.json")
 OUTPUT_JS_PATH = os.path.join(BASE_DIR, "football_latest.js")
+FIXTURES_PATH = os.path.join(BASE_DIR, "football_fixtures.json")
+FIXTURES_JS_PATH = os.path.join(BASE_DIR, "football_fixtures.js")
+FIXTURES_DAYS = 7  # 近期赛程窗口：今天起未来 7 天
 
 # A 类：mmz4281/{赛季码}/{联赛码}.csv
 LEAGUES_A = ["E0", "SP1", "D1", "I1", "F1",
@@ -194,6 +200,47 @@ def parse_main_csv(text, league, season_start, team_cn, missing_teams):
     return matches
 
 
+def make_fixture(date, time_s, home, away, season, league, team_cn):
+    """未来赛程记录；新球队同样先以英文名占位（通常已赛球队已在 team_cn 中）。"""
+    for team in (home, away):
+        if team not in team_cn:
+            team_cn[team] = team
+    return {
+        "date": date,
+        "time": time_s,
+        "team1": home,
+        "team2": away,
+        "team1_cn": team_cn.get(home, home),
+        "team2_cn": team_cn.get(away, away),
+        "season": str(season),
+        "_league": league,
+    }
+
+
+def parse_main_fixtures(text, league, season_start, team_cn, today):
+    """A 类 CSV 中比分为空（FTHG 无值）的已排期行 = 未来赛程。
+    只保留 [今天, 今天+FIXTURES_DAYS] 窗口内的场次。B 类 /new/*.csv 只含已赛场次，
+    经核实文件末尾即为最新已赛日期、无未来行，故未来赛程仅取 A 类。"""
+    last_day = today + timedelta(days=FIXTURES_DAYS)
+    fixtures = []
+    reader = csv.DictReader(io.StringIO(text))
+    for row in reader:
+        home = (row.get("HomeTeam") or "").strip()
+        away = (row.get("AwayTeam") or "").strip()
+        date = parse_date(row.get("Date"))
+        if not home or not away or not date:
+            continue
+        if to_int(row.get("FTHG")) is not None:
+            continue  # 已赛
+        d = datetime.strptime(date, "%Y-%m-%d").date()
+        if not (today <= d <= last_day):
+            continue
+        time_s = (row.get("Time") or "").strip()
+        fixtures.append(make_fixture(date, time_s, home, away,
+                                     season_start, league, team_cn))
+    return fixtures
+
+
 def parse_extra_csv_latest(text, league, team_cn, missing_teams):
     """B 类 CSV（Season/Home/Away/HG/AG/Res），只取文件内最新赛季的已赛场次。
     赛季列可能是 "2025/2026"（跨年）或 "2026"（自然年），统一取起始年最大值。"""
@@ -227,16 +274,20 @@ def parse_extra_csv_latest(text, league, team_cn, missing_teams):
 
 
 def fetch_apifb_fast(csv_index, team_cn, missing_teams):
-    """快速通道：API-Football 按天拉全球比赛，过滤出本站 38 联赛的已赛场次。
+    """快速通道：API-Football 按天拉全球比赛，过滤出本站 38 联赛的比赛。
 
     csv_index: {(联赛码, 主队, 客队): {CSV 已有日期}} —— 用于「同队 ±2 天吸附」兜底。
-    单日请求失败只警告不中断；队名未映射整场跳过。返回与 CSV 相同结构的比赛列表。
-    只收 FT（完场）；AET/PEN 按惯例取常规时间比分（score.fulltime）。
+    单日请求失败只警告不中断；队名未映射整场跳过。返回 (赛果列表, 赛程列表)。
+    赛果只收 FT（完场）；AET/PEN 按惯例取常规时间比分（score.fulltime）。
+    赛程收 NS（未开赛）：免费版窗口含明天，故额外多拉 1 天（FAST_DAYS+1 次调用），
+    得出「今天+明天」的近期赛程；CSV 一旦出现排期行会与之按同键去重合并。
     """
     today = datetime.now(timezone.utc).date()
     dates = [(today - timedelta(days=FAST_DAYS - 1 - i)) for i in range(FAST_DAYS)]
+    dates.append(today + timedelta(days=1))  # 免费版窗口含明天，多拉 1 天补近期赛程
     start_year = current_season_start()
     out = []
+    out_fixtures = []
     for day in dates:
         time.sleep(APIFB_SLEEP)
         req = urllib.request.Request(
@@ -252,24 +303,18 @@ def fetch_apifb_fast(csv_index, team_cn, missing_teams):
             print(f"[快速通道 {day}] 警告：API 返回错误 {data['errors']}，跳过该天")
             continue
 
-        added = skipped_league = skipped_team = 0
+        added = added_fx = skipped_league = skipped_team = 0
         for f in data.get("response", []):
             lid = (f.get("league") or {}).get("id")
             league = APIFB_LEAGUES.get(lid)
             if not league:
                 skipped_league += 1  # 杯赛/其他联赛，不属于本站 38 联赛
                 continue
-            if (f.get("fixture") or {}).get("status", {}).get("short") not in ("FT", "AET", "PEN"):
-                continue
-            ft = (f.get("score") or {}).get("fulltime") or {}
-            s1, s2 = ft.get("home"), ft.get("away")
-            if s1 is None or s2 is None:  # AET/PEN 但无常规时间比分则回退 goals
-                goals = f.get("goals") or {}
-                s1, s2 = goals.get("home"), goals.get("away")
+            status = (f.get("fixture") or {}).get("status", {}).get("short")
             utc = (f.get("fixture") or {}).get("date") or ""
             home_org = (f.get("teams") or {}).get("home", {}).get("name") or ""
             away_org = (f.get("teams") or {}).get("away", {}).get("name") or ""
-            if s1 is None or s2 is None or not utc:
+            if not utc:
                 continue
             aliases = TEAM_ALIASES.get(league, {})
             home = aliases.get(home_org)
@@ -284,23 +329,41 @@ def fetch_apifb_fast(csv_index, team_cn, missing_teams):
             # 「同队 ±2 天吸附」兜底：CSV 已有同对阵记录时直接采用 CSV 日期。
             dt = datetime.fromisoformat(utc.replace("Z", "+00:00")) + timedelta(
                 hours=LEAGUE_UTC_OFFSET.get(league, 0))
+            # 赛季字段沿用脚本现有惯例：跨年联赛记起始年，自然年联赛记比赛日历年
+            season = start_year if league in LEAGUES_A else dt.date().year
+
+            if status == "NS":  # 未开赛 → 近期赛程
+                local_day = dt.date()
+                if today <= local_day <= today + timedelta(days=FIXTURES_DAYS):
+                    out_fixtures.append(make_fixture(
+                        local_day.isoformat(), dt.strftime("%H:%M"),
+                        home, away, season, league, team_cn))
+                    added_fx += 1
+                continue
+            if status not in ("FT", "AET", "PEN"):
+                continue
+            ft = (f.get("score") or {}).get("fulltime") or {}
+            s1, s2 = ft.get("home"), ft.get("away")
+            if s1 is None or s2 is None:  # AET/PEN 但无常规时间比分则回退 goals
+                goals = f.get("goals") or {}
+                s1, s2 = goals.get("home"), goals.get("away")
+            if s1 is None or s2 is None:
+                continue
             date = dt.date().isoformat()
             for d in csv_index.get((league, home, away), ()):
                 if abs((datetime.strptime(d, "%Y-%m-%d").date() - dt.date()).days) <= 2:
                     date = d
                     break
             res = "H" if s1 > s2 else ("A" if s1 < s2 else "D")
-            # 赛季字段沿用脚本现有惯例：跨年联赛记起始年，自然年联赛记比赛日历年
-            season = start_year if league in LEAGUES_A else dt.date().year
             out.append(make_match(date, home, s1, s2, away, res, season,
                                   league, team_cn, missing_teams))
             added += 1
-        if added or skipped_team:
-            print(f"[快速通道 {day}] 本站联赛已赛 {added} 场入列"
+        if added or added_fx or skipped_team:
+            print(f"[快速通道 {day}] 本站联赛已赛 {added} 场、未赛赛程 {added_fx} 场入列"
                   f"（非本站联赛 {skipped_league} 场忽略，队名未映射跳过 {skipped_team} 场）")
         else:
-            print(f"[快速通道 {day}] 本站联赛暂无已赛比赛")
-    return out
+            print(f"[快速通道 {day}] 本站联赛暂无相关比赛")
+    return out, out_fixtures
 
 
 def merge_fast(all_matches, fast_matches):
@@ -322,6 +385,7 @@ def merge_fast(all_matches, fast_matches):
 
 def main():
     start_year = current_season_start()
+    today = datetime.now().date()
     print(f"当前赛季起始年判定为 {start_year}（{season_code(start_year)} 赛季）")
 
     # 加载中文名映射
@@ -334,7 +398,9 @@ def main():
 
     missing_teams = set()
     all_matches = []
+    all_fixtures = []
     summary = {}
+    fixtures_summary = {}
 
     # ---- A 类：当前赛季，404 回退上一赛季 ----
     for league in LEAGUES_A:
@@ -363,6 +429,10 @@ def main():
         all_matches.extend(matches)
         summary[league] = len(matches)
         print(f"[{league}] {season_code(used_year)} 赛季抓到 {len(matches)} 场已赛比赛")
+        if used_year == start_year:  # 回退到旧赛季的不会有未来赛程
+            fx = parse_main_fixtures(text, league, used_year, team_cn, today)
+            all_fixtures.extend(fx)
+            fixtures_summary[league] = len(fx)
 
     # ---- B 类：全历史文件，取最新赛季已赛场次 ----
     for league in LEAGUES_B:
@@ -399,11 +469,13 @@ def main():
         for m in all_matches:
             csv_index.setdefault((m["_league"], m["team1"], m["team2"]), set()).add(m["date"])
         before = len(all_matches)
-        fast_matches = fetch_apifb_fast(csv_index, team_cn, missing_teams)
+        fast_matches, fast_fixtures = fetch_apifb_fast(csv_index, team_cn, missing_teams)
         all_matches = merge_fast(all_matches, fast_matches)
+        all_fixtures.extend(fast_fixtures)
         summary["_fast"] = len(fast_matches)
-        print(f"[快速通道] 合计 {len(fast_matches)} 场，"
-              f"净新增 {len(all_matches) - before} 场\n")
+        summary["_fast_fx"] = len(fast_fixtures)
+        print(f"[快速通道] 赛果合计 {len(fast_matches)} 场，"
+              f"净新增 {len(all_matches) - before} 场；赛程 {len(fast_fixtures)} 场\n")
     else:
         print("\n未设置 API_FOOTBALL_KEY，跳过快速通道（API-Football）")
 
@@ -430,14 +502,40 @@ def main():
         json.dump(output, f, ensure_ascii=False)
         f.write(";\n")
 
+    # ---- 近期赛程：按 (联赛, 日期, 时间, 主, 客) 去重后按开球时间排序 ----
+    fx_merged = {}
+    for fx in all_fixtures:
+        fx_merged[(fx["_league"], fx["date"], fx["time"], fx["team1"], fx["team2"])] = fx
+    all_fixtures = sorted(fx_merged.values(),
+                          key=lambda x: (x["date"], x["time"] or "99:99", x["team1"]))
+    fixtures_output = {
+        "updated_at": output["updated_at"],
+        "fixtures": all_fixtures,
+    }
+    with open(FIXTURES_PATH, "w", encoding="utf-8") as f:
+        json.dump(fixtures_output, f, ensure_ascii=False, indent=2)
+    with open(FIXTURES_JS_PATH, "w", encoding="utf-8") as f:
+        f.write("window.FIXTURES_DATA = ")
+        json.dump(fixtures_output, f, ensure_ascii=False)
+        f.write(";\n")
+
     print("\n===== 汇总 =====")
     for league in LEAGUES_A + LEAGUES_B:
         print(f"  {league}: {summary.get(league, 0)} 场")
     if "_fast" in summary:
-        print(f"  快速通道(API-Football): {summary['_fast']} 场")
+        print(f"  快速通道(API-Football): {summary['_fast']} 场"
+              + (f"（另获赛程 {summary['_fast_fx']} 场）" if summary.get("_fast_fx") else ""))
     print(f"  合计: {len(all_matches)} 场")
     print(f"  输出文件: {OUTPUT_PATH}")
     print(f"  输出文件: {OUTPUT_JS_PATH}")
+    fx_total = len(all_fixtures)
+    print(f"\n===== 近期赛程（未来 {FIXTURES_DAYS} 天） =====")
+    for league in sorted(fixtures_summary):
+        if fixtures_summary[league]:
+            print(f"  {league}: {fixtures_summary[league]} 场")
+    print(f"  合计: {fx_total} 场")
+    print(f"  输出文件: {FIXTURES_PATH}")
+    print(f"  输出文件: {FIXTURES_JS_PATH}")
 
 
 if __name__ == "__main__":

@@ -485,6 +485,8 @@ TEAM_ALIASES = {
         "Belgrano Cordoba": "Belgrano",
         "Central Cordoba de Santiago": "Central Cordoba",
         "Union Santa Fe": "Union de Santa Fe",
+        "Talleres Cordoba": "Talleres Cordoba",
+        "Lanus": "Lanus",
     },
     # 奥甲（AUT）
     "AUT": {
