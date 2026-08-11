@@ -8,11 +8,16 @@ update_scores.py — 从 football-data.co.uk 抓取 27 国 38 个联赛的当前
   B 类（/new/{code}.csv 单一全历史文件）：解析后只取文件内最新赛季的已赛场次
 
 快速通道（可选）：football-data.co.uk 赛果更新滞后 1~3 天，设置环境变量
-FOOTBALL_DATA_ORG_TOKEN 后，脚本会再从 football-data.org API 拉取 9 个热门赛事
-近 14 天的 FINISHED 比赛补最新赛果（每次调用间隔 7.5 秒，免费套餐 10 次/分钟）；
-未设置该变量时脚本行为与旧版完全一致。
+API_FOOTBALL_KEY 后，脚本会再从 API-Football（api-sports.io）按天拉取全球比赛，
+过滤出本站 38 个联赛的已赛场次补最新赛果（每天 1 次调用，默认拉 昨天+今天 共 2 天；
+免费版 100 次/天且只开放 [昨天, 明天] 三天窗口，2×24=48 次/天够用；
+升级 Pro 后把 FAST_DAYS 调大即可回溯更多天）。未设置该变量时脚本行为与旧版完全一致。
 队名经 team_aliases.py 显式映射回 football-data.co.uk 短名，未映射的球队整场跳过
 （宁可不更新，也不制造同一场比赛的重复记录）。
+
+注意：football-data.co.uk 在新赛季 CSV 未就绪时会把缺失文件 301 重定向到别的联赛
+文件（如 E0.csv→EC.csv），本脚本对跨路径重定向一律视为文件不存在并回退上一赛季，
+防止一场比赛被打上多个联赛标签。
 
 用法: python3 update_scores.py
 依赖: 仅标准库（urllib / csv / json / time）+ 同目录 team_aliases.py
@@ -25,6 +30,7 @@ import os
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
 
@@ -58,25 +64,34 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) update_scores/2.0"
 
 FTR_MAP = {"H": "B", "A": "P", "D": "T"}
 
-# ---- 快速通道：football-data.org API ----
-ORG_TOKEN = os.environ.get("FOOTBALL_DATA_ORG_TOKEN", "").strip()
-# football-data.org 赛事码 -> (本站联赛码, 联赛当地相对 UTC 的固定偏移小时)
-# 注意：football-data.org 的 ELC（英冠）对应本站 E1；football-data.co.uk 的 EC 是英议联，不在快速通道内。
-FAST_LEAGUES = {
-    "PL":  ("E0", 0),    # 英超（英国 UTC+0/+1，直接用 UTC 日期即可对齐当地日期）
-    "ELC": ("E1", 0),    # 英冠
-    "BL1": ("D1", 1),    # 德甲（中欧 UTC+1/+2）
-    "PD":  ("SP1", 1),   # 西甲
-    "SA":  ("I1", 1),    # 意甲
-    "FL1": ("F1", 1),    # 法甲
-    "DED": ("N1", 1),    # 荷甲
-    "PPL": ("P1", 0),    # 葡超（葡萄牙 UTC+0/+1）
-    "BSA": ("BRA", -3),  # 巴甲（巴西利亚 UTC-3）
+# ---- 快速通道：API-Football（api-sports.io）----
+APIFB_KEY = os.environ.get("API_FOOTBALL_KEY", "").strip()
+APIFB_URL = "https://v3.football.api-sports.io/fixtures?date={d}"
+FAST_DAYS = 2      # 拉取 昨天+今天（免费版只开放 [昨天, 明天] 窗口且 100 次/天：2×24=48 次/天；升级 Pro 后调大可回溯更多天）
+APIFB_SLEEP = 6    # 调用间隔秒数（免费版限流保护）
+# API-Football league.id → 本站联赛码（2026-08 逐一用 /leagues 接口按 国家+名称+League 类型核实）
+APIFB_LEAGUES = {
+    39: "E0", 40: "E1", 41: "E2", 42: "E3", 43: "EC",
+    140: "SP1", 141: "SP2", 78: "D1", 79: "D2",
+    135: "I1", 136: "I2", 61: "F1", 62: "F2",
+    179: "SC0", 180: "SC1", 183: "SC2", 184: "SC3",
+    88: "N1", 144: "B1", 94: "P1", 203: "T1", 197: "G1",
+    128: "ARG", 218: "AUT", 71: "BRA", 169: "CHN", 119: "DNK",
+    244: "FIN", 357: "IRL", 98: "JPN", 262: "MEX", 103: "NOR",
+    106: "POL", 283: "ROU", 235: "RUS", 113: "SWE", 207: "SWZ", 253: "USA",
 }
-ORG_API = ("https://api.football-data.org/v4/competitions/{comp}/matches"
-           "?status=FINISHED&dateFrom={d1}&dateTo={d2}")
-ORG_DAYS = 14      # 拉取近 14 天已赛比赛
-ORG_SLEEP = 7.5    # 每次调用间隔 ≥7 秒（免费套餐 10 次/分钟）
+# 本站联赛码 → 联赛当地相对 UTC 的固定偏移小时（用于把 fixture.date 换算成联赛当地日期，
+# 与 football-data.co.uk CSV 的当地日期惯例对齐。不追夏令时，±1 天误差由「同队 ±2 天吸附」兜底）
+LEAGUE_UTC_OFFSET = {
+    "E0": 0, "E1": 0, "E2": 0, "E3": 0, "EC": 0, "IRL": 0, "P1": 0,
+    "SC0": 0, "SC1": 0, "SC2": 0, "SC3": 0,
+    "SP1": 1, "SP2": 1, "D1": 1, "D2": 1, "I1": 1, "I2": 1, "F1": 1, "F2": 1,
+    "N1": 1, "B1": 1, "AUT": 1, "POL": 1, "DNK": 1, "NOR": 1, "SWE": 1, "SWZ": 1,
+    "G1": 2, "ROU": 2, "FIN": 2,
+    "T1": 3, "RUS": 3,
+    "ARG": -3, "BRA": -3, "MEX": -6, "USA": -5,
+    "CHN": 8, "JPN": 9,
+}
 
 
 def current_season_start(today=None):
@@ -90,18 +105,37 @@ def season_code(start_year):
     return f"{start_year % 100:02d}{(start_year + 1) % 100:02d}"
 
 
+class _NoCrossPathRedirect(urllib.request.HTTPRedirectHandler):
+    """football-data.co.uk 在新赛季文件未就绪时会把缺失文件 301 到别的联赛 CSV
+    （如 2627/E0.csv → 2627/EC.csv，曾致一场比赛被标上 E0/E3/EC 三个联赛）。
+    跨路径重定向一律拒绝跟随，按「文件不存在」处理并回退上一赛季。"""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        old_path = urllib.parse.urlparse(req.full_url).path
+        new_path = urllib.parse.urlparse(newurl).path
+        if new_path != old_path:
+            return None  # urllib 将抛出 HTTPError(code)，download() 按不存在处理
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+_OPENER = urllib.request.build_opener(_NoCrossPathRedirect)
+
+
 def download(url):
-    """下载 CSV 文本；404 返回 None，其他异常抛出。"""
+    """下载 CSV 文本；404/跨路径重定向/非 CSV 内容（HTML 错误页）返回 None，其他异常抛出。"""
     time.sleep(SLEEP)
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     try:
-        with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+        with _OPENER.open(req, timeout=TIMEOUT) as resp:
             raw = resp.read()
     except urllib.error.HTTPError as e:
-        if e.code == 404:
+        if e.code == 404 or 300 <= e.code < 400:
             return None
         raise
-    return raw.decode("utf-8-sig", errors="replace")
+    text = raw.decode("utf-8-sig", errors="replace")
+    if text.lstrip().startswith("<"):  # HTML 错误页，不是 CSV
+        return None
+    return text
 
 
 def parse_date(s):
@@ -192,63 +226,80 @@ def parse_extra_csv_latest(text, league, team_cn, missing_teams):
             if start == max_season]
 
 
-def fetch_org_fast(csv_index, team_cn, missing_teams):
-    """快速通道：从 football-data.org 拉 9 个热门赛事近 ORG_DAYS 天的已赛比赛。
+def fetch_apifb_fast(csv_index, team_cn, missing_teams):
+    """快速通道：API-Football 按天拉全球比赛，过滤出本站 38 联赛的已赛场次。
 
     csv_index: {(联赛码, 主队, 客队): {CSV 已有日期}} —— 用于「同队 ±2 天吸附」兜底。
-    单次请求失败只警告不中断；队名未映射整场跳过。返回与 CSV 相同结构的比赛列表。
+    单日请求失败只警告不中断；队名未映射整场跳过。返回与 CSV 相同结构的比赛列表。
+    只收 FT（完场）；AET/PEN 按惯例取常规时间比分（score.fulltime）。
     """
     today = datetime.now(timezone.utc).date()
-    d1 = (today - timedelta(days=ORG_DAYS)).isoformat()
-    d2 = today.isoformat()
+    dates = [(today - timedelta(days=FAST_DAYS - 1 - i)) for i in range(FAST_DAYS)]
     start_year = current_season_start()
     out = []
-    for comp, (league, offset) in FAST_LEAGUES.items():
-        time.sleep(ORG_SLEEP)  # 每次调用前都间隔，防爆免费套餐 10 次/分钟限额
-        url = ORG_API.format(comp=comp, d1=d1, d2=d2)
+    for day in dates:
+        time.sleep(APIFB_SLEEP)
         req = urllib.request.Request(
-            url, headers={"X-Auth-Token": ORG_TOKEN, "User-Agent": USER_AGENT})
+            APIFB_URL.format(d=day.isoformat()),
+            headers={"x-apisports-key": APIFB_KEY, "User-Agent": USER_AGENT})
         try:
             with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
                 data = json.load(resp)
         except Exception as e:
-            print(f"[快速通道 {comp}] 警告：请求失败（{e}），跳过该赛事，保留 CSV 结果")
+            print(f"[快速通道 {day}] 警告：请求失败（{e}），跳过该天，保留 CSV 结果")
+            continue
+        if data.get("errors"):
+            print(f"[快速通道 {day}] 警告：API 返回错误 {data['errors']}，跳过该天")
             continue
 
-        aliases = TEAM_ALIASES.get(league, {})
-        added = skipped = 0
-        for mt in data.get("matches", []):
-            score = (mt.get("score") or {}).get("fullTime") or {}
-            s1, s2 = score.get("home"), score.get("away")
-            utc = mt.get("utcDate") or ""
-            home_org = (mt.get("homeTeam") or {}).get("name") or ""
-            away_org = (mt.get("awayTeam") or {}).get("name") or ""
+        added = skipped_league = skipped_team = 0
+        for f in data.get("response", []):
+            lid = (f.get("league") or {}).get("id")
+            league = APIFB_LEAGUES.get(lid)
+            if not league:
+                skipped_league += 1  # 杯赛/其他联赛，不属于本站 38 联赛
+                continue
+            if (f.get("fixture") or {}).get("status", {}).get("short") not in ("FT", "AET", "PEN"):
+                continue
+            ft = (f.get("score") or {}).get("fulltime") or {}
+            s1, s2 = ft.get("home"), ft.get("away")
+            if s1 is None or s2 is None:  # AET/PEN 但无常规时间比分则回退 goals
+                goals = f.get("goals") or {}
+                s1, s2 = goals.get("home"), goals.get("away")
+            utc = (f.get("fixture") or {}).get("date") or ""
+            home_org = (f.get("teams") or {}).get("home", {}).get("name") or ""
+            away_org = (f.get("teams") or {}).get("away", {}).get("name") or ""
             if s1 is None or s2 is None or not utc:
                 continue
+            aliases = TEAM_ALIASES.get(league, {})
             home = aliases.get(home_org)
             away = aliases.get(away_org)
             if not home or not away:
-                skipped += 1
-                print(f"[快速通道 {comp}] 警告：队名未映射，跳过 "
+                skipped_team += 1
+                print(f"[快速通道 {day} {league}] 警告：队名未映射，跳过 "
                       f"{home_org} vs {away_org}（请补充 team_aliases.py 的 {league} 表）")
                 continue
-            # utcDate 是 UTC 时刻；football-data.co.uk CSV 记录的是联赛当地日期。
-            # 这里按 FAST_LEAGUES 的固定偏移换算成近似的联赛当地日期，让两个源的同一场
-            # 比赛去重键（date|team1|team2）一致。不做夏令时精确换算，深夜开球可能差
-            # ±1 天，由下面的「同队 ±2 天吸附」兜底：CSV 已有同对阵记录时直接采用 CSV 日期。
-            dt = datetime.fromisoformat(utc.replace("Z", "+00:00")) + timedelta(hours=offset)
+            # fixture.date 是 UTC 时刻；football-data.co.uk CSV 记录的是联赛当地日期。
+            # 按 LEAGUE_UTC_OFFSET 固定偏移换算（不追夏令时），深夜开球 ±1 天误差由
+            # 「同队 ±2 天吸附」兜底：CSV 已有同对阵记录时直接采用 CSV 日期。
+            dt = datetime.fromisoformat(utc.replace("Z", "+00:00")) + timedelta(
+                hours=LEAGUE_UTC_OFFSET.get(league, 0))
             date = dt.date().isoformat()
             for d in csv_index.get((league, home, away), ()):
                 if abs((datetime.strptime(d, "%Y-%m-%d").date() - dt.date()).days) <= 2:
                     date = d
                     break
             res = "H" if s1 > s2 else ("A" if s1 < s2 else "D")
-            # 赛季字段沿用脚本现有惯例：跨年联赛记起始年，巴甲（自然年）记比赛日历年
-            season = dt.date().year if league == "BRA" else start_year
+            # 赛季字段沿用脚本现有惯例：跨年联赛记起始年，自然年联赛记比赛日历年
+            season = start_year if league in LEAGUES_A else dt.date().year
             out.append(make_match(date, home, s1, s2, away, res, season,
                                   league, team_cn, missing_teams))
             added += 1
-        print(f"[快速通道 {comp}→{league}] 拉到 {added} 场（跳过未映射 {skipped} 场）")
+        if added or skipped_team:
+            print(f"[快速通道 {day}] 本站联赛已赛 {added} 场入列"
+                  f"（非本站联赛 {skipped_league} 场忽略，队名未映射跳过 {skipped_team} 场）")
+        else:
+            print(f"[快速通道 {day}] 本站联赛暂无已赛比赛")
     return out
 
 
@@ -340,21 +391,21 @@ def main():
         season_label = matches[0]["season"] if matches else "?"
         print(f"[{league}] 最新赛季（{season_label}）抓到 {len(matches)} 场已赛比赛")
 
-    # ---- 快速通道：football-data.org 补最新赛果（无密钥时跳过，行为与旧版一致）----
-    if ORG_TOKEN:
-        print(f"\n快速通道：从 football-data.org 拉取 {len(FAST_LEAGUES)} 个赛事近 "
-              f"{ORG_DAYS} 天赛果（每次间隔 {ORG_SLEEP} 秒）...")
+    # ---- 快速通道：API-Football 补最新赛果（无密钥时跳过，行为与旧版一致）----
+    if APIFB_KEY:
+        print(f"\n快速通道：API-Football 按天拉取最近 {FAST_DAYS} 天全球比赛"
+              f"（每次间隔 {APIFB_SLEEP} 秒）...")
         csv_index = {}
         for m in all_matches:
             csv_index.setdefault((m["_league"], m["team1"], m["team2"]), set()).add(m["date"])
         before = len(all_matches)
-        fast_matches = fetch_org_fast(csv_index, team_cn, missing_teams)
+        fast_matches = fetch_apifb_fast(csv_index, team_cn, missing_teams)
         all_matches = merge_fast(all_matches, fast_matches)
         summary["_fast"] = len(fast_matches)
         print(f"[快速通道] 合计 {len(fast_matches)} 场，"
               f"净新增 {len(all_matches) - before} 场\n")
     else:
-        print("\n未设置 FOOTBALL_DATA_ORG_TOKEN，跳过快速通道（football-data.org）")
+        print("\n未设置 API_FOOTBALL_KEY，跳过快速通道（API-Football）")
 
     # 有新增球队时回写 team_cn.json（不覆盖已有键）
     if missing_teams:
@@ -383,7 +434,7 @@ def main():
     for league in LEAGUES_A + LEAGUES_B:
         print(f"  {league}: {summary.get(league, 0)} 场")
     if "_fast" in summary:
-        print(f"  快速通道(football-data.org): {summary['_fast']} 场")
+        print(f"  快速通道(API-Football): {summary['_fast']} 场")
     print(f"  合计: {len(all_matches)} 场")
     print(f"  输出文件: {OUTPUT_PATH}")
     print(f"  输出文件: {OUTPUT_JS_PATH}")
