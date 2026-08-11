@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T15:58:11+08:00",
+  "updated_at": "2026-08-11T09:18:53+00:00",
   "matches": [
     {
       "date": "2025-02-14",
@@ -81579,78 +81579,6 @@
     },
     {
       "date": "2026-08-10",
-      "team1": "FC Botosani",
-      "s1": 0,
-      "s2": 0,
-      "team2": "Corvinul",
-      "result": "T",
-      "team1_cn": "博托沙尼",
-      "team2_cn": "胡内多阿拉",
-      "season": "2026",
-      "_league": "ROU"
-    },
-    {
-      "date": "2026-08-10",
-      "team1": "Fakel Voronezh",
-      "s1": 0,
-      "s2": 0,
-      "team2": "Akhmat Grozny",
-      "result": "T",
-      "team1_cn": "沃罗涅日火炬",
-      "team2_cn": "格罗兹尼",
-      "season": "2026",
-      "_league": "RUS"
-    },
-    {
-      "date": "2026-08-10",
-      "team1": "Sirius",
-      "s1": 2,
-      "s2": 2,
-      "team2": "Brommapojkarna",
-      "result": "T",
-      "team1_cn": "天狼星",
-      "team2_cn": "布洛马波卡纳",
-      "season": "2026",
-      "_league": "SWE"
-    },
-    {
-      "date": "2026-08-10",
-      "team1": "Vasteras SK",
-      "s1": 1,
-      "s2": 0,
-      "team2": "Djurgarden",
-      "result": "B",
-      "team1_cn": "韦斯特罗斯",
-      "team2_cn": "佐加顿斯",
-      "season": "2026",
-      "_league": "SWE"
-    },
-    {
-      "date": "2026-08-10",
-      "team1": "Silkeborg",
-      "s1": 1,
-      "s2": 0,
-      "team2": "Odense",
-      "result": "B",
-      "team1_cn": "锡尔克堡",
-      "team2_cn": "欧登塞",
-      "season": "2026",
-      "_league": "DNK"
-    },
-    {
-      "date": "2026-08-10",
-      "team1": "Sepsi Sf. Gheorghe",
-      "s1": 0,
-      "s2": 0,
-      "team2": "FCSB",
-      "result": "T",
-      "team1_cn": "圣格奥尔基",
-      "team2_cn": "布加勒斯特星",
-      "season": "2026",
-      "_league": "ROU"
-    },
-    {
-      "date": "2026-08-10",
       "team1": "Santa Clara",
       "s1": 2,
       "s2": 2,
@@ -81660,30 +81588,6 @@
       "team2_cn": "马德拉国民",
       "season": "2026",
       "_league": "P1"
-    },
-    {
-      "date": "2026-08-10",
-      "team1": "Banfield",
-      "s1": 0,
-      "s2": 2,
-      "team2": "Belgrano",
-      "result": "P",
-      "team1_cn": "班菲尔德",
-      "team2_cn": "贝尔格拉诺",
-      "season": "2026",
-      "_league": "ARG"
-    },
-    {
-      "date": "2026-08-10",
-      "team1": "Union de Santa Fe",
-      "s1": 1,
-      "s2": 2,
-      "team2": "Central Cordoba",
-      "result": "P",
-      "team1_cn": "圣菲联合",
-      "team2_cn": "科尔多瓦中央",
-      "season": "2026",
-      "_league": "ARG"
     }
   ]
 }
