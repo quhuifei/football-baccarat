@@ -1,1 +1,1 @@
-window.FIXTURES_DATA = {"updated_at": "2026-08-11T12:02:34+00:00", "fixtures": []};
+window.FIXTURES_DATA = {"updated_at": "2026-08-11T13:49:10+00:00", "fixtures": []};
