@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T04:45:30+00:00",
+  "updated_at": "2026-08-11T13:38:14+08:00",
   "matches": [
     {
       "date": "2025-02-14",
@@ -60506,6 +60506,54 @@
       "_league": "P1"
     },
     {
+      "date": "2026-08-08",
+      "team1": "Gremio",
+      "s1": 2,
+      "s2": 1,
+      "team2": "Sao Paulo",
+      "result": "B",
+      "team1_cn": "格雷米奥",
+      "team2_cn": "圣保罗",
+      "season": "2026",
+      "_league": "BRA"
+    },
+    {
+      "date": "2026-08-08",
+      "team1": "Remo",
+      "s1": 2,
+      "s2": 2,
+      "team2": "Atletico-MG",
+      "result": "T",
+      "team1_cn": "雷莫",
+      "team2_cn": "米内罗竞技",
+      "season": "2026",
+      "_league": "BRA"
+    },
+    {
+      "date": "2026-08-08",
+      "team1": "Coritiba",
+      "s1": 2,
+      "s2": 1,
+      "team2": "Chapecoense-SC",
+      "result": "B",
+      "team1_cn": "科里蒂巴",
+      "team2_cn": "沙佩科恩斯",
+      "season": "2026",
+      "_league": "BRA"
+    },
+    {
+      "date": "2026-08-08",
+      "team1": "Botafogo RJ",
+      "s1": 1,
+      "s2": 1,
+      "team2": "Fluminense",
+      "result": "T",
+      "team1_cn": "博塔弗戈",
+      "team2_cn": "弗鲁米嫩塞",
+      "season": "2026",
+      "_league": "BRA"
+    },
+    {
       "date": "2026-08-09",
       "team1": "Porto",
       "s1": 2,
@@ -60790,6 +60838,90 @@
       "result": "T",
       "team1_cn": "莫雷伦斯",
       "team2_cn": "布拉加",
+      "season": "2026",
+      "_league": "P1"
+    },
+    {
+      "date": "2026-08-09",
+      "team1": "Cruzeiro",
+      "s1": 3,
+      "s2": 1,
+      "team2": "Mirassol",
+      "result": "B",
+      "team1_cn": "克鲁塞罗",
+      "team2_cn": "米拉索尔",
+      "season": "2026",
+      "_league": "BRA"
+    },
+    {
+      "date": "2026-08-09",
+      "team1": "Bahia",
+      "s1": 0,
+      "s2": 0,
+      "team2": "Vasco",
+      "result": "T",
+      "team1_cn": "巴伊亚",
+      "team2_cn": "瓦斯科达伽马",
+      "season": "2026",
+      "_league": "BRA"
+    },
+    {
+      "date": "2026-08-09",
+      "team1": "Palmeiras",
+      "s1": 0,
+      "s2": 0,
+      "team2": "Internacional",
+      "result": "T",
+      "team1_cn": "帕尔梅拉斯",
+      "team2_cn": "巴西国际",
+      "season": "2026",
+      "_league": "BRA"
+    },
+    {
+      "date": "2026-08-09",
+      "team1": "Bragantino",
+      "s1": 0,
+      "s2": 2,
+      "team2": "Corinthians",
+      "result": "P",
+      "team1_cn": "布拉干蒂诺",
+      "team2_cn": "科林蒂安",
+      "season": "2026",
+      "_league": "BRA"
+    },
+    {
+      "date": "2026-08-09",
+      "team1": "Santos",
+      "s1": 0,
+      "s2": 2,
+      "team2": "Athletico-PR",
+      "result": "P",
+      "team1_cn": "桑托斯",
+      "team2_cn": "巴拉纳竞技",
+      "season": "2026",
+      "_league": "BRA"
+    },
+    {
+      "date": "2026-08-09",
+      "team1": "Flamengo RJ",
+      "s1": 2,
+      "s2": 0,
+      "team2": "Vitoria",
+      "result": "B",
+      "team1_cn": "弗拉门戈",
+      "team2_cn": "维多利亚",
+      "season": "2026",
+      "_league": "BRA"
+    },
+    {
+      "date": "2026-08-10",
+      "team1": "Santa Clara",
+      "s1": 2,
+      "s2": 2,
+      "team2": "Nacional",
+      "result": "T",
+      "team1_cn": "圣克拉拉",
+      "team2_cn": "马德拉国民",
       "season": "2026",
       "_league": "P1"
     }

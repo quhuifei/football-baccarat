@@ -20,6 +20,9 @@ jobs:
           python-version: "3.12"
 
       - name: 抓取最新赛果
+        env:
+          # football-data.org 快速通道密钥（未配置该 secret 时脚本自动跳过快速通道）
+          FOOTBALL_DATA_ORG_TOKEN: ${{ secrets.FOOTBALL_DATA_ORG_TOKEN }}
         run: python update_scores.py
 
       - name: 提交更新

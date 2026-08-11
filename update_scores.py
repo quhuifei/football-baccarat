@@ -7,8 +7,15 @@ update_scores.py — 从 football-data.co.uk 抓取 27 国 38 个联赛的当前
   A 类（mmz4281 按赛季分文件）：抓当前赛季，404 回退上一赛季
   B 类（/new/{code}.csv 单一全历史文件）：解析后只取文件内最新赛季的已赛场次
 
+快速通道（可选）：football-data.co.uk 赛果更新滞后 1~3 天，设置环境变量
+FOOTBALL_DATA_ORG_TOKEN 后，脚本会再从 football-data.org API 拉取 9 个热门赛事
+近 14 天的 FINISHED 比赛补最新赛果（每次调用间隔 7.5 秒，免费套餐 10 次/分钟）；
+未设置该变量时脚本行为与旧版完全一致。
+队名经 team_aliases.py 显式映射回 football-data.co.uk 短名，未映射的球队整场跳过
+（宁可不更新，也不制造同一场比赛的重复记录）。
+
 用法: python3 update_scores.py
-依赖: 仅标准库（urllib / csv / json / time）
+依赖: 仅标准库（urllib / csv / json / time）+ 同目录 team_aliases.py
 """
 
 import csv
@@ -19,7 +26,12 @@ import sys
 import time
 import urllib.error
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+
+try:
+    from team_aliases import TEAM_ALIASES
+except ImportError:
+    TEAM_ALIASES = {}
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEAM_CN_PATH = os.path.join(BASE_DIR, "team_cn.json")
@@ -45,6 +57,26 @@ SLEEP = 1.0
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) update_scores/2.0"
 
 FTR_MAP = {"H": "B", "A": "P", "D": "T"}
+
+# ---- 快速通道：football-data.org API ----
+ORG_TOKEN = os.environ.get("FOOTBALL_DATA_ORG_TOKEN", "").strip()
+# football-data.org 赛事码 -> (本站联赛码, 联赛当地相对 UTC 的固定偏移小时)
+# 注意：football-data.org 的 ELC（英冠）对应本站 E1；football-data.co.uk 的 EC 是英议联，不在快速通道内。
+FAST_LEAGUES = {
+    "PL":  ("E0", 0),    # 英超（英国 UTC+0/+1，直接用 UTC 日期即可对齐当地日期）
+    "ELC": ("E1", 0),    # 英冠
+    "BL1": ("D1", 1),    # 德甲（中欧 UTC+1/+2）
+    "PD":  ("SP1", 1),   # 西甲
+    "SA":  ("I1", 1),    # 意甲
+    "FL1": ("F1", 1),    # 法甲
+    "DED": ("N1", 1),    # 荷甲
+    "PPL": ("P1", 0),    # 葡超（葡萄牙 UTC+0/+1）
+    "BSA": ("BRA", -3),  # 巴甲（巴西利亚 UTC-3）
+}
+ORG_API = ("https://api.football-data.org/v4/competitions/{comp}/matches"
+           "?status=FINISHED&dateFrom={d1}&dateTo={d2}")
+ORG_DAYS = 14      # 拉取近 14 天已赛比赛
+ORG_SLEEP = 7.5    # 每次调用间隔 ≥7 秒（免费套餐 10 次/分钟）
 
 
 def current_season_start(today=None):
@@ -160,6 +192,83 @@ def parse_extra_csv_latest(text, league, team_cn, missing_teams):
             if start == max_season]
 
 
+def fetch_org_fast(csv_index, team_cn, missing_teams):
+    """快速通道：从 football-data.org 拉 9 个热门赛事近 ORG_DAYS 天的已赛比赛。
+
+    csv_index: {(联赛码, 主队, 客队): {CSV 已有日期}} —— 用于「同队 ±2 天吸附」兜底。
+    单次请求失败只警告不中断；队名未映射整场跳过。返回与 CSV 相同结构的比赛列表。
+    """
+    today = datetime.now(timezone.utc).date()
+    d1 = (today - timedelta(days=ORG_DAYS)).isoformat()
+    d2 = today.isoformat()
+    start_year = current_season_start()
+    out = []
+    for comp, (league, offset) in FAST_LEAGUES.items():
+        time.sleep(ORG_SLEEP)  # 每次调用前都间隔，防爆免费套餐 10 次/分钟限额
+        url = ORG_API.format(comp=comp, d1=d1, d2=d2)
+        req = urllib.request.Request(
+            url, headers={"X-Auth-Token": ORG_TOKEN, "User-Agent": USER_AGENT})
+        try:
+            with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+                data = json.load(resp)
+        except Exception as e:
+            print(f"[快速通道 {comp}] 警告：请求失败（{e}），跳过该赛事，保留 CSV 结果")
+            continue
+
+        aliases = TEAM_ALIASES.get(league, {})
+        added = skipped = 0
+        for mt in data.get("matches", []):
+            score = (mt.get("score") or {}).get("fullTime") or {}
+            s1, s2 = score.get("home"), score.get("away")
+            utc = mt.get("utcDate") or ""
+            home_org = (mt.get("homeTeam") or {}).get("name") or ""
+            away_org = (mt.get("awayTeam") or {}).get("name") or ""
+            if s1 is None or s2 is None or not utc:
+                continue
+            home = aliases.get(home_org)
+            away = aliases.get(away_org)
+            if not home or not away:
+                skipped += 1
+                print(f"[快速通道 {comp}] 警告：队名未映射，跳过 "
+                      f"{home_org} vs {away_org}（请补充 team_aliases.py 的 {league} 表）")
+                continue
+            # utcDate 是 UTC 时刻；football-data.co.uk CSV 记录的是联赛当地日期。
+            # 这里按 FAST_LEAGUES 的固定偏移换算成近似的联赛当地日期，让两个源的同一场
+            # 比赛去重键（date|team1|team2）一致。不做夏令时精确换算，深夜开球可能差
+            # ±1 天，由下面的「同队 ±2 天吸附」兜底：CSV 已有同对阵记录时直接采用 CSV 日期。
+            dt = datetime.fromisoformat(utc.replace("Z", "+00:00")) + timedelta(hours=offset)
+            date = dt.date().isoformat()
+            for d in csv_index.get((league, home, away), ()):
+                if abs((datetime.strptime(d, "%Y-%m-%d").date() - dt.date()).days) <= 2:
+                    date = d
+                    break
+            res = "H" if s1 > s2 else ("A" if s1 < s2 else "D")
+            # 赛季字段沿用脚本现有惯例：跨年联赛记起始年，巴甲（自然年）记比赛日历年
+            season = dt.date().year if league == "BRA" else start_year
+            out.append(make_match(date, home, s1, s2, away, res, season,
+                                  league, team_cn, missing_teams))
+            added += 1
+        print(f"[快速通道 {comp}→{league}] 拉到 {added} 场（跳过未映射 {skipped} 场）")
+    return out
+
+
+def merge_fast(all_matches, fast_matches):
+    """合并快速通道结果：去重键 (联赛, date, team1, team2)，同键时新源（快速通道）覆盖 CSV。
+    保证 football_latest 里同一场比赛绝不出现两条。"""
+    merged = {}
+    for m in all_matches:
+        merged[(m["_league"], m["date"], m["team1"], m["team2"])] = m
+    overridden = 0
+    for m in fast_matches:
+        key = (m["_league"], m["date"], m["team1"], m["team2"])
+        if key in merged:
+            overridden += 1
+        merged[key] = m
+    if overridden:
+        print(f"[快速通道] {overridden} 场与 CSV 重复，已用新源比分覆盖（未产生重复记录）")
+    return list(merged.values())
+
+
 def main():
     start_year = current_season_start()
     print(f"当前赛季起始年判定为 {start_year}（{season_code(start_year)} 赛季）")
@@ -231,6 +340,22 @@ def main():
         season_label = matches[0]["season"] if matches else "?"
         print(f"[{league}] 最新赛季（{season_label}）抓到 {len(matches)} 场已赛比赛")
 
+    # ---- 快速通道：football-data.org 补最新赛果（无密钥时跳过，行为与旧版一致）----
+    if ORG_TOKEN:
+        print(f"\n快速通道：从 football-data.org 拉取 {len(FAST_LEAGUES)} 个赛事近 "
+              f"{ORG_DAYS} 天赛果（每次间隔 {ORG_SLEEP} 秒）...")
+        csv_index = {}
+        for m in all_matches:
+            csv_index.setdefault((m["_league"], m["team1"], m["team2"]), set()).add(m["date"])
+        before = len(all_matches)
+        fast_matches = fetch_org_fast(csv_index, team_cn, missing_teams)
+        all_matches = merge_fast(all_matches, fast_matches)
+        summary["_fast"] = len(fast_matches)
+        print(f"[快速通道] 合计 {len(fast_matches)} 场，"
+              f"净新增 {len(all_matches) - before} 场\n")
+    else:
+        print("\n未设置 FOOTBALL_DATA_ORG_TOKEN，跳过快速通道（football-data.org）")
+
     # 有新增球队时回写 team_cn.json（不覆盖已有键）
     if missing_teams:
         with open(TEAM_CN_PATH, "w", encoding="utf-8") as f:
@@ -257,6 +382,8 @@ def main():
     print("\n===== 汇总 =====")
     for league in LEAGUES_A + LEAGUES_B:
         print(f"  {league}: {summary.get(league, 0)} 场")
+    if "_fast" in summary:
+        print(f"  快速通道(football-data.org): {summary['_fast']} 场")
     print(f"  合计: {len(all_matches)} 场")
     print(f"  输出文件: {OUTPUT_PATH}")
     print(f"  输出文件: {OUTPUT_JS_PATH}")

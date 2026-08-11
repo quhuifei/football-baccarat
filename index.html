@@ -879,7 +879,7 @@
 
   <div class="subtitle" id="api-status" style="font-size:12px;color:#4dd0a8;min-height:18px;margin-top:18px;">正在加载联赛目录...</div>
 
-  <div class="footer" id="footer">数据来源：football-data.co.uk · 全球 27 国联赛 2014 起</div>
+  <div class="footer" id="footer">数据来源：football-data.co.uk · Football data provided by the Football-Data.org API · 全球 27 国联赛 2014 起</div>
   <div class="footer" style="margin-top:8px;color:#c9a227;opacity:0.85;">数据仅供参考，不构成投资建议</div>
 </div>
 
@@ -1394,7 +1394,7 @@ function updatePageInfo() {
   document.getElementById('page-title').textContent = leagueInfo.cn;
   document.title = leagueInfo.cn + ' · 赛果路图';
   document.getElementById('footer').textContent =
-    '数据来源：football-data.co.uk · 全球 27 国联赛 2014 起 · ' + leagueInfo.cn + ' 共 ' + leagueInfo.matches.length + ' 场比赛';
+    '数据来源：football-data.co.uk · Football data provided by the Football-Data.org API · 全球 27 国联赛 2014 起 · ' + leagueInfo.cn + ' 共 ' + leagueInfo.matches.length + ' 场比赛';
 }
 
 function renderAll() {
