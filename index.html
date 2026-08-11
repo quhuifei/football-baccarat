@@ -741,7 +741,7 @@
     .tooltip { max-width: calc(100vw - 24px); padding-right: 36px; }
     .tooltip.sticky .tooltip-close { display: block; }
     /* 赛果表格手机端更紧凑：隐藏「年份」列（日期列已含年份），长队名允许任意断行避免撑宽 */
-    .match-list { padding: 10px; }
+    .match-list { padding: 10px; max-height: 340px; }  /* 一屏约 10 场，超出内部滚动 */
     .match-list h2 { font-size: 15px; margin-bottom: 6px; }
     table { font-size: 12px; }
     th, td { padding: 4px 5px; }
