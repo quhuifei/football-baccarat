@@ -225,6 +225,8 @@
     background: rgba(143, 163, 155, 0.15); color: var(--muted);
   }
   .hidden { display: none !important; }
+  /* 通用线性图标（Lucide 风格，描边跟随文字色 currentColor） */
+  .ic { display: inline-block; width: 1.05em; height: 1.05em; vertical-align: -0.18em; }
   @media (max-width: 760px) {
     .support-grid { flex-direction: column; height: auto; }
     .thread-list { width: 100%; max-height: 200px; }
@@ -265,7 +267,7 @@
         <div class="search-row">
           <input type="text" id="userQ" placeholder="搜索邮箱 / 手机号 / 昵称">
           <button class="btn-mini" id="userSearchBtn">搜索</button>
-          <button class="btn-gold" onclick="window.location.href='/api/auth/admin/users.csv'">📥 导出 CSV</button>
+          <button class="btn-gold" onclick="window.location.href='/api/auth/admin/users.csv'"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg> 导出 CSV</button>
         </div>
       </div>
       <div class="table-wrap">
@@ -312,7 +314,7 @@
           <div class="chat-msgs" id="sMsgs"><div class="chat-empty">未选择会话</div></div>
           <div class="s-input-row">
             <input type="file" id="sImgFile" accept="image/jpeg,image/png,image/webp,image/gif" class="hidden">
-            <button type="button" class="btn-img" id="sImgBtn" title="发送图片（≤30MB）" disabled>📷</button>
+            <button type="button" class="btn-img" id="sImgBtn" title="发送图片（≤30MB）" disabled><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 15.5l-4.5-4.5L7 20.5"/></svg></button>
             <input type="text" id="sInput" maxlength="500" placeholder="输入回复…" disabled>
             <button type="button" class="btn-send" id="sSend" disabled>回复</button>
           </div>

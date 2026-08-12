@@ -725,6 +725,10 @@
     border-top: 1px solid rgba(212, 175, 55, 0.12);
     letter-spacing: 0.5px;
   }
+  /* 通用线性图标（Lucide 风格，描边跟随文字色 currentColor） */
+  .ic { display: inline-block; width: 1.05em; height: 1.05em; vertical-align: -0.18em; }
+  /* 底部状态行与数据来源行默认隐藏；api-status 仅在错误时由 JS 显示 */
+  #api-status, #footer { display: none; }
   @media (max-width: 640px) {
     /* 防整页横向晃动：页面级禁止横向滚动（卡片内部仍可自行横滚，iOS 滚动链不再带动整页） */
     html, body { overflow-x: hidden; }
@@ -800,7 +804,7 @@
 </style>
 <!-- 顶部固定栏：左首页 右账户 -->
 <div id="topbar">
-  <a id="brand-mark" href="/">⚽ 首页</a>
+  <a id="brand-mark" href="/"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8l2.94 2.14-1.12 3.42h-3.64L9.06 10.14 12 8z"/><path d="M12 8V3M9.06 10.14L4.4 7.2M14.94 10.14L19.6 7.2M13.82 13.56L18.8 17.9M10.18 13.56L5.2 17.9"/></svg> 首页</a>
   <!-- 账户角标：游客显示登录/注册，登录后显示头像+昵称+退出 -->
   <div id="account-chip">
     <a id="account-profile" href="/profile.html" title="个人中心">
@@ -878,8 +882,8 @@
   <div class="controls">
     <label for="league-btn" style="color:#778da9;font-size:14px;">选择赛事：</label>
     <button type="button" class="year-select league-btn" id="league-btn" onclick="openLeaguePanel()">加载中...<span id="league-btn-dot" class="hidden"></span></button>
-    <button type="button" class="year-select" id="fixtures-btn" onclick="openFixturesPanel()">📅 近期赛程</button>
-    <button type="button" class="year-select" id="ou-btn" onclick="openOuPanel()">⚽ 大小球</button>
+    <button type="button" class="year-select" id="fixtures-btn" onclick="openFixturesPanel()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></svg> 近期赛程</button>
+    <button type="button" class="year-select" id="ou-btn" onclick="openOuPanel()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8l2.94 2.14-1.12 3.42h-3.64L9.06 10.14 12 8z"/><path d="M12 8V3M9.06 10.14L4.4 7.2M14.94 10.14L19.6 7.2M13.82 13.56L18.8 17.9M10.18 13.56L5.2 17.9"/></svg> 大小球</button>
 
     <span id="season-wrapper">
       <label for="season-select" style="color:#778da9;font-size:14px;">选择赛季：</label>
@@ -915,7 +919,7 @@
     <div class="chat-msgs" id="chat-msgs"></div>
     <div class="chat-input-row">
       <input type="text" id="chat-input" maxlength="200" placeholder="加载中…" readonly>
-      <button type="button" class="chat-img-btn" id="chat-img-btn" title="发图片">📷</button>
+      <button type="button" class="chat-img-btn" id="chat-img-btn" title="发图片"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 15.5l-4.5-4.5L7 20.5"/></svg></button>
       <input type="file" id="chat-img-file" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none">
       <button type="button" id="chat-send">发送</button>
     </div>
@@ -965,7 +969,7 @@
 <div class="tooltip" id="tooltip"></div>
 
 <!-- 悬浮客服求助（聊天窗） -->
-<button type="button" id="support-fab" onclick="toggleSupport()">💬 求助</button>
+<button type="button" id="support-fab" onclick="toggleSupport()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.5 0-2.9-.35-4.1-1L3 20l1.05-4.9A8.5 8.5 0 1 1 21 11.5z"/></svg> 求助</button>
 <div id="support-modal" class="hidden">
   <div class="support-card">
     <div class="support-head">
@@ -975,7 +979,7 @@
     <div class="support-msgs" id="support-msgs"></div>
     <div class="support-input-row">
       <input type="file" id="support-img-file" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none">
-      <button type="button" id="support-img-btn" title="发送图片（≤30MB）">📷</button>
+      <button type="button" id="support-img-btn" title="发送图片（≤30MB）"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 15.5l-4.5-4.5L7 20.5"/></svg></button>
       <input type="text" id="support-text" maxlength="500" placeholder="描述你的问题…">
       <button type="button" id="support-submit" onclick="submitSupport()">发送</button>
     </div>
@@ -1725,6 +1729,18 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ===== 数据加载 =====
+// api-status 默认隐藏（CSS #api-status{display:none}），仅错误信息显示：静默加载、出错可见
+(function () {
+  const el = document.getElementById('api-status');
+  if (!el) return;
+  const sync = () => {
+    const t = el.textContent || '';
+    const isError = t.startsWith('❌') || t.includes('失败') || t.includes('错误');
+    el.style.display = isError ? 'block' : 'none';
+  };
+  new MutationObserver(sync).observe(el, { childList: true, characterData: true, subtree: true });
+  sync();
+})();
 // 加载 update_scores.py 生成的最新战绩（football_latest.js -> window.LATEST_DATA），按联赛码暂存
 async function loadLatestData() {
   try {

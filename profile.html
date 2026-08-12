@@ -247,6 +247,8 @@
     margin-right: 6px;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+  /* 通用线性图标（Lucide 风格，描边跟随文字色 currentColor） */
+  .ic { display: inline-block; width: 1.05em; height: 1.05em; vertical-align: -0.18em; }
   @media (max-width: 420px) {
     .card { padding: 22px 18px 20px; }
     .avatar { width: 72px; height: 72px; font-size: 28px; }
@@ -295,7 +297,7 @@
     <div class="info-row"><span class="k">注册时间</span><span class="v" id="infoCreated"></span></div>
     <div class="info-row"><span class="k">最近登录</span><span class="v" id="infoLogin"></span></div>
     <div id="adminExport" class="hidden" style="margin-top:14px;">
-      <button class="btn btn-main" onclick="window.location.href='/api/auth/admin/users.csv'">📥 导出用户列表（管理员）</button>
+      <button class="btn btn-main" onclick="window.location.href='/api/auth/admin/users.csv'"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg> 导出用户列表（管理员）</button>
     </div>
   </div>
 
