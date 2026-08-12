@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T08:43:52+00:00",
+  "updated_at": "2026-08-12T10:31:52+00:00",
   "matches": [
     {
       "date": "2025-02-14",
@@ -82630,6 +82630,18 @@
       "result": "P",
       "team1_cn": "圣菲联合",
       "team2_cn": "科尔多瓦中央",
+      "season": "2026",
+      "_league": "ARG"
+    },
+    {
+      "date": "2026-08-12",
+      "team1": "Talleres Cordoba",
+      "s1": 0,
+      "s2": 3,
+      "team2": "Lanus",
+      "result": "P",
+      "team1_cn": "塔列雷斯",
+      "team2_cn": "拉努斯",
       "season": "2026",
       "_league": "ARG"
     }
