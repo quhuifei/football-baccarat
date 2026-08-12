@@ -48,6 +48,12 @@ OUTPUT_PATH = os.path.join(BASE_DIR, "football_latest.json")
 OUTPUT_JS_PATH = os.path.join(BASE_DIR, "football_latest.js")
 FIXTURES_PATH = os.path.join(BASE_DIR, "football_fixtures.json")
 FIXTURES_JS_PATH = os.path.join(BASE_DIR, "football_fixtures.js")
+OU_PATH = os.path.join(BASE_DIR, "football_ou.json")
+OU_JS_PATH = os.path.join(BASE_DIR, "football_ou.js")
+OU_STORE_PATH = os.path.join(BASE_DIR, "odds_store.json")  # 初盘快照持久化（首次抓到即存，不覆盖）
+OU_MAX_CALLS = 45      # 每次运行 odds 调用上限（fixtures 11 次之外，总预算 ≤60 次/运行）
+OU_STORE_DAYS = 30     # 快照保留天数（按比赛日期裁剪，防文件无限增长）
+OU_DAYS = 14           # football_ou 输出近 14 天完场对照
 
 # A 类：mmz4281/{赛季码}/{联赛码}.csv
 LEAGUES_A = ["E0", "SP1", "D1", "I1", "F1",
@@ -200,12 +206,13 @@ def parse_main_csv(text, league, season_start, team_cn, missing_teams):
     return matches
 
 
-def make_fixture(date, time_s, home, away, season, league, team_cn):
-    """未来赛程记录；新球队同样先以英文名占位（通常已赛球队已在 team_cn 中）。"""
+def make_fixture(date, time_s, home, away, season, league, team_cn, fid=None):
+    """未来赛程记录；新球队同样先以英文名占位（通常已赛球队已在 team_cn 中）。
+    fid 为 API-Football fixture id（仅快速通道来源有），用于 /odds?fixture= 抓初盘。"""
     for team in (home, away):
         if team not in team_cn:
             team_cn[team] = team
-    return {
+    rec = {
         "date": date,
         "time": time_s,
         "team1": home,
@@ -215,6 +222,9 @@ def make_fixture(date, time_s, home, away, season, league, team_cn):
         "season": str(season),
         "_league": league,
     }
+    if fid is not None:
+        rec["fid"] = fid
+    return rec
 
 
 def parse_main_fixtures(text, league, season_start, team_cn, today):
@@ -337,7 +347,8 @@ def fetch_apifb_fast(csv_index, team_cn, missing_teams):
                 if today <= local_day <= today + timedelta(days=FIXTURE_DAYS):
                     out_fixtures.append(make_fixture(
                         local_day.isoformat(), dt.strftime("%H:%M"),
-                        home, away, season, league, team_cn))
+                        home, away, season, league, team_cn,
+                        fid=(f.get("fixture") or {}).get("id")))
                     added_fx += 1
                 continue
             if status not in ("FT", "AET", "PEN"):
@@ -381,6 +392,176 @@ def merge_fast(all_matches, fast_matches):
     if overridden:
         print(f"[快速通道] {overridden} 场与 CSV 重复，已用新源比分覆盖（未产生重复记录）")
     return list(merged.values())
+
+
+# ---- 初盘大小球：/odds 快照 ----
+# API-Football 不区分初盘/临场，「初盘」= 我们首次看到该场 Goals Over/Under 盘口时的快照。
+# fixtures 提前 7 天进入窗口，首次抓到即存 odds_store.json，之后绝不覆盖。
+APIFB_ODDS_URL = "https://v3.football.api-sports.io/odds?fixture={fid}"
+
+
+def ou_key_tuple(league, date, team1, team2):
+    return f"{league}|{date}|{team1}|{team2}"
+
+
+def load_ou_store():
+    if os.path.exists(OU_STORE_PATH):
+        try:
+            with open(OU_STORE_PATH, encoding="utf-8") as f:
+                return json.load(f)
+        except (ValueError, OSError):
+            print("警告：odds_store.json 损坏，从空快照重新开始")
+    return {}
+
+
+def save_ou_store(store):
+    cutoff = (datetime.now(timezone.utc).date()
+              - timedelta(days=OU_STORE_DAYS)).isoformat()
+    store = {k: v for k, v in store.items() if v.get("date", "9999") >= cutoff}
+    with open(OU_STORE_PATH, "w", encoding="utf-8") as f:
+        json.dump(store, f, ensure_ascii=False, indent=2, sort_keys=True)
+    return store
+
+
+def pick_ou_market(bookmakers):
+    """从 bookmakers 列表选大小球主线。
+    市场优先级：'Goal Line'（亚洲大小球，含 2.25/2.75 等四分之一盘）> 'Goals Over/Under'；
+    庄家优先级：Bet365 > 第一家有对应市场的。
+    主线 = 所选市场内两边赔率最接近的盘口（即庄家眼中的平衡盘）。
+    返回 {'line', 'over', 'under', 'bm', 'market'} 或 None。"""
+    def extract(bm, market_name):
+        lines = {}
+        for bet in bm.get("bets", []):
+            if bet.get("name") != market_name:
+                continue
+            for v in bet.get("values", []):
+                parts = (v.get("value") or "").split()
+                if len(parts) != 2:
+                    continue
+                side, line_s = parts
+                try:
+                    lf = float(line_s)
+                    odd = float(v.get("odd"))
+                except (TypeError, ValueError):
+                    continue
+                lines.setdefault(lf, {})[side.lower()] = odd
+        cands = [(abs(o["over"] - o["under"]), lf, o)
+                 for lf, o in lines.items() if "over" in o and "under" in o]
+        if not cands:
+            return None
+        cands.sort(key=lambda x: x[0])
+        _, lf, o = cands[0]
+        return {"line": lf, "over": o["over"], "under": o["under"]}
+
+    fallback_gl = fallback_gou = None
+    for bm in bookmakers:
+        name = (bm.get("name") or "").strip().lower()
+        for market in ("Goal Line", "Goals Over/Under"):
+            cand = extract(bm, market)
+            if not cand:
+                continue
+            cand["bm"] = bm.get("name") or "?"
+            cand["market"] = market
+            if name == "bet365":
+                return cand
+            if market == "Goal Line" and fallback_gl is None:
+                fallback_gl = cand
+            elif market == "Goals Over/Under" and fallback_gou is None:
+                fallback_gou = cand
+    return fallback_gl or fallback_gou
+
+
+def fetch_ou_snapshots(fixtures, store):
+    """对窗口内无快照的未赛场次抓初盘（每场 1 次 /odds?fixture= 调用，每轮上限 OU_MAX_CALLS，
+    临近开赛优先）。快照一旦写入绝不覆盖；盘口未开出留待下轮；已过开赛日仍无盘口则封盘放弃。
+    返回 (本轮新抓, 仍缺)。"""
+    today = datetime.now(timezone.utc).date()
+    pending = []
+    for fx in fixtures:
+        key = ou_key_tuple(fx["_league"], fx["date"], fx["team1"], fx["team2"])
+        old = store.get(key)
+        if old and (old.get("line") is not None or old.get("closed")):
+            continue  # 已有初盘或已封盘
+        if not fx.get("fid"):
+            continue  # CSV 来源无 fixture id，无法抓 odds
+        pending.append((key, fx))
+    pending.sort(key=lambda x: (x[1]["date"], x[1].get("time") or "99:99"))
+
+    got = still = 0
+    for key, fx in pending[:OU_MAX_CALLS]:
+        time.sleep(1.0)  # Pro 限流宽松，1 秒足够
+        req = urllib.request.Request(
+            APIFB_ODDS_URL.format(fid=fx["fid"]),
+            headers={"x-apisports-key": APIFB_KEY, "User-Agent": USER_AGENT})
+        try:
+            with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+                data = json.load(resp)
+        except Exception as e:
+            print(f"[初盘 {fx['_league']}] {fx['team1']} vs {fx['team2']} 请求失败：{e}")
+            still += 1
+            continue
+        if data.get("errors"):
+            print(f"[初盘 {fx['_league']}] API 返回错误 {data['errors']}")
+            still += 1
+            continue
+        bms = (data.get("response") or [{}])[0].get("bookmakers") or []
+        snap = pick_ou_market(bms)
+        if snap:
+            snap.update({
+                "fid": fx["fid"],
+                "first_seen": datetime.now().astimezone().isoformat(timespec="seconds"),
+                "league": fx["_league"], "date": fx["date"],
+                "time": fx.get("time") or "",
+                "team1": fx["team1"], "team2": fx["team2"],
+            })
+            store[key] = snap  # 仅在无快照时到达这里，天然不覆盖
+            got += 1
+        else:
+            d = datetime.strptime(fx["date"], "%Y-%m-%d").date()
+            if d < today:  # 已过开赛日仍无盘口（小联赛不开盘），封盘避免反复抓
+                store[key] = {"line": None, "closed": True, "fid": fx["fid"],
+                              "league": fx["_league"], "date": fx["date"],
+                              "time": fx.get("time") or "",
+                              "team1": fx["team1"], "team2": fx["team2"]}
+            still += 1
+    overflow = len(pending) - min(len(pending), OU_MAX_CALLS)
+    if overflow > 0:
+        print(f"[初盘] 本轮达调用上限，{overflow} 场留待下轮")
+    return got, still + overflow
+
+
+def settle_ou(total, line):
+    """总进球 vs 初盘线 → 大/小/走/半大/半小。
+    半球盘（x.5）：无走水；整盘（x.0）：进球数等于线=走水退本金；
+    四分之一盘（x.25/x.75）：拆成相邻两半各结算一半（如 2.75 = 2.5 半 + 3.0 半），
+    总进球为整数时两半结果只会是 半大(赢半) 或 半小(输半)，不会出现整走。"""
+    if line is None:
+        return None
+    q = int(round(line * 4))
+    if q % 2 == 0:
+        l = q / 4
+        return "大" if total > l else ("小" if total < l else "走")
+    pts = 0
+    for h in ((q - 1) / 4, (q + 1) / 4):
+        pts += 1 if total > h else (-1 if total < h else 0)
+    return {2: "大", 1: "半大", -1: "半小", -2: "小"}.get(pts, "走")
+
+
+def annotate_ou(records, store, with_result):
+    """给赛果/赛程记录回写 ou_line/ou_over/ou_under/ou_bm（及赛果的 ou_result）。"""
+    n = 0
+    for r in records:
+        snap = store.get(ou_key_tuple(r["_league"], r["date"], r["team1"], r["team2"]))
+        if not snap or snap.get("line") is None:
+            continue
+        r["ou_line"] = snap["line"]
+        r["ou_over"] = snap.get("over")
+        r["ou_under"] = snap.get("under")
+        r["ou_bm"] = snap.get("bm")
+        if with_result and r.get("s1") is not None and r.get("s2") is not None:
+            r["ou_result"] = settle_ou(r["s1"] + r["s2"], snap["line"])
+        n += 1
+    return n
 
 
 def main():
@@ -479,6 +660,16 @@ def main():
     else:
         print("\n未设置 API_FOOTBALL_KEY，跳过快速通道（API-Football）")
 
+    # ---- 初盘大小球：抓快照（首次抓到即初盘，不覆盖）并回写到赛果/赛程 ----
+    ou_store = load_ou_store()
+    if APIFB_KEY:
+        got, lack = fetch_ou_snapshots(all_fixtures, ou_store)
+        print(f"[初盘] 本轮新抓 {got} 场初盘快照，{lack} 场盘口未开出（下轮再试）")
+    ou_store = save_ou_store(ou_store)  # 裁剪过期快照
+    fx_ou = annotate_ou(all_fixtures, ou_store, with_result=False)
+    m_ou = annotate_ou(all_matches, ou_store, with_result=True)
+    print(f"[初盘] 赛程回写 {fx_ou} 场初盘，赛果回写 {m_ou} 场大小球对照")
+
     # 有新增球队时回写 team_cn.json（不覆盖已有键）
     if missing_teams:
         with open(TEAM_CN_PATH, "w", encoding="utf-8") as f:
@@ -503,6 +694,8 @@ def main():
         f.write(";\n")
 
     # ---- 近期赛程：按 (联赛, 日期, 时间, 主, 客) 去重后按开球时间排序 ----
+    for fx in all_fixtures:
+        fx.pop("fid", None)  # fixture id 仅供内部抓 odds，不输出
     fx_merged = {}
     for fx in all_fixtures:
         fx_merged[(fx["_league"], fx["date"], fx["time"], fx["team1"], fx["team2"])] = fx
@@ -517,6 +710,39 @@ def main():
     with open(FIXTURES_JS_PATH, "w", encoding="utf-8") as f:
         f.write("window.FIXTURES_DATA = ")
         json.dump(fixtures_output, f, ensure_ascii=False)
+        f.write(";\n")
+
+    # ---- 大小球对照输出：近 OU_DAYS 天完场（含结果）+ 窗口内未赛（初盘）----
+    ou_cutoff = (today - timedelta(days=OU_DAYS)).isoformat()
+    ou_items = []
+    for m in all_matches:
+        if m.get("ou_line") is not None and m["date"] >= ou_cutoff:
+            ou_items.append({
+                "date": m["date"], "time": "", "_league": m["_league"],
+                "team1": m["team1"], "team2": m["team2"],
+                "team1_cn": m["team1_cn"], "team2_cn": m["team2_cn"],
+                "status": "FT", "s1": m["s1"], "s2": m["s2"],
+                "ou_line": m["ou_line"], "ou_bm": m.get("ou_bm"),
+                "ou_result": m.get("ou_result"),
+            })
+    for fx in all_fixtures:
+        if fx.get("ou_line") is not None:
+            ou_items.append({
+                "date": fx["date"], "time": fx.get("time") or "",
+                "_league": fx["_league"],
+                "team1": fx["team1"], "team2": fx["team2"],
+                "team1_cn": fx["team1_cn"], "team2_cn": fx["team2_cn"],
+                "status": "NS",
+                "ou_line": fx["ou_line"], "ou_bm": fx.get("ou_bm"),
+                "ou_over": fx.get("ou_over"), "ou_under": fx.get("ou_under"),
+            })
+    ou_items.sort(key=lambda x: (x["date"], x["time"] or "99:99", x["team1"]))
+    ou_output = {"updated_at": output["updated_at"], "items": ou_items}
+    with open(OU_PATH, "w", encoding="utf-8") as f:
+        json.dump(ou_output, f, ensure_ascii=False, indent=2)
+    with open(OU_JS_PATH, "w", encoding="utf-8") as f:
+        f.write("window.OU_DATA = ")
+        json.dump(ou_output, f, ensure_ascii=False)
         f.write(";\n")
 
     print("\n===== 汇总 =====")
@@ -536,6 +762,12 @@ def main():
     print(f"  合计: {fx_total} 场")
     print(f"  输出文件: {FIXTURES_PATH}")
     print(f"  输出文件: {FIXTURES_JS_PATH}")
+    ou_ft = sum(1 for i in ou_items if i["status"] == "FT")
+    ou_ns = len(ou_items) - ou_ft
+    print(f"\n===== 大小球对照 =====")
+    print(f"  完场对照 {ou_ft} 场，未赛初盘 {ou_ns} 场")
+    print(f"  输出文件: {OU_PATH}")
+    print(f"  输出文件: {OU_JS_PATH}")
 
 
 if __name__ == "__main__":

@@ -268,6 +268,24 @@
   .fixture-item .fx-teams { flex: 1; min-width: 0; overflow-wrap: anywhere; }
   .fixture-item .fx-time { color: var(--gold-bright); font-size: 12px; white-space: nowrap; flex-shrink: 0; }
   .fixture-empty { color: var(--muted); text-align: center; padding: 32px 0; font-size: 13px; }
+  /* ===== 大小球：初盘字样 + 对照徽章 ===== */
+  .fx-ou {
+    flex-shrink: 0; white-space: nowrap;
+    font-size: 11px; color: var(--gold-bright);
+    border: 1px solid rgba(212, 175, 55, 0.45); border-radius: 999px;
+    padding: 1px 8px; background: rgba(212, 175, 55, 0.08);
+  }
+  .ou-badge {
+    display: inline-block; flex-shrink: 0; white-space: nowrap;
+    font-size: 11px; font-weight: 700; border-radius: 999px; padding: 1px 9px;
+  }
+  .ou-over       { color: #ff6b6b; border: 1px solid rgba(255, 107, 107, 0.5); background: rgba(255, 107, 107, 0.12); }
+  .ou-half-over  { color: #ffa8a8; border: 1px solid rgba(255, 107, 107, 0.35); background: rgba(255, 107, 107, 0.06); }
+  .ou-under      { color: #4dabf7; border: 1px solid rgba(77, 171, 247, 0.5); background: rgba(77, 171, 247, 0.12); }
+  .ou-half-under { color: #99c8f8; border: 1px solid rgba(77, 171, 247, 0.35); background: rgba(77, 171, 247, 0.06); }
+  .ou-push       { color: #9aa5b1; border: 1px solid rgba(154, 165, 177, 0.4); background: rgba(154, 165, 177, 0.08); }
+  .ou-score { color: var(--gold-bright); font-size: 12px; white-space: nowrap; flex-shrink: 0; font-weight: 700; }
+  .ou-section { color: var(--gold); font-size: 13px; letter-spacing: 2px; margin: 16px 4px 6px; }
   .export-btn {
     padding: 9px 16px;
     border: 1px solid rgba(212, 175, 55, 0.35);
@@ -861,6 +879,7 @@
     <label for="league-btn" style="color:#778da9;font-size:14px;">选择赛事：</label>
     <button type="button" class="year-select league-btn" id="league-btn" onclick="openLeaguePanel()">加载中...<span id="league-btn-dot" class="hidden"></span></button>
     <button type="button" class="year-select" id="fixtures-btn" onclick="openFixturesPanel()">📅 近期赛程</button>
+    <button type="button" class="year-select" id="ou-btn" onclick="openOuPanel()">⚽ 大小球</button>
 
     <span id="season-wrapper">
       <label for="season-select" style="color:#778da9;font-size:14px;">选择赛季：</label>
@@ -929,6 +948,17 @@
       <button type="button" class="league-panel-close" onclick="closeFixturesPanel()" aria-label="关闭">✕</button>
     </div>
     <div class="league-panel-body" id="fixtures-panel-body"></div>
+  </div>
+</div>
+
+<!-- 大小球对照弹层 -->
+<div class="league-overlay" id="ou-overlay" onclick="if(event.target===this)closeOuPanel()">
+  <div class="league-panel" role="dialog" aria-label="大小球对照">
+    <div class="league-panel-head">
+      <span>初盘大小球 · 赛后对照</span>
+      <button type="button" class="league-panel-close" onclick="closeOuPanel()" aria-label="关闭">✕</button>
+    </div>
+    <div class="league-panel-body" id="ou-panel-body"></div>
   </div>
 </div>
 
@@ -1603,6 +1633,7 @@ function renderFixturesPanel() {
     html += '<div class="fixture-item">' +
       '<span class="fx-league">' + lname + '</span>' +
       '<span class="fx-teams">' + esc(fx.team1_cn || fx.team1) + ' vs ' + esc(fx.team2_cn || fx.team2) + '</span>' +
+      (fx.ou_line != null ? '<span class="fx-ou">初盘 ' + esc(String(fx.ou_line)) + '</span>' : '') +
       '<span class="fx-time">' + esc(fx.time || '--:--') + '</span>' +
       '</div>';
   });
@@ -1613,8 +1644,84 @@ function closeFixturesPanel() {
   document.getElementById('fixtures-overlay').classList.remove('open');
 }
 
+// ===== 大小球对照弹层（懒加载 football_ou.js -> window.OU_DATA） =====
+let ouData = undefined;  // undefined=未加载, null=加载失败
+let ouLoading = null;
+
+const OU_BADGE_CLASS = { '大': 'ou-over', '半大': 'ou-half-over', '小': 'ou-under', '半小': 'ou-half-under', '走': 'ou-push' };
+
+async function openOuPanel() {
+  document.getElementById('ou-overlay').classList.add('open');
+  if (ouData !== undefined) { renderOuPanel(); return; }
+  const body = document.getElementById('ou-panel-body');
+  body.innerHTML = '<div class="fixture-empty">大小球数据加载中…</div>';
+  if (!ouLoading) {
+    ouLoading = loadScript('football_ou.js')
+      .then(() => { ouData = window.OU_DATA || null; })
+      .catch(err => { console.log('加载大小球数据失败:', err.message); ouData = null; });
+  }
+  await ouLoading;
+  renderOuPanel();
+}
+
+function renderOuPanel() {
+  const body = document.getElementById('ou-panel-body');
+  const items = (ouData && Array.isArray(ouData.items)) ? ouData.items : [];
+  if (!items.length) {
+    body.innerHTML = '<div class="fixture-empty">' +
+      (ouData ? '暂无初盘数据（新比赛进入赛程窗口后自动抓快照）' : '数据加载失败，请稍后再试') + '</div>';
+    return;
+  }
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g,
+    c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+  const dateTitle = d => {
+    const dt = new Date(d + 'T00:00:00');
+    return esc(d) + (isNaN(dt.getTime()) ? '' : ' · ' + weekdays[dt.getDay()]);
+  };
+  const itemHtml = it => {
+    const meta = leagueMetaMap[it._league];
+    const lname = meta ? meta.flag + ' ' + meta.cn : esc(it._league);
+    const right = it.status === 'FT'
+      ? '<span class="ou-score">' + it.s1 + ':' + it.s2 + '</span>' +
+        '<span class="ou-badge ' + (OU_BADGE_CLASS[it.ou_result] || 'ou-push') + '">' +
+        esc(String(it.ou_line)) + ' ' + esc(it.ou_result || '') + '</span>'
+      : '<span class="fx-time">' + esc(it.time || '--:--') + '</span>' +
+        '<span class="fx-ou">初盘 ' + esc(String(it.ou_line)) + '</span>';
+    return '<div class="fixture-item">' +
+      '<span class="fx-league">' + lname + '</span>' +
+      '<span class="fx-teams">' + esc(it.team1_cn || it.team1) + ' vs ' + esc(it.team2_cn || it.team2) + '</span>' +
+      right + '</div>';
+  };
+
+  const ft = items.filter(i => i.status === 'FT').sort((a, b) => b.date.localeCompare(a.date));
+  const ns = items.filter(i => i.status === 'NS');
+  let html = '';
+  if (ft.length) {
+    html += '<div class="ou-section">已完场 · 初盘对照</div>';
+    let last = null;
+    ft.forEach(it => {
+      if (it.date !== last) { html += '<div class="fixture-date-title">' + dateTitle(it.date) + '</div>'; last = it.date; }
+      html += itemHtml(it);
+    });
+  }
+  if (ns.length) {
+    html += '<div class="ou-section">未开赛 · 初盘</div>';
+    let last = null;
+    ns.forEach(it => {
+      if (it.date !== last) { html += '<div class="fixture-date-title">' + dateTitle(it.date) + '</div>'; last = it.date; }
+      html += itemHtml(it);
+    });
+  }
+  body.innerHTML = html;
+}
+
+function closeOuPanel() {
+  document.getElementById('ou-overlay').classList.remove('open');
+}
+
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') { closeLeaguePanel(); closeFixturesPanel(); }
+  if (e.key === 'Escape') { closeLeaguePanel(); closeFixturesPanel(); closeOuPanel(); }
 });
 
 // ===== 数据加载 =====
