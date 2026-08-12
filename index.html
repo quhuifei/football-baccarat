@@ -589,12 +589,40 @@
     font-family: "Oswald", "Noto Sans SC", sans-serif;
     letter-spacing: 2px;
   }
-  /* ===== 赛果列表 + 聊天室 双栏布局 ===== */
+  /* ===== 赛果列表 + 近期赛程 + 聊天室 三栏布局 ===== */
   .match-chat-row { display: flex; flex-direction: column; gap: 16px; }
   @media (min-width: 900px) {
     .match-chat-row { flex-direction: row; align-items: stretch; }
     .match-chat-row .match-list { flex: 1 1 0; min-width: 0; }
+    .match-chat-row .fixtures-panel { flex: 1 1 0; min-width: 0; height: 600px; }
     .match-chat-row .chat-panel { flex: 1 1 0; min-width: 0; height: 600px; }
+  }
+  @media (max-width: 899px) {
+    /* 手机端顺序：近期赛程 → 完整赛果列表 → 聊天室；赛程面板限高内部滚动 */
+    .match-chat-row .fixtures-panel { order: -1; max-height: 320px; }
+  }
+  /* ===== 近期赛程常显面板（深色金色卡片，与赛果列表同款） ===== */
+  .fixtures-panel {
+    background: linear-gradient(180deg, rgba(15, 32, 27, 0.85), rgba(8, 18, 14, 0.9));
+    border: 1px solid var(--gold-line);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex; flex-direction: column;
+    max-height: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    animation: riseIn 0.5s ease 0.12s both;
+  }
+  .fixtures-panel h2 {
+    font-size: 17px;
+    margin-bottom: 10px;
+    color: var(--gold);
+    font-family: "Oswald", "Noto Sans SC", sans-serif;
+    letter-spacing: 2px;
+    flex-shrink: 0;
+  }
+  .fixtures-inline-body {
+    flex: 1; min-height: 0; overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   /* ===== 聊天室 ===== */
   .chat-panel {
@@ -906,8 +934,6 @@
   <div class="controls">
     <label for="league-btn" style="color:#778da9;font-size:14px;">选择赛事：</label>
     <button type="button" class="year-select league-btn" id="league-btn" onclick="openLeaguePanel()">加载中...<span id="league-btn-dot" class="hidden"></span></button>
-    <button type="button" class="year-select" id="fixtures-btn" onclick="openFixturesPanel()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></svg> 近期赛程</button>
-    <button type="button" class="year-select" id="ou-btn" onclick="openOuPanel()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8l2.94 2.14-1.12 3.42h-3.64L9.06 10.14 12 8z"/><path d="M12 8V3M9.06 10.14L4.4 7.2M14.94 10.14L19.6 7.2M13.82 13.56L18.8 17.9M10.18 13.56L5.2 17.9"/></svg> 大小球</button>
 
     <span id="season-wrapper">
       <label for="season-select" style="color:#778da9;font-size:14px;">选择赛季：</label>
@@ -942,6 +968,11 @@
     </table>
   </div>
 
+  <div class="fixtures-panel" id="fixtures-panel">
+    <h2>近期赛程</h2>
+    <div class="fixtures-inline-body" id="fixtures-inline-body"><div class="fixture-empty">赛程加载中…</div></div>
+  </div>
+
   <div class="chat-panel" id="chat-panel">
     <h2>球迷聊天室</h2>
     <div class="chat-msgs" id="chat-msgs"></div>
@@ -969,28 +1000,6 @@
       <button type="button" class="league-panel-close" onclick="closeLeaguePanel()" aria-label="关闭">✕</button>
     </div>
     <div class="league-panel-body" id="league-panel-body"></div>
-  </div>
-</div>
-
-<!-- 近期赛程弹层 -->
-<div class="league-overlay" id="fixtures-overlay" onclick="if(event.target===this)closeFixturesPanel()">
-  <div class="league-panel" role="dialog" aria-label="近期赛程">
-    <div class="league-panel-head">
-      <span>近期赛程 · 未来 7 天</span>
-      <button type="button" class="league-panel-close" onclick="closeFixturesPanel()" aria-label="关闭">✕</button>
-    </div>
-    <div class="league-panel-body" id="fixtures-panel-body"></div>
-  </div>
-</div>
-
-<!-- 大小球对照弹层 -->
-<div class="league-overlay" id="ou-overlay" onclick="if(event.target===this)closeOuPanel()">
-  <div class="league-panel" role="dialog" aria-label="大小球对照">
-    <div class="league-panel-head">
-      <span>初盘大小球 · 赛后对照</span>
-      <button type="button" class="league-panel-close" onclick="closeOuPanel()" aria-label="关闭">✕</button>
-    </div>
-    <div class="league-panel-body" id="ou-panel-body"></div>
   </div>
 </div>
 
@@ -1719,15 +1728,12 @@ function closeLeaguePanel() {
   document.getElementById('league-overlay').classList.remove('open');
 }
 
-// ===== 近期赛程弹层（懒加载 football_fixtures.js -> window.FIXTURES_DATA） =====
+// ===== 近期赛程常显面板（加载 football_fixtures.js -> window.FIXTURES_DATA） =====
 let fixturesData = undefined;  // undefined=未加载, null=加载失败
 let fixturesLoading = null;
 
-async function openFixturesPanel() {
-  document.getElementById('fixtures-overlay').classList.add('open');
+async function initFixturesPanel() {
   if (fixturesData !== undefined) { renderFixturesPanel(); return; }
-  const body = document.getElementById('fixtures-panel-body');
-  body.innerHTML = '<div class="fixture-empty">赛程加载中…</div>';
   if (!fixturesLoading) {
     fixturesLoading = loadScript('football_fixtures.js')
       .then(() => { fixturesData = window.FIXTURES_DATA || null; })
@@ -1738,7 +1744,8 @@ async function openFixturesPanel() {
 }
 
 function renderFixturesPanel() {
-  const body = document.getElementById('fixtures-panel-body');
+  const body = document.getElementById('fixtures-inline-body');
+  if (!body) return;
   const list = (fixturesData && Array.isArray(fixturesData.fixtures)) ? fixturesData.fixtures : [];
   if (!list.length) {
     body.innerHTML = '<div class="fixture-empty">' +
@@ -1769,88 +1776,10 @@ function renderFixturesPanel() {
   body.innerHTML = html;
 }
 
-function closeFixturesPanel() {
-  document.getElementById('fixtures-overlay').classList.remove('open');
-}
-
-// ===== 大小球对照弹层（懒加载 football_ou.js -> window.OU_DATA） =====
-let ouData = undefined;  // undefined=未加载, null=加载失败
-let ouLoading = null;
-
-const OU_BADGE_CLASS = { '大': 'ou-over', '半大': 'ou-half-over', '小': 'ou-under', '半小': 'ou-half-under', '走': 'ou-push' };
-
-async function openOuPanel() {
-  document.getElementById('ou-overlay').classList.add('open');
-  if (ouData !== undefined) { renderOuPanel(); return; }
-  const body = document.getElementById('ou-panel-body');
-  body.innerHTML = '<div class="fixture-empty">大小球数据加载中…</div>';
-  if (!ouLoading) {
-    ouLoading = loadScript('football_ou.js')
-      .then(() => { ouData = window.OU_DATA || null; })
-      .catch(err => { console.log('加载大小球数据失败:', err.message); ouData = null; });
-  }
-  await ouLoading;
-  renderOuPanel();
-}
-
-function renderOuPanel() {
-  const body = document.getElementById('ou-panel-body');
-  const items = (ouData && Array.isArray(ouData.items)) ? ouData.items : [];
-  if (!items.length) {
-    body.innerHTML = '<div class="fixture-empty">' +
-      (ouData ? '暂无初盘数据（新比赛进入赛程窗口后自动抓快照）' : '数据加载失败，请稍后再试') + '</div>';
-    return;
-  }
-  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g,
-    c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-  const dateTitle = d => {
-    const dt = new Date(d + 'T00:00:00');
-    return esc(d) + (isNaN(dt.getTime()) ? '' : ' · ' + weekdays[dt.getDay()]);
-  };
-  const itemHtml = it => {
-    const meta = leagueMetaMap[it._league];
-    const lname = meta ? meta.flag + ' ' + meta.cn : esc(it._league);
-    const right = it.status === 'FT'
-      ? '<span class="ou-score">' + it.s1 + ':' + it.s2 + '</span>' +
-        '<span class="ou-badge ' + (OU_BADGE_CLASS[it.ou_result] || 'ou-push') + '">' +
-        esc(String(it.ou_line)) + ' ' + esc(it.ou_result || '') + '</span>'
-      : '<span class="fx-time">' + esc(it.time || '--:--') + '</span>' +
-        '<span class="fx-ou">初盘 ' + esc(String(it.ou_line)) + '</span>';
-    return '<div class="fixture-item">' +
-      '<span class="fx-league">' + lname + '</span>' +
-      '<span class="fx-teams">' + esc(it.team1_cn || it.team1) + ' vs ' + esc(it.team2_cn || it.team2) + '</span>' +
-      right + '</div>';
-  };
-
-  const ft = items.filter(i => i.status === 'FT').sort((a, b) => b.date.localeCompare(a.date));
-  const ns = items.filter(i => i.status === 'NS');
-  let html = '';
-  if (ft.length) {
-    html += '<div class="ou-section">已完场 · 初盘对照</div>';
-    let last = null;
-    ft.forEach(it => {
-      if (it.date !== last) { html += '<div class="fixture-date-title">' + dateTitle(it.date) + '</div>'; last = it.date; }
-      html += itemHtml(it);
-    });
-  }
-  if (ns.length) {
-    html += '<div class="ou-section">未开赛 · 初盘</div>';
-    let last = null;
-    ns.forEach(it => {
-      if (it.date !== last) { html += '<div class="fixture-date-title">' + dateTitle(it.date) + '</div>'; last = it.date; }
-      html += itemHtml(it);
-    });
-  }
-  body.innerHTML = html;
-}
-
-function closeOuPanel() {
-  document.getElementById('ou-overlay').classList.remove('open');
-}
+initFixturesPanel();
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') { closeLeaguePanel(); closeFixturesPanel(); closeOuPanel(); }
+  if (e.key === 'Escape') { closeLeaguePanel(); }
 });
 
 // ===== 数据加载 =====
@@ -1932,6 +1861,7 @@ async function initApp() {
       throw new Error('leagues.js 中未找到 LEAGUES_MANIFEST');
     }
     buildLeaguePanel();
+    if (fixturesData !== undefined) renderFixturesPanel();  // 用联赛元数据（旗标+中文名）重渲染赛程面板
   } catch (err) {
     statusEl.textContent = '❌ 无法加载 leagues.js 联赛目录（' + err.message + '）。请先运行 fetch_history.py 生成数据文件。';
     statusEl.style.color = '#ff6b6b';
