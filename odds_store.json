@@ -27,6 +27,20 @@
     "time": "14:30",
     "under": 1.98
   },
+  "ARG|2026-08-15|Belgrano|Ind. Rivadavia": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1493064,
+    "first_seen": "2026-08-12T15:10:57+08:00",
+    "league": "ARG",
+    "line": 2.0,
+    "market": "Goal Line",
+    "over": 1.95,
+    "team1": "Belgrano",
+    "team2": "Ind. Rivadavia",
+    "time": "19:00",
+    "under": 1.85
+  },
   "ARG|2026-08-15|Estudiantes L.P.|Gimnasia L.P.": {
     "bm": "Bet365",
     "date": "2026-08-15",
@@ -40,6 +54,34 @@
     "team2": "Gimnasia L.P.",
     "time": "16:45",
     "under": 2.02
+  },
+  "ARG|2026-08-15|Newells Old Boys|Dep. Riestra": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1493070,
+    "first_seen": "2026-08-12T15:11:00+08:00",
+    "league": "ARG",
+    "line": 1.75,
+    "market": "Goal Line",
+    "over": 1.9,
+    "team1": "Newells Old Boys",
+    "team2": "Dep. Riestra",
+    "time": "19:00",
+    "under": 1.9
+  },
+  "ARG|2026-08-15|Platense|Boca Juniors": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1493071,
+    "first_seen": "2026-08-12T15:12:44+08:00",
+    "league": "ARG",
+    "line": 1.75,
+    "market": "Goal Line",
+    "over": 1.85,
+    "team1": "Platense",
+    "team2": "Boca Juniors",
+    "time": "21:15",
+    "under": 1.95
   },
   "ARG|2026-08-15|San Lorenzo|Union de Santa Fe": {
     "bm": "Bet365",
@@ -111,6 +153,20 @@
     "time": "19:45",
     "under": 1.9
   },
+  "B1|2026-08-15|Genk|Westerlo": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1558593,
+    "first_seen": "2026-08-12T15:11:38+08:00",
+    "league": "B1",
+    "line": 3.25,
+    "market": "Goal Line",
+    "over": 2.0,
+    "team1": "Genk",
+    "team2": "Westerlo",
+    "time": "19:45",
+    "under": 1.8
+  },
   "B1|2026-08-15|Kortrijk|Antwerp": {
     "bm": "Bet365",
     "date": "2026-08-15",
@@ -124,6 +180,20 @@
     "team2": "Antwerp",
     "time": "17:15",
     "under": 1.95
+  },
+  "B1|2026-08-15|Oud-Heverlee Leuven|Club Brugge": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1558594,
+    "first_seen": "2026-08-12T15:11:41+08:00",
+    "league": "B1",
+    "line": 3.25,
+    "market": "Goal Line",
+    "over": 1.95,
+    "team1": "Oud-Heverlee Leuven",
+    "team2": "Club Brugge",
+    "time": "19:45",
+    "under": 1.85
   },
   "B1|2026-08-15|St. Gilloise|Waregem": {
     "bm": "Bet365",
@@ -167,6 +237,34 @@
     "time": "16:30",
     "under": 1.85
   },
+  "BRA|2026-08-15|Sao Paulo|Coritiba": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1492337,
+    "first_seen": "2026-08-12T15:12:35+08:00",
+    "league": "BRA",
+    "line": 2.5,
+    "market": "Goal Line",
+    "over": 1.98,
+    "team1": "Sao Paulo",
+    "team2": "Coritiba",
+    "time": "21:00",
+    "under": 1.88
+  },
+  "BRA|2026-08-16|Chapecoense-SC|Bahia": {
+    "bm": "Bet365",
+    "date": "2026-08-16",
+    "fid": 1492332,
+    "first_seen": "2026-08-12T15:13:05+08:00",
+    "league": "BRA",
+    "line": 2.5,
+    "market": "Goal Line",
+    "over": 1.9,
+    "team1": "Chapecoense-SC",
+    "team2": "Bahia",
+    "time": "11:00",
+    "under": 1.95
+  },
   "CHN|2026-08-14|Qingdao West Coast|Chongqing Tonglianglong": {
     "bm": "Bet365",
     "date": "2026-08-14",
@@ -208,6 +306,76 @@
     "team2": "Shanghai SIPG",
     "time": "19:35",
     "under": 1.9
+  },
+  "CHN|2026-08-15|Hangzhou Greentown|Chengdu Rongcheng": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1523240,
+    "first_seen": "2026-08-12T15:11:34+08:00",
+    "league": "CHN",
+    "line": 3.5,
+    "market": "Goal Line",
+    "over": 2.0,
+    "team1": "Hangzhou Greentown",
+    "team2": "Chengdu Rongcheng",
+    "time": "19:35",
+    "under": 1.8
+  },
+  "CHN|2026-08-15|Liaoning Tieren|Shenzhen Xinpengcheng": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1523238,
+    "first_seen": "2026-08-12T15:10:38+08:00",
+    "league": "CHN",
+    "line": 3.0,
+    "market": "Goal Line",
+    "over": 1.95,
+    "team1": "Liaoning Tieren",
+    "team2": "Shenzhen Xinpengcheng",
+    "time": "19:00",
+    "under": 1.85
+  },
+  "CHN|2026-08-15|Shanghai Shenhua|Henan Songshan Longmen": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1523241,
+    "first_seen": "2026-08-12T15:11:45+08:00",
+    "league": "CHN",
+    "line": 3.25,
+    "market": "Goal Line",
+    "over": 1.85,
+    "team1": "Shanghai Shenhua",
+    "team2": "Henan Songshan Longmen",
+    "time": "20:00",
+    "under": 1.95
+  },
+  "CHN|2026-08-15|Tianjin Jinmen Tiger|Beijing Guoan": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1523239,
+    "first_seen": "2026-08-12T15:11:30+08:00",
+    "league": "CHN",
+    "line": 2.5,
+    "market": "Goal Line",
+    "over": 1.8,
+    "team1": "Tianjin Jinmen Tiger",
+    "team2": "Beijing Guoan",
+    "time": "19:35",
+    "under": 2.0
+  },
+  "CHN|2026-08-15|Yunnan Yukun|Dalian Yingbo": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1523242,
+    "first_seen": "2026-08-12T15:12:03+08:00",
+    "league": "CHN",
+    "line": 3.25,
+    "market": "Goal Line",
+    "over": 1.85,
+    "team1": "Yunnan Yukun",
+    "team2": "Dalian Yingbo",
+    "time": "20:00",
+    "under": 1.95
   },
   "D2|2026-08-14|Braunschweig|Bochum": {
     "bm": "10Bet",
@@ -264,6 +432,20 @@
     "team2": "Heidenheim",
     "time": "12:00",
     "under": 2.25
+  },
+  "D2|2026-08-15|Kaiserslautern|Karlsruhe": {
+    "bm": "10Bet",
+    "date": "2026-08-15",
+    "fid": 1576149,
+    "first_seen": "2026-08-12T15:11:10+08:00",
+    "league": "D2",
+    "line": 3.5,
+    "market": "Goals Over/Under",
+    "over": 2.3,
+    "team1": "Kaiserslautern",
+    "team2": "Karlsruhe",
+    "time": "19:30",
+    "under": 1.6
   },
   "D2|2026-08-15|Osnabruck|Magdeburg": {
     "bm": "10Bet",
@@ -1035,6 +1217,20 @@
     "time": "19:00",
     "under": 1.8
   },
+  "JPN|2026-08-15|Avispa Fukuoka|Cerezo Osaka": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1556022,
+    "first_seen": "2026-08-12T15:10:34+08:00",
+    "league": "JPN",
+    "line": 2.5,
+    "market": "Goal Line",
+    "over": 2.02,
+    "team1": "Avispa Fukuoka",
+    "team2": "Cerezo Osaka",
+    "time": "19:00",
+    "under": 1.78
+  },
   "JPN|2026-08-15|Chiba|Machida": {
     "bm": "Bet365",
     "date": "2026-08-15",
@@ -1119,6 +1315,34 @@
     "time": "18:30",
     "under": 1.82
   },
+  "JPN|2026-08-15|Urawa Reds|Sanfrecce Hiroshima": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1554015,
+    "first_seen": "2026-08-12T15:10:27+08:00",
+    "league": "JPN",
+    "line": 2.5,
+    "market": "Goal Line",
+    "over": 1.9,
+    "team1": "Urawa Reds",
+    "team2": "Sanfrecce Hiroshima",
+    "time": "19:00",
+    "under": 1.9
+  },
+  "JPN|2026-08-15|Vissel Kobe|FC Tokyo": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1554016,
+    "first_seen": "2026-08-12T15:10:30+08:00",
+    "league": "JPN",
+    "line": 2.25,
+    "market": "Goal Line",
+    "over": 1.9,
+    "team1": "Vissel Kobe",
+    "team2": "FC Tokyo",
+    "time": "19:00",
+    "under": 1.9
+  },
   "MEX|2026-08-15|Atlante|Toluca": {
     "bm": "Bet365",
     "date": "2026-08-15",
@@ -1133,6 +1357,34 @@
     "time": "17:00",
     "under": 1.78
   },
+  "MEX|2026-08-15|Atlas|Tigres UANL": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1550923,
+    "first_seen": "2026-08-12T15:12:40+08:00",
+    "league": "MEX",
+    "line": 2.25,
+    "market": "Goal Line",
+    "over": 1.82,
+    "team1": "Atlas",
+    "team2": "Tigres UANL",
+    "time": "21:10",
+    "under": 1.98
+  },
+  "MEX|2026-08-15|Monterrey|Juarez": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1550922,
+    "first_seen": "2026-08-12T15:11:04+08:00",
+    "league": "MEX",
+    "line": 3.0,
+    "market": "Goal Line",
+    "over": 1.8,
+    "team1": "Monterrey",
+    "team2": "Juarez",
+    "time": "19:10",
+    "under": 2.0
+  },
   "N1|2026-08-14|Telstar|Sparta Rotterdam": {
     "bm": "Bet365",
     "date": "2026-08-14",
@@ -1145,6 +1397,34 @@
     "team1": "Telstar",
     "team2": "Sparta Rotterdam",
     "time": "19:00",
+    "under": 1.8
+  },
+  "N1|2026-08-15|Excelsior|PSV Eindhoven": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1552129,
+    "first_seen": "2026-08-12T15:10:51+08:00",
+    "league": "N1",
+    "line": 3.5,
+    "market": "Goal Line",
+    "over": 1.92,
+    "team1": "Excelsior",
+    "team2": "PSV Eindhoven",
+    "time": "19:00",
+    "under": 1.88
+  },
+  "N1|2026-08-15|For Sittard|Cambuur": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1552130,
+    "first_seen": "2026-08-12T15:12:08+08:00",
+    "league": "N1",
+    "line": 3.25,
+    "market": "Goal Line",
+    "over": 2.0,
+    "team1": "For Sittard",
+    "team2": "Cambuur",
+    "time": "20:00",
     "under": 1.8
   },
   "N1|2026-08-15|Utrecht|AZ Alkmaar": {
@@ -1174,6 +1454,20 @@
     "team2": "Nijmegen",
     "time": "15:30",
     "under": 1.98
+  },
+  "N1|2026-08-16|Den Haag|Groningen": {
+    "bm": "Bet365",
+    "date": "2026-08-16",
+    "fid": 1552131,
+    "first_seen": "2026-08-12T15:13:08+08:00",
+    "league": "N1",
+    "line": 3.0,
+    "market": "Goal Line",
+    "over": 1.95,
+    "team1": "Den Haag",
+    "team2": "Groningen",
+    "time": "11:15",
+    "under": 1.85
   },
   "NOR|2026-08-14|Rosenborg|Viking": {
     "bm": "Bet365",
@@ -1217,6 +1511,20 @@
     "time": "19:15",
     "under": 1.92
   },
+  "P1|2026-08-15|Academico Viseu|Santa Clara": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1575455,
+    "first_seen": "2026-08-12T15:10:23+08:00",
+    "league": "P1",
+    "line": 2.25,
+    "market": "Goal Line",
+    "over": 1.95,
+    "team1": "Academico Viseu",
+    "team2": "Santa Clara",
+    "time": "17:00",
+    "under": 1.9
+  },
   "P1|2026-08-15|Alverca|Estrela": {
     "bm": "Bet365",
     "date": "2026-08-15",
@@ -1231,6 +1539,20 @@
     "time": "14:30",
     "under": 1.92
   },
+  "P1|2026-08-15|Rio Ave|Porto": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1575462,
+    "first_seen": "2026-08-12T15:11:14+08:00",
+    "league": "P1",
+    "line": 2.75,
+    "market": "Goal Line",
+    "over": 1.98,
+    "team1": "Rio Ave",
+    "team2": "Porto",
+    "time": "19:30",
+    "under": 1.88
+  },
   "POL|2026-08-14|Legia|Radomiak Radom": {
     "bm": "10Bet",
     "date": "2026-08-14",
@@ -1244,6 +1566,20 @@
     "team2": "Radomiak Radom",
     "time": "19:30",
     "under": 2.2
+  },
+  "POL|2026-08-15|Widzew Lodz|Korona Kielce": {
+    "bm": "10Bet",
+    "date": "2026-08-15",
+    "fid": 1553134,
+    "first_seen": "2026-08-12T15:11:07+08:00",
+    "league": "POL",
+    "line": 2.5,
+    "market": "Goals Over/Under",
+    "over": 2.1,
+    "team1": "Widzew Lodz",
+    "team2": "Korona Kielce",
+    "time": "19:15",
+    "under": 1.7
   },
   "ROU|2026-08-14|FC Arges|Farul Constanta": {
     "bm": "Bet365",
@@ -1327,6 +1663,20 @@
     "team1": "FK Rostov",
     "team2": "Rubin Kazan",
     "time": "18:30",
+    "under": 1.85
+  },
+  "RUS|2026-08-15|Krasnodar|Akhmat Grozny": {
+    "bm": "Marathonbet",
+    "date": "2026-08-15",
+    "fid": 1561358,
+    "first_seen": "2026-08-12T15:12:30+08:00",
+    "league": "RUS",
+    "line": 2.75,
+    "market": "Goals Over/Under",
+    "over": 1.88,
+    "team1": "Krasnodar",
+    "team2": "Akhmat Grozny",
+    "time": "20:45",
     "under": 1.85
   },
   "RUS|2026-08-15|Rodina Moscow|Akron Togliatti": {
@@ -1483,6 +1833,20 @@
     "time": "18:30",
     "under": 1.9
   },
+  "SP1|2026-08-15|Sevilla|Vallecano": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1570341,
+    "first_seen": "2026-08-12T15:12:19+08:00",
+    "league": "SP1",
+    "line": 2.25,
+    "market": "Goal Line",
+    "over": 2.02,
+    "team1": "Sevilla",
+    "team2": "Vallecano",
+    "time": "20:30",
+    "under": 1.82
+  },
   "SP2|2026-08-14|Sociedad B|Castellon": {
     "bm": "Bet365",
     "date": "2026-08-14",
@@ -1509,6 +1873,20 @@
     "team1": "Cadiz",
     "team2": "Celta B",
     "time": "18:00",
+    "under": 1.82
+  },
+  "SP2|2026-08-15|Mallorca|Valladolid": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1569879,
+    "first_seen": "2026-08-12T15:12:15+08:00",
+    "league": "SP2",
+    "line": 2.5,
+    "market": "Goal Line",
+    "over": 1.98,
+    "team1": "Mallorca",
+    "team2": "Valladolid",
+    "time": "20:30",
     "under": 1.82
   },
   "SP2|2026-08-15|Oviedo|Granada": {
@@ -1567,6 +1945,62 @@
     "time": "21:30",
     "under": 1.8
   },
+  "T1|2026-08-15|Gaziantep|Alanyaspor": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1584371,
+    "first_seen": "2026-08-12T15:12:48+08:00",
+    "league": "T1",
+    "line": 2.5,
+    "market": "Goal Line",
+    "over": 1.85,
+    "team1": "Gaziantep",
+    "team2": "Alanyaspor",
+    "time": "21:30",
+    "under": 1.95
+  },
+  "T1|2026-08-15|Genclerbirligi|Fenerbahce": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1584372,
+    "first_seen": "2026-08-12T15:12:51+08:00",
+    "league": "T1",
+    "line": 2.75,
+    "market": "Goal Line",
+    "over": 1.9,
+    "team1": "Genclerbirligi",
+    "team2": "Fenerbahce",
+    "time": "21:30",
+    "under": 1.9
+  },
+  "T1|2026-08-15|Kasimpasa|Trabzonspor": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1584373,
+    "first_seen": "2026-08-12T15:10:42+08:00",
+    "league": "T1",
+    "line": 2.75,
+    "market": "Goal Line",
+    "over": 2.0,
+    "team1": "Kasimpasa",
+    "team2": "Trabzonspor",
+    "time": "19:00",
+    "under": 1.8
+  },
+  "T1|2026-08-15|Konyaspor|Rizespor": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1584374,
+    "first_seen": "2026-08-12T15:10:46+08:00",
+    "league": "T1",
+    "line": 2.5,
+    "market": "Goal Line",
+    "over": 1.88,
+    "team1": "Konyaspor",
+    "team2": "Rizespor",
+    "time": "19:00",
+    "under": 1.92
+  },
   "USA|2026-08-15|Atlanta Utd|New York Red Bulls": {
     "bm": "Bet365",
     "date": "2026-08-15",
@@ -1609,6 +2043,62 @@
     "time": "18:30",
     "under": 1.92
   },
+  "USA|2026-08-15|Colorado Rapids|Sporting Kansas City": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1490385,
+    "first_seen": "2026-08-12T15:12:26+08:00",
+    "league": "USA",
+    "line": 3.25,
+    "market": "Goal Line",
+    "over": 1.95,
+    "team1": "Colorado Rapids",
+    "team2": "Sporting Kansas City",
+    "time": "20:30",
+    "under": 1.85
+  },
+  "USA|2026-08-15|Houston Dynamo|Los Angeles Galaxy": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1490382,
+    "first_seen": "2026-08-12T15:11:25+08:00",
+    "league": "USA",
+    "line": 3.0,
+    "market": "Goal Line",
+    "over": 1.95,
+    "team1": "Houston Dynamo",
+    "team2": "Los Angeles Galaxy",
+    "time": "19:30",
+    "under": 1.85
+  },
+  "USA|2026-08-15|Los Angeles FC|San Diego FC": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1490386,
+    "first_seen": "2026-08-12T15:12:56+08:00",
+    "league": "USA",
+    "line": 3.25,
+    "market": "Goal Line",
+    "over": 1.92,
+    "team1": "Los Angeles FC",
+    "team2": "San Diego FC",
+    "time": "21:30",
+    "under": 1.88
+  },
+  "USA|2026-08-15|Nashville SC|Inter Miami": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1490381,
+    "first_seen": "2026-08-12T15:11:20+08:00",
+    "league": "USA",
+    "line": 3.25,
+    "market": "Goal Line",
+    "over": 1.9,
+    "team1": "Nashville SC",
+    "team2": "Inter Miami",
+    "time": "19:30",
+    "under": 1.9
+  },
   "USA|2026-08-15|Orlando City|FC Cincinnati": {
     "bm": "Bet365",
     "date": "2026-08-15",
@@ -1622,6 +2112,34 @@
     "team2": "FC Cincinnati",
     "time": "18:30",
     "under": 1.92
+  },
+  "USA|2026-08-15|Real Salt Lake|Minnesota United": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1490384,
+    "first_seen": "2026-08-12T15:12:22+08:00",
+    "league": "USA",
+    "line": 3.0,
+    "market": "Goal Line",
+    "over": 1.95,
+    "team1": "Real Salt Lake",
+    "team2": "Minnesota United",
+    "time": "20:30",
+    "under": 1.85
+  },
+  "USA|2026-08-15|San Jose Earthquakes|St. Louis City": {
+    "bm": "Bet365",
+    "date": "2026-08-15",
+    "fid": 1490387,
+    "first_seen": "2026-08-12T15:13:00+08:00",
+    "league": "USA",
+    "line": 3.0,
+    "market": "Goal Line",
+    "over": 1.78,
+    "team1": "San Jose Earthquakes",
+    "team2": "St. Louis City",
+    "time": "21:30",
+    "under": 2.02
   },
   "USA|2026-08-15|Toronto FC|New England Revolution": {
     "bm": "Bet365",

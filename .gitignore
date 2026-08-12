@@ -1,6 +1,9 @@
-node_modules/
-package-lock.json
-.DS_Store
-wc_baccarat_final.html
-.cache/
-auth/
+.resend_pw
+__pycache__/
+vpn_link.txt
+vpn_qr.png
+design-mockups/
+*.xlsx
+*.docx
+matches.json
+ou_progress.json

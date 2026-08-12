@@ -530,6 +530,31 @@ def fetch_ou_snapshots(fixtures, store):
     return got, still + overflow
 
 
+def safe_write_output(json_path, js_path, js_var, payload, list_key, label):
+    """防空写保护：新列表为空、或不足旧文件一半（旧文件 ≥10 条）时，判定本次抓取异常，
+    保留磁盘旧文件不覆盖并打印警告。旧文件缺失/损坏时按无旧数据处理，正常写入。
+    返回 True=已写入，False=已保留旧文件。"""
+    new_count = len(payload.get(list_key) or [])
+    old_count = 0
+    if os.path.exists(json_path):
+        try:
+            with open(json_path, encoding="utf-8") as f:
+                old_count = len((json.load(f) or {}).get(list_key) or [])
+        except (ValueError, OSError):
+            old_count = 0
+    if old_count and (new_count == 0 or new_count < old_count * 0.5):
+        print(f"[防空写] 警告：{label} 本次仅 {new_count} 条，旧文件有 {old_count} 条，"
+              f"疑似抓取失败，已保留旧文件不覆盖（{os.path.basename(json_path)} 及其 .js）")
+        return False
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+    with open(js_path, "w", encoding="utf-8") as f:
+        f.write(f"window.{js_var} = ")
+        json.dump(payload, f, ensure_ascii=False)
+        f.write(";\n")
+    return True
+
+
 def settle_ou(total, line):
     """总进球 vs 初盘线 → 大/小/走/半大/半小。
     半球盘（x.5）：无走水；整盘（x.0）：进球数等于线=走水退本金；
@@ -684,14 +709,8 @@ def main():
         "updated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
         "matches": all_matches,
     }
-    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
-
-    # 同步输出 JS 版本（window.LATEST_DATA），供 file:// 方式直接打开页面时加载
-    with open(OUTPUT_JS_PATH, "w", encoding="utf-8") as f:
-        f.write("window.LATEST_DATA = ")
-        json.dump(output, f, ensure_ascii=False)
-        f.write(";\n")
+    latest_written = safe_write_output(OUTPUT_PATH, OUTPUT_JS_PATH,
+                                       "LATEST_DATA", output, "matches", "赛果增量")
 
     # ---- 近期赛程：按 (联赛, 日期, 时间, 主, 客) 去重后按开球时间排序 ----
     for fx in all_fixtures:
@@ -705,12 +724,8 @@ def main():
         "updated_at": output["updated_at"],
         "fixtures": all_fixtures,
     }
-    with open(FIXTURES_PATH, "w", encoding="utf-8") as f:
-        json.dump(fixtures_output, f, ensure_ascii=False, indent=2)
-    with open(FIXTURES_JS_PATH, "w", encoding="utf-8") as f:
-        f.write("window.FIXTURES_DATA = ")
-        json.dump(fixtures_output, f, ensure_ascii=False)
-        f.write(";\n")
+    fx_written = safe_write_output(FIXTURES_PATH, FIXTURES_JS_PATH,
+                                   "FIXTURES_DATA", fixtures_output, "fixtures", "近期赛程")
 
     # ---- 大小球对照输出：近 OU_DAYS 天完场（含结果）+ 窗口内未赛（初盘）----
     ou_cutoff = (today - timedelta(days=OU_DAYS)).isoformat()
@@ -738,12 +753,8 @@ def main():
             })
     ou_items.sort(key=lambda x: (x["date"], x["time"] or "99:99", x["team1"]))
     ou_output = {"updated_at": output["updated_at"], "items": ou_items}
-    with open(OU_PATH, "w", encoding="utf-8") as f:
-        json.dump(ou_output, f, ensure_ascii=False, indent=2)
-    with open(OU_JS_PATH, "w", encoding="utf-8") as f:
-        f.write("window.OU_DATA = ")
-        json.dump(ou_output, f, ensure_ascii=False)
-        f.write(";\n")
+    ou_written = safe_write_output(OU_PATH, OU_JS_PATH,
+                                   "OU_DATA", ou_output, "items", "大小球对照")
 
     print("\n===== 汇总 =====")
     for league in LEAGUES_A + LEAGUES_B:
@@ -752,22 +763,22 @@ def main():
         print(f"  快速通道(API-Football): {summary['_fast']} 场"
               + (f"（另获赛程 {summary['_fast_fx']} 场）" if summary.get("_fast_fx") else ""))
     print(f"  合计: {len(all_matches)} 场")
-    print(f"  输出文件: {OUTPUT_PATH}")
-    print(f"  输出文件: {OUTPUT_JS_PATH}")
+    print(f"  输出文件: {OUTPUT_PATH}{'' if latest_written else '（防空写：保留旧文件）'}")
+    print(f"  输出文件: {OUTPUT_JS_PATH}{'' if latest_written else '（防空写：保留旧文件）'}")
     fx_total = len(all_fixtures)
     print(f"\n===== 近期赛程（未来 {FIXTURE_DAYS} 天） =====")
     for league in sorted(fixtures_summary):
         if fixtures_summary[league]:
             print(f"  {league}: {fixtures_summary[league]} 场")
     print(f"  合计: {fx_total} 场")
-    print(f"  输出文件: {FIXTURES_PATH}")
-    print(f"  输出文件: {FIXTURES_JS_PATH}")
+    print(f"  输出文件: {FIXTURES_PATH}{'' if fx_written else '（防空写：保留旧文件）'}")
+    print(f"  输出文件: {FIXTURES_JS_PATH}{'' if fx_written else '（防空写：保留旧文件）'}")
     ou_ft = sum(1 for i in ou_items if i["status"] == "FT")
     ou_ns = len(ou_items) - ou_ft
     print(f"\n===== 大小球对照 =====")
     print(f"  完场对照 {ou_ft} 场，未赛初盘 {ou_ns} 场")
-    print(f"  输出文件: {OU_PATH}")
-    print(f"  输出文件: {OU_JS_PATH}")
+    print(f"  输出文件: {OU_PATH}{'' if ou_written else '（防空写：保留旧文件）'}")
+    print(f"  输出文件: {OU_JS_PATH}{'' if ou_written else '（防空写：保留旧文件）'}")
 
 
 if __name__ == "__main__":
