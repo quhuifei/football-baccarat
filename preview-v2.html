@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>赛果路图 · V2 指挥台设计预览</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --bg: #071510;
+    --panel: rgba(15, 32, 27, 0.72);
+    --panel-solid: #0d1e18;
+    --gold: #d4af37;
+    --gold-bright: #f0d060;
+    --gold-line: rgba(212, 175, 55, 0.22);
+    --muted: #778da9;
+    --txt: #e8eef2;
+    --banker: #ff6b6b;   /* 大 / 庄 */
+    --player: #4dabf7;   /* 小 / 闲 */
+    --tie: #4dd0a8;      /* 走 / 和 */
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background:
+      radial-gradient(1100px 500px at 85% -10%, rgba(212, 175, 55, 0.07), transparent 60%),
+      radial-gradient(900px 600px at -10% 20%, rgba(42, 157, 143, 0.05), transparent 55%),
+      var(--bg);
+    color: var(--txt);
+    font-family: "Noto Sans SC", sans-serif;
+    min-height: 100vh;
+    padding: 76px 18px 24px;
+  }
+  h1, h2, .num { font-family: "Oswald", "Noto Sans SC", sans-serif; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* ===== 顶部固定栏 ===== */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 56px; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 22px;
+    background: rgba(7, 21, 16, 0.82);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.14);
+  }
+  .brand {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--gold); text-decoration: none; font-weight: 700; letter-spacing: 2px; font-size: 15px;
+  }
+  .brand .ic { width: 19px; height: 19px; }
+  .account { display: flex; gap: 10px; align-items: center; }
+  .account a { text-decoration: none; font-size: 13px; letter-spacing: 1px; }
+  .account .login { color: var(--gold); padding: 5px 14px; border: 1px solid rgba(212,175,55,0.45); border-radius: 999px; }
+  .account .register {
+    color: #071510; font-weight: 700; padding: 6px 15px; border-radius: 999px;
+    background: linear-gradient(135deg, #d4af37, #b8952e);
+  }
+  .ic { display: inline-block; width: 1.05em; height: 1.05em; vertical-align: -0.18em; }
+
+  .page { max-width: 1280px; margin: 0 auto; }
+
+  /* ===== 卡片基座：1px 半透明金边 + 轻渐变 + 柔和投影 ===== */
+  .card {
+    background: linear-gradient(180deg, rgba(15, 32, 27, 0.78), rgba(8, 18, 14, 0.86));
+    border: 1px solid var(--gold-line);
+    border-radius: 16px;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+  .card-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 14px 18px 10px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+  }
+  .card-head h2 { font-size: 15px; letter-spacing: 3px; color: var(--gold); font-weight: 600; }
+  .card-head .sub { font-size: 11px; color: var(--muted); letter-spacing: 1px; }
+
+  /* ===== 联赛头部横条 ===== */
+  .league-bar {
+    display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
+    padding: 14px 20px; margin-bottom: 14px;
+  }
+  .league-id { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .league-id .flag { font-size: 34px; line-height: 1; }
+  .league-id h1 { font-size: 22px; letter-spacing: 2px; color: var(--txt); }
+  .league-id .en { font-size: 11px; color: var(--muted); letter-spacing: 1px; margin-top: 1px; }
+  .league-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .lc-label { font-size: 12px; color: var(--muted); }
+  select.pill {
+    appearance: none; -webkit-appearance: none;
+    background: rgba(5, 13, 10, 0.65) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d4af37' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+    border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 999px;
+    color: var(--txt); font-size: 13px; font-family: inherit;
+    padding: 7px 30px 7px 14px; cursor: pointer; outline: none;
+  }
+  select.pill:focus { border-color: var(--gold); }
+  select.pill option { background: #0d1e18; }
+  .mode-tabs {
+    display: flex; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 999px; overflow: hidden;
+  }
+  .mode-tabs button {
+    border: none; cursor: pointer; font-family: inherit;
+    padding: 7px 18px; font-size: 13px; font-weight: 600; letter-spacing: 2px;
+    color: var(--muted); background: transparent;
+    transition: background 0.2s, color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mode-tabs button.active {
+    color: #071510; background: linear-gradient(135deg, #d4af37, #b8952e);
+  }
+  .mini-stats { display: flex; gap: 22px; margin-left: auto; }
+  .mini-stat { text-align: right; }
+  .mini-stat .num { font-size: 21px; font-weight: 600; line-height: 1.1; }
+  .mini-stat .lb { font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-top: 2px; }
+  .mini-stat.s-b .num { color: var(--banker); }
+  .mini-stat.s-p .num { color: var(--player); }
+  .mini-stat.s-t .num { color: var(--tie); }
+  .mini-stat.s-total .num { color: var(--gold-bright); }
+
+  /* ===== 主区网格 ===== */
+  .grid {
+    display: grid; gap: 14px;
+    grid-template-columns: repeat(12, 1fr);
+  }
+  .road-card { grid-column: span 8; display: flex; flex-direction: column; }
+  .rail { grid-column: span 4; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .table-card { grid-column: span 7; }
+  .chat-card { grid-column: span 5; }
+
+  /* ===== 大路图珠子：圆润 + 细描边 + 微高光 + 呼吸间距 ===== */
+  .road-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 16px 18px 18px; }
+  .road { display: grid; gap: 7px; min-width: fit-content; }
+  .cell { position: relative; width: 34px; height: 34px; }
+  .bead {
+    width: 100%; height: 100%; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Oswald", "Noto Sans SC", sans-serif;
+    font-size: 12.5px; font-weight: 600; color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    border: 1.5px solid rgba(255, 255, 255, 0.30);
+    box-shadow:
+      0 3px 8px rgba(0, 0, 0, 0.42),
+      inset 0 1.5px 2.5px rgba(255, 255, 255, 0.38),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.28);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+    cursor: default;
+  }
+  .bead:hover {
+    transform: scale(1.13);
+    box-shadow:
+      0 5px 14px rgba(0, 0, 0, 0.5), 0 0 12px rgba(212, 175, 55, 0.32),
+      inset 0 1.5px 2.5px rgba(255, 255, 255, 0.42);
+    position: relative; z-index: 3;
+  }
+  .bead-B { background: radial-gradient(circle at 33% 27%, #ff9a9a, #d62f3a 56%, #a11d25); }
+  .bead-P { background: radial-gradient(circle at 33% 27%, #8fc9fc, #1971c2 56%, #125094); }
+  .bead-T { background: radial-gradient(circle at 33% 27%, #7debcc, #2a9d8f 56%, #1d6f64); }
+  .tie-slash {
+    position: absolute; top: 50%; left: 16%; width: 68%; height: 2.5px;
+    background: var(--tie); border-radius: 2px;
+    box-shadow: 0 0 5px rgba(77, 208, 168, 0.75);
+    transform-origin: center; pointer-events: none;
+  }
+  .tie-badge {
+    position: absolute; right: -4px; bottom: -4px;
+    font-size: 9px; font-weight: 700; color: #071510;
+    background: var(--tie); border-radius: 999px; padding: 0 4px; line-height: 14px;
+  }
+
+  /* ===== 近期赛程卡（桌面：纵向滚动列表） ===== */
+  .fixtures-card { min-height: 0; }
+  .fx-list { overflow-y: auto; -webkit-overflow-scrolling: touch; max-height: 330px; padding: 8px 12px 14px; }
+  .fx-day-title {
+    color: var(--gold); font-size: 11.5px; letter-spacing: 2px; margin: 10px 4px 6px;
+  }
+  .fx-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px; margin-bottom: 5px; border-radius: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.12);
+    background: rgba(255, 255, 255, 0.025);
+    font-size: 12.5px; transition: background 0.15s, border-color 0.15s;
+  }
+  .fx-row:hover { background: rgba(212, 175, 55, 0.07); border-color: rgba(212, 175, 55, 0.3); }
+  .fx-time { color: var(--gold-bright); font-size: 11.5px; white-space: nowrap; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  .fx-teams { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .fx-teams .fx-flag { margin-right: 4px; }
+  .fx-ou {
+    flex-shrink: 0; white-space: nowrap; font-size: 10.5px; color: var(--gold-bright);
+    border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 999px;
+    padding: 0 7px; background: rgba(212, 175, 55, 0.07);
+    font-variant-numeric: tabular-nums;
+  }
+  .empty-tip { color: var(--muted); font-size: 12.5px; text-align: center; padding: 24px 0; }
+
+  /* ===== 大小球近绩卡 ===== */
+  .ou-list { padding: 10px 14px 14px; display: flex; flex-direction: column; gap: 5px; max-height: 240px; overflow-y: auto; }
+  .ou-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .ou-row .d { color: var(--muted); font-size: 11px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  .ou-row .t { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .ou-row .sc { color: var(--gold-bright); font-weight: 700; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  .ou-badge {
+    display: inline-block; flex-shrink: 0; white-space: nowrap;
+    font-size: 10.5px; font-weight: 700; border-radius: 999px; padding: 1px 8px;
+  }
+  .ou-over  { color: var(--banker); border: 1px solid rgba(255,107,107,0.5); background: rgba(255,107,107,0.12); }
+  .ou-under { color: var(--player); border: 1px solid rgba(77,171,247,0.5); background: rgba(77,171,247,0.12); }
+  .ou-push  { color: #9aa5b1; border: 1px solid rgba(154,165,177,0.4); background: rgba(154,165,177,0.08); }
+
+  /* ===== 赛果表 ===== */
+  .table-wrap { overflow: auto; -webkit-overflow-scrolling: touch; max-height: 560px; padding: 4px 12px 14px; }
+  table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+  th, td { padding: 7px 9px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.05); white-space: nowrap; }
+  td:nth-child(4), td:nth-child(6) { white-space: normal; }
+  th {
+    color: var(--gold); font-weight: 600; font-size: 12px; letter-spacing: 1px;
+    position: sticky; top: -4px; background: #0d1e18; z-index: 3;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  }
+  tbody tr:hover td { background: rgba(212, 175, 55, 0.06); }
+  .r-B { color: var(--banker); font-weight: 700; }
+  .r-P { color: var(--player); font-weight: 700; }
+  .r-T { color: var(--tie); font-weight: 700; }
+  .ou-mini { font-size: 11px; font-weight: 700; }
+  .ou-mini-B { color: var(--banker); }
+  .ou-mini-P { color: var(--player); }
+  .ou-mini-T { color: var(--tie); }
+
+  /* ===== 聊天室占位 ===== */
+  .chat-card { display: flex; flex-direction: column; }
+  .chat-placeholder {
+    flex: 1; min-height: 220px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    color: var(--muted); font-size: 13px; letter-spacing: 1px;
+  }
+  .chat-placeholder .ic { width: 30px; height: 30px; opacity: 0.55; }
+
+  footer {
+    text-align: center; color: var(--muted); font-size: 12px;
+    margin-top: 22px; padding-top: 14px;
+    border-top: 1px solid rgba(212, 175, 55, 0.1); letter-spacing: 0.5px;
+  }
+  footer .warn { color: var(--gold); opacity: 0.85; }
+
+  /* ===== 手机端 ===== */
+  @media (max-width: 999px) {
+    .road-card, .rail, .table-card, .chat-card { grid-column: span 12; }
+    .rail { display: contents; }  /* 拆开侧栏，卡片自由排序 */
+    .fixtures-card { order: -1; }
+  }
+  @media (max-width: 639px) {
+    body { padding: 66px 8px 10px; }
+    .topbar { padding: 0 14px; height: 52px; }
+    .league-bar { flex-direction: column; align-items: stretch; gap: 12px; padding: 14px; }
+    .mini-stats { margin-left: 0; justify-content: space-between; gap: 8px; }
+    .mini-stat { text-align: center; }
+    .mini-stat .num { font-size: 18px; }
+    .league-controls { flex-direction: column; align-items: stretch; }
+    .mode-tabs button { flex: 1; }
+    select.pill { width: 100%; }
+    /* 赛程卡在大拉图上方，横向滑动日期条 */
+    .grid { display: flex; flex-direction: column; }
+    .fixtures-card { order: -2; }
+    .road-card { order: -1; }
+    .fx-list {
+      display: flex; gap: 10px; overflow-x: auto; max-height: none;
+      scroll-snap-type: x mandatory; padding: 12px 14px 16px;
+    }
+    .fx-day {
+      flex: 0 0 78%; scroll-snap-align: start;
+      border: 1px solid rgba(212, 175, 55, 0.14); border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02); padding: 8px 10px;
+    }
+    .fx-day-title { margin: 2px 2px 8px; }
+    .fx-row { padding: 6px 8px; font-size: 12px; }
+    table { font-size: 12px; }
+    th, td { padding: 4px 5px; }
+    th:nth-child(2), td:nth-child(2), th.ou-col, td.ou-col { display: none; }
+  }
+  /* 桌面端日期分组不需要卡片包装 */
+  @media (min-width: 640px) {
+    .fx-day { margin-bottom: 2px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#">
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8l2.94 2.14-1.12 3.42h-3.64L9.06 10.14 12 8z"/><path d="M12 8V3M9.06 10.14L4.4 7.2M14.94 10.14L19.6 7.2M13.82 13.56L18.8 17.9M10.18 13.56L5.2 17.9"/></svg>
+    赛果路图
+  </a>
+  <div class="account">
+    <a class="login" href="#">登录</a>
+    <a class="register" href="#">注册</a>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- 联赛头部横条 -->
+  <section class="league-bar card">
+    <div class="league-id">
+      <span class="flag" id="lg-flag">🏴</span>
+      <div>
+        <h1 id="lg-cn">英超</h1>
+        <div class="en" id="lg-en">Premier League · 英格兰</div>
+      </div>
+    </div>
+    <div class="league-controls">
+      <span class="lc-label">联赛</span>
+      <select class="pill" id="league-select"></select>
+      <span class="lc-label">赛季</span>
+      <select class="pill" id="season-select"></select>
+      <div class="mode-tabs">
+        <button type="button" id="tab-bpt" class="active" onclick="setMode('bpt')">胜平负</button>
+        <button type="button" id="tab-ou" onclick="setMode('ou')">大小球</button>
+      </div>
+    </div>
+    <div class="mini-stats">
+      <div class="mini-stat s-b"><div class="num" id="st-b">–</div><div class="lb" id="st-b-lb">庄（主胜）</div></div>
+      <div class="mini-stat s-p"><div class="num" id="st-p">–</div><div class="lb" id="st-p-lb">闲（客胜）</div></div>
+      <div class="mini-stat s-t"><div class="num" id="st-t">–</div><div class="lb" id="st-t-lb">和</div></div>
+      <div class="mini-stat s-total"><div class="num" id="st-total">–</div><div class="lb">总场次</div></div>
+    </div>
+  </section>
+
+  <main class="grid">
+    <!-- 大路图 -->
+    <section class="card road-card">
+      <div class="card-head"><h2>大路图</h2><span class="sub" id="road-sub">胜平负 · 全部赛季</span></div>
+      <div class="road-scroll"><div class="road" id="road"></div></div>
+    </section>
+
+    <!-- 右侧栏：近期赛程常显 + 大小球近绩 -->
+    <aside class="rail">
+      <section class="card fixtures-card">
+        <div class="card-head"><h2>近期赛程</h2><span class="sub">未来 7 天 · 全联赛</span></div>
+        <div class="fx-list" id="fx-list"><div class="empty-tip">加载中…</div></div>
+      </section>
+      <section class="card ou-card">
+        <div class="card-head"><h2>大小球近绩</h2><span class="sub" id="ou-sub">本联赛最近完场</span></div>
+        <div class="ou-list" id="ou-list"><div class="empty-tip">加载中…</div></div>
+      </section>
+    </aside>
+
+    <!-- 完整赛果列表 -->
+    <section class="card table-card">
+      <div class="card-head"><h2>完整赛果列表</h2><span class="sub" id="tbl-sub"></span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>年份</th><th>日期</th><th>主队</th><th>比分</th><th>客队</th><th>结果</th><th class="ou-col">大小</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 聊天室占位 -->
+    <section class="card chat-card">
+      <div class="card-head"><h2>球迷聊天室</h2><span class="sub">占位</span></div>
+      <div class="chat-placeholder">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.5 0-2.9-.35-4.1-1L3 20l1.05-4.9A8.5 8.5 0 1 1 21 11.5z"/></svg>
+        聊天室（设计稿占位，正式版接入现有功能）
+      </div>
+    </section>
+  </main>
+
+  <footer><span class="warn">数据仅供参考，不构成投资建议</span></footer>
+</div>
+
+<script>
+'use strict';
+/* ================= 数据加载 ================= */
+const S = {
+  league: 'E0', season: 'all', mode: 'bpt',
+  manifest: [], byCode: {},
+  data: null,            // 当前联赛 {matches:[...]}
+  latestByLeague: {},    // football_latest 增量
+  fixtures: null,
+};
+const OU_DEFAULT_LINE = 2.5;
+const OU_ROAD_DAYS = 365;
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src + '?_=' + Date.now();
+    s.onload = resolve;
+    s.onerror = () => reject(new Error('无法加载 ' + src));
+    document.head.appendChild(s);
+  });
+}
+
+async function boot() {
+  await loadScript('leagues.js');
+  S.manifest = window.LEAGUES_MANIFEST || [];
+  S.manifest.forEach(m => S.byCode[m.code] = m);
+  buildLeagueSelect();
+  // 并行拉增量赛果与赛程
+  loadScript('football_latest.js').then(() => {
+    (window.LATEST_DATA && window.LATEST_DATA.matches || []).forEach(m => {
+      if (!m._league) return;
+      (S.latestByLeague[m._league] = S.latestByLeague[m._league] || []).push(m);
+    });
+    mergeLatest();
+    renderAll();
+  }).catch(() => {});
+  loadScript('football_fixtures.js').then(() => {
+    S.fixtures = window.FIXTURES_DATA || null;
+    renderFixtures();
+  }).catch(() => {
+    document.getElementById('fx-list').innerHTML = '<div class="empty-tip">赛程数据加载失败</div>';
+  });
+  await loadLeague('E0');
+}
+
+function buildLeagueSelect() {
+  const sel = document.getElementById('league-select');
+  sel.innerHTML = S.manifest.map(m =>
+    `<option value="${m.code}">${m.flag} ${m.cn}</option>`).join('');
+  sel.value = S.league;
+  sel.addEventListener('change', () => loadLeague(sel.value));
+}
+
+async function loadLeague(code) {
+  S.league = code;
+  try {
+    await loadScript('data/' + code + '.js');
+  } catch (e) {
+    document.getElementById('road').innerHTML = '<div class="empty-tip">联赛数据加载失败</div>';
+    return;
+  }
+  S.data = window.LEAGUE_DATA;
+  mergeLatest();
+  const meta = S.byCode[code] || {};
+  document.getElementById('lg-flag').textContent = meta.flag || '';
+  document.getElementById('lg-cn').textContent = meta.cn || code;
+  document.getElementById('lg-en').textContent = (meta.name || '') + ' · ' + (meta.country_cn || '');
+  buildSeasonSelect();
+  renderAll();
+}
+
+// football_latest 增量合并（带来 ou_line 初盘字段）
+function mergeLatest() {
+  const list = S.latestByLeague[S.league];
+  if (!list || !S.data) return;
+  const matches = S.data.matches;
+  const idx = new Map();
+  matches.forEach((m, i) => idx.set(m.date + '|' + m.team1 + '|' + m.team2, i));
+  list.forEach(m => {
+    const key = m.date + '|' + m.team1 + '|' + m.team2;
+    if (idx.has(key)) matches[idx.get(key)] = { ...matches[idx.get(key)], ...m };
+    else matches.push(m);
+  });
+  matches.sort((a, b) => a.date < b.date ? -1 : 1);
+}
+
+function fmtSeason(y) {
+  const n = parseInt(y, 10);
+  if (isNaN(n)) return y;
+  const meta = S.byCode[S.league];
+  if (meta && meta.season_type === 'calendar') return String(n);
+  return n + '-' + String((n + 1) % 100).padStart(2, '0');
+}
+
+function buildSeasonSelect() {
+  const seasons = [...new Set(S.data.matches.map(m => m.season))].sort();
+  const sel = document.getElementById('season-select');
+  sel.innerHTML = '<option value="all">全部赛季</option>' +
+    seasons.map(s => `<option value="${s}">${fmtSeason(s)}</option>`).join('');
+  sel.value = 'all';
+  S.season = 'all';
+  sel.onchange = () => { S.season = sel.value; renderAll(); };
+}
+
+/* ================= 判定与过滤 ================= */
+function getFiltered() {
+  return S.data.matches.filter(m => S.season === 'all' || m.season === S.season);
+}
+
+function ouOutcome(m) {
+  if (m.s1 == null || m.s2 == null) return null;
+  const total = m.s1 + m.s2;
+  if (m.ou_line != null) {
+    const line = m.ou_line;
+    const q = Math.round(line * 4);
+    if (q % 2 === 0) {
+      const l = q / 4;
+      if (total > l) return { token: 'B', label: '大', line, isDefault: false };
+      if (total < l) return { token: 'P', label: '小', line, isDefault: false };
+      return { token: 'T', label: '走', line, isDefault: false };
+    }
+    let pts = 0;
+    [(q - 1) / 4, (q + 1) / 4].forEach(h => { pts += total > h ? 1 : (total < h ? -1 : 0); });
+    if (pts > 0) return { token: 'B', label: pts === 2 ? '大' : '半大', line, isDefault: false };
+    if (pts < 0) return { token: 'P', label: pts === -2 ? '小' : '半小', line, isDefault: false };
+    return { token: 'T', label: '走', line, isDefault: false };
+  }
+  return total >= 3
+    ? { token: 'B', label: '大', line: OU_DEFAULT_LINE, isDefault: true }
+    : { token: 'P', label: '小', line: OU_DEFAULT_LINE, isDefault: true };
+}
+
+function addDays(dateStr, days) {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + days);
+  const p = n => String(n).padStart(2, '0');
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+}
+
+let ouCache = { key: null, matches: [] };
+function getOuRoadMatches() {
+  let anchor = '';
+  S.data.matches.forEach(m => { if (m.date > anchor) anchor = m.date; });
+  const key = S.league + '|' + S.season + '|' + anchor + '|' + S.data.matches.length;
+  if (ouCache.key === key) return ouCache.matches;
+  const cutoff = anchor ? addDays(anchor, -OU_ROAD_DAYS) : '';
+  const out = [];
+  getFiltered().forEach(m => {
+    if (m.date < cutoff) return;
+    const ou = ouOutcome(m);
+    if (!ou) return;
+    out.push({ ...m, result: ou.token, _ou: ou });
+  });
+  ouCache = { key, matches: out };
+  return out;
+}
+
+function setMode(mode) {
+  if (S.mode === mode) return;
+  S.mode = mode;
+  document.getElementById('tab-bpt').classList.toggle('active', mode === 'bpt');
+  document.getElementById('tab-ou').classList.toggle('active', mode === 'ou');
+  renderAll();
+}
+
+/* ================= 大路图算法（与正式版一致） ================= */
+function generateStandardRoad(results, maxRows = 6) {
+  const grid = {};
+  const cellTies = {};
+  let lastPos = null, currentCol = -1, pendingTies = [];
+  results.forEach((r, i) => {
+    const res = r.result;
+    if (res === 'T') {
+      if (lastPos) {
+        const key = lastPos.join(',');
+        (cellTies[key] = cellTies[key] || []).push(i);
+      } else pendingTies.push(i);
+      return;
+    }
+    if (Object.keys(grid).length === 0) {
+      currentCol = 0;
+      grid['0,0'] = res;
+      lastPos = [0, 0];
+      cellTies['0,0'] = pendingTies.slice();
+      pendingTies = [];
+      return;
+    }
+    const lastRes = grid[lastPos.join(',')];
+    if (res === lastRes) {
+      const [col, row] = lastPos;
+      let newRow = row + 1;
+      while (newRow < maxRows && grid[col + ',' + newRow]) newRow++;
+      if (newRow < maxRows && !grid[col + ',' + newRow]) {
+        grid[col + ',' + newRow] = res;
+        lastPos = [col, newRow];
+      } else {
+        let newCol = col + 1;
+        while (grid[newCol + ',' + row]) newCol++;
+        grid[newCol + ',' + row] = res;
+        lastPos = [newCol, row];
+      }
+    } else {
+      const newCol = currentCol + 1;
+      grid[newCol + ',0'] = res;
+      lastPos = [newCol, 0];
+      currentCol = newCol;
+    }
+  });
+  if (pendingTies.length && Object.keys(grid).length === 0) {
+    grid['0,0'] = 'T';
+    cellTies['0,0'] = pendingTies;
+  }
+  return { grid, cellTies };
+}
+
+function renderRoad(matches) {
+  const roadEl = document.getElementById('road');
+  const { grid, cellTies } = generateStandardRoad(matches);
+  let maxCol = 0, maxRow = 0;
+  for (const key in grid) {
+    const [c, r] = key.split(',').map(Number);
+    if (c > maxCol) maxCol = c;
+    if (r > maxRow) maxRow = r;
+  }
+  roadEl.style.gridTemplateColumns = `repeat(${maxCol + 1}, 34px)`;
+  roadEl.style.gridTemplateRows = `repeat(${maxRow + 1}, 34px)`;
+  const textMap = S.mode === 'ou' ? { B: '大', P: '小', T: '走' } : { B: 'B', P: 'P', T: 'T' };
+  const html = [];
+  for (let r = 0; r <= maxRow; r++) {
+    for (let c = 0; c <= maxCol; c++) {
+      const key = c + ',' + r;
+      if (!grid[key]) { html.push('<div class="cell"></div>'); continue; }
+      const ties = cellTies[key] || [];
+      html.push(`<div class="cell"><div class="bead bead-${grid[key]}"${ties.length ? ` title="并列 ${ties.length} 场"` : ''}>${textMap[grid[key]]}</div>` +
+        ties.slice(0, 3).map((t, i) =>
+          `<div class="tie-slash" style="transform:rotate(${-24 - i * 22}deg) translateY(${(i - Math.min(ties.length,3) / 2 + 0.5) * 3}px)"></div>`).join('') +
+        (ties.length > 3 ? `<div class="tie-badge">+${ties.length - 3}</div>` : '') +
+        '</div>');
+    }
+  }
+  roadEl.innerHTML = html.join('');
+  // 滚动到最新（最右端）
+  requestAnimationFrame(() => {
+    const sc = document.querySelector('.road-scroll');
+    sc.scrollLeft = sc.scrollWidth;
+  });
+}
+
+/* ================= 渲染 ================= */
+function renderAll() {
+  if (!S.data) return;
+  const isOu = S.mode === 'ou';
+  const filtered = isOu ? getOuRoadMatches() : getFiltered();
+  // 迷你统计
+  const counts = { B: 0, P: 0, T: 0 };
+  filtered.forEach(m => counts[m.result]++);
+  document.getElementById('st-b').textContent = counts.B;
+  document.getElementById('st-p').textContent = counts.P;
+  document.getElementById('st-t').textContent = counts.T;
+  document.getElementById('st-total').textContent = filtered.length;
+  document.getElementById('st-b-lb').textContent = isOu ? '大' : '庄（主胜）';
+  document.getElementById('st-p-lb').textContent = isOu ? '小' : '闲（客胜）';
+  document.getElementById('st-t-lb').textContent = isOu ? '走' : '和';
+  document.getElementById('road-sub').textContent =
+    (isOu ? '大小球 · 近一年' : '胜平负') + ' · ' +
+    (S.season === 'all' ? '全部赛季' : fmtSeason(S.season) + ' 赛季');
+  renderRoad(filtered);
+  renderTable();
+  renderOuRecent();
+}
+
+function renderTable() {
+  const filtered = getFiltered().slice().reverse();
+  const rows = [];
+  let lastYear = '';
+  filtered.forEach((m, i) => {
+    const year = m.date.split('-')[0];
+    if (S.season === 'all' && year !== lastYear) {
+      rows.push(`<tr><td colspan="8" style="color:var(--gold);font-size:12px;letter-spacing:2px;padding:8px 9px;background:rgba(212,175,55,0.05)">${year} 年</td></tr>`);
+      lastYear = year;
+    }
+    const ou = ouOutcome(m);
+    rows.push(`<tr><td>${i + 1}</td><td>${year}</td><td>${m.date}</td>` +
+      `<td>${m.team1_cn}</td><td class="num">${m.s1}–${m.s2}</td><td>${m.team2_cn}</td>` +
+      `<td class="r-${m.result}">${({B:'庄',P:'闲',T:'和'})[m.result]}</td>` +
+      `<td class="ou-col">${ou ? `<span class="ou-mini ou-mini-${ou.token}" title="总进球 ${m.s1 + m.s2} · ${ou.isDefault ? '2.5 默认线' : '初盘 ' + ou.line}">${ou.label}</span>` : ''}</td></tr>`);
+  });
+  document.getElementById('tbody').innerHTML = rows.join('');
+  document.getElementById('tbl-sub').textContent = filtered.length + ' 场';
+}
+
+function renderFixtures() {
+  const box = document.getElementById('fx-list');
+  const list = (S.fixtures && S.fixtures.fixtures) || [];
+  if (!list.length) { box.innerHTML = '<div class="empty-tip">未来 7 天暂无已排期比赛</div>'; return; }
+  const weekdays = ['周日','周一','周二','周三','周四','周五','周六'];
+  const esc = s => String(s == null ? '' : s);
+  let html = '', last = '';
+  list.forEach(fx => {
+    if (fx.date !== last) {
+      if (last) html += '</div>';
+      const d = new Date(fx.date + 'T00:00:00');
+      const wd = isNaN(d.getTime()) ? '' : ' · ' + weekdays[d.getDay()];
+      html += `<div class="fx-day"><div class="fx-day-title">${esc(fx.date)}${wd}</div>`;
+      last = fx.date;
+    }
+    const meta = S.byCode[fx._league] || {};
+    html += `<div class="fx-row">` +
+      `<span class="fx-time">${esc(fx.time || '--:--')}</span>` +
+      `<span class="fx-teams"><span class="fx-flag">${meta.flag || ''}</span>${esc(fx.team1_cn)} vs ${esc(fx.team2_cn)}</span>` +
+      (fx.ou_line != null ? `<span class="fx-ou">初盘 ${fx.ou_line}</span>` : '') +
+      `</div>`;
+  });
+  html += '</div>';
+  box.innerHTML = html;
+}
+
+// 大小球近绩：本联赛最近完场 18 场（真实初盘或 2.5 默认线）
+function renderOuRecent() {
+  const box = document.getElementById('ou-list');
+  const cls = { '大': 'ou-over', '半大': 'ou-over', '小': 'ou-under', '半小': 'ou-under', '走': 'ou-push' };
+  const rows = [];
+  const ms = S.data.matches;
+  for (let i = ms.length - 1; i >= 0 && rows.length < 18; i--) {
+    const m = ms[i];
+    const ou = ouOutcome(m);
+    if (!ou) continue;
+    rows.push(`<div class="ou-row">` +
+      `<span class="d">${m.date.slice(5)}</span>` +
+      `<span class="t">${m.team1_cn} vs ${m.team2_cn}</span>` +
+      `<span class="sc">${m.s1}:${m.s2}</span>` +
+      `<span class="ou-badge ${cls[ou.label]}" title="${ou.isDefault ? '2.5 默认线' : '初盘 ' + ou.line}">${ou.line} ${ou.label}</span>` +
+      `</div>`);
+  }
+  box.innerHTML = rows.join('') || '<div class="empty-tip">暂无数据</div>';
+}
+
+boot();
+</script>
+</body>
+</html>
