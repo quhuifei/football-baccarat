@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T15:35:24+08:00",
+  "updated_at": "2026-08-12T08:43:52+00:00",
   "matches": [
     {
       "date": "2025-02-14",
@@ -82526,138 +82526,6 @@
       "_league": "SWZ"
     },
     {
-      "date": "2026-08-09",
-      "team1": "FC Tokyo",
-      "s1": 1,
-      "s2": 1,
-      "team2": "Kawasaki Frontale",
-      "result": "T",
-      "team1_cn": "FC东京",
-      "team2_cn": "川崎前锋",
-      "season": "2026",
-      "_league": "JPN"
-    },
-    {
-      "date": "2026-08-09",
-      "team1": "V-Varen Nagasaki",
-      "s1": 2,
-      "s2": 1,
-      "team2": "Kyoto",
-      "result": "B",
-      "team1_cn": "长崎航海",
-      "team2_cn": "京都不死鸟",
-      "season": "2026",
-      "_league": "JPN"
-    },
-    {
-      "date": "2026-08-09",
-      "team1": "Dynamo Moscow",
-      "s1": 3,
-      "s2": 1,
-      "team2": "Dynamo Makhachkala",
-      "result": "B",
-      "team1_cn": "莫斯科迪纳摩",
-      "team2_cn": "马哈奇卡拉迪纳摩",
-      "season": "2026",
-      "_league": "RUS"
-    },
-    {
-      "date": "2026-08-09",
-      "team1": "Chongqing Tonglianglong",
-      "s1": 2,
-      "s2": 3,
-      "team2": "Shanghai SIPG",
-      "result": "P",
-      "team1_cn": "重庆铜梁龙",
-      "team2_cn": "上海上港",
-      "season": "2026",
-      "_league": "CHN"
-    },
-    {
-      "date": "2026-08-09",
-      "team1": "Shandong Luneng",
-      "s1": 2,
-      "s2": 1,
-      "team2": "Tianjin Jinmen Tiger",
-      "result": "B",
-      "team1_cn": "山东鲁能",
-      "team2_cn": "天津津门虎",
-      "season": "2026",
-      "_league": "CHN"
-    },
-    {
-      "date": "2026-08-09",
-      "team1": "Slask Wroclaw",
-      "s1": 0,
-      "s2": 0,
-      "team2": "Cracovia",
-      "result": "T",
-      "team1_cn": "弗罗茨瓦夫",
-      "team2_cn": "克拉科维亚",
-      "season": "2026",
-      "_league": "POL"
-    },
-    {
-      "date": "2026-08-09",
-      "team1": "Hearts",
-      "s1": 4,
-      "s2": 0,
-      "team2": "Dundee",
-      "result": "B",
-      "team1_cn": "哈茨",
-      "team2_cn": "邓迪",
-      "season": "2026",
-      "_league": "SC0"
-    },
-    {
-      "date": "2026-08-09",
-      "team1": "Zenit",
-      "s1": 1,
-      "s2": 2,
-      "team2": "Rodina Moscow",
-      "result": "P",
-      "team1_cn": "泽尼特",
-      "team2_cn": "莫斯科罗迪纳",
-      "season": "2026",
-      "_league": "RUS"
-    },
-    {
-      "date": "2026-08-09",
-      "team1": "Ham-Kam",
-      "s1": 1,
-      "s2": 1,
-      "team2": "Aalesund",
-      "result": "T",
-      "team1_cn": "汉坎",
-      "team2_cn": "奥勒松",
-      "season": "2026",
-      "_league": "NOR"
-    },
-    {
-      "date": "2026-08-09",
-      "team1": "Spartak Moscow",
-      "s1": 1,
-      "s2": 2,
-      "team2": "Krasnodar",
-      "result": "P",
-      "team1_cn": "莫斯科斯巴达",
-      "team2_cn": "克拉斯诺达尔",
-      "season": "2026",
-      "_league": "RUS"
-    },
-    {
-      "date": "2026-08-09",
-      "team1": "Rubin Kazan",
-      "s1": 1,
-      "s2": 1,
-      "team2": "Orenburg",
-      "result": "T",
-      "team1_cn": "喀山鲁宾",
-      "team2_cn": "奥伦堡",
-      "season": "2026",
-      "_league": "RUS"
-    },
-    {
       "date": "2026-08-10",
       "team1": "Santa Clara",
       "s1": 2,
@@ -82754,18 +82622,6 @@
       "_league": "SWE"
     },
     {
-      "date": "2026-08-10",
-      "team1": "Fakel Voronezh",
-      "s1": 0,
-      "s2": 0,
-      "team2": "Akhmat Grozny",
-      "result": "T",
-      "team1_cn": "沃罗涅日火炬",
-      "team2_cn": "格罗兹尼",
-      "season": "2026",
-      "_league": "RUS"
-    },
-    {
       "date": "2026-08-11",
       "team1": "Union de Santa Fe",
       "s1": 1,
@@ -82774,18 +82630,6 @@
       "result": "P",
       "team1_cn": "圣菲联合",
       "team2_cn": "科尔多瓦中央",
-      "season": "2026",
-      "_league": "ARG"
-    },
-    {
-      "date": "2026-08-11",
-      "team1": "Talleres Cordoba",
-      "s1": 0,
-      "s2": 3,
-      "team2": "Lanus",
-      "result": "P",
-      "team1_cn": "塔列雷斯",
-      "team2_cn": "拉努斯",
       "season": "2026",
       "_league": "ARG"
     }
