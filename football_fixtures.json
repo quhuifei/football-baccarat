@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T15:13:08+08:00",
+  "updated_at": "2026-08-12T15:35:24+08:00",
   "fixtures": [
     {
       "date": "2026-08-14",
@@ -10,6 +10,7 @@
       "team2_cn": "莫斯科火车头",
       "season": "2026",
       "_league": "RUS",
+      "fid": 1561360,
       "ou_line": 2.75,
       "ou_over": 1.87,
       "ou_under": 1.86,
@@ -24,6 +25,7 @@
       "team2_cn": "TPS图尔库",
       "season": "2026",
       "_league": "FIN",
+      "fid": 1495757,
       "ou_line": 2.75,
       "ou_over": 2.0,
       "ou_under": 1.8,
@@ -38,6 +40,7 @@
       "team2_cn": "波鸿",
       "season": "2026",
       "_league": "D2",
+      "fid": 1576144,
       "ou_line": 2.5,
       "ou_over": 1.85,
       "ou_under": 1.9,
@@ -52,6 +55,7 @@
       "team2_cn": "佩特罗鲁",
       "season": "2026",
       "_league": "ROU",
+      "fid": 1565220,
       "ou_line": 2.25,
       "ou_over": 1.85,
       "ou_under": 1.95,
@@ -66,6 +70,7 @@
       "team2_cn": "圣保利",
       "season": "2026",
       "_league": "D2",
+      "fid": 1576148,
       "ou_line": 2.75,
       "ou_over": 2.0,
       "ou_under": 1.8,
@@ -80,6 +85,7 @@
       "team2_cn": "韦斯特罗斯",
       "season": "2026",
       "_league": "SWE",
+      "fid": 1494244,
       "ou_line": 2.75,
       "ou_over": 1.92,
       "ou_under": 1.88,
@@ -94,6 +100,7 @@
       "team2_cn": "维京",
       "season": "2026",
       "_league": "NOR",
+      "fid": 1494738,
       "ou_line": 3.25,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -108,6 +115,7 @@
       "team2_cn": "奥胡斯",
       "season": "2026",
       "_league": "DNK",
+      "fid": 1548990,
       "ou_line": 2.75,
       "ou_over": 1.82,
       "ou_under": 1.98,
@@ -122,6 +130,7 @@
       "team2_cn": "里德",
       "season": "2026",
       "_league": "AUT",
+      "fid": 1561906,
       "ou_line": 2.75,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -136,6 +145,7 @@
       "team2_cn": "柏太阳神",
       "season": "2026",
       "_league": "JPN",
+      "fid": 1556021,
       "ou_line": 2.25,
       "ou_over": 2.0,
       "ou_under": 1.8,
@@ -150,6 +160,7 @@
       "team2_cn": "鹿特丹斯巴达",
       "season": "2026",
       "_league": "N1",
+      "fid": 1552126,
       "ou_line": 3.0,
       "ou_over": 2.0,
       "ou_under": 1.8,
@@ -164,6 +175,7 @@
       "team2_cn": "布莱克本",
       "season": "2026",
       "_league": "E1",
+      "fid": 1563083,
       "ou_line": 2.5,
       "ou_over": 1.85,
       "ou_under": 2.0,
@@ -178,6 +190,7 @@
       "team2_cn": "吉马良斯",
       "season": "2026",
       "_league": "P1",
+      "fid": 1575463,
       "ou_line": 3.25,
       "ou_over": 1.92,
       "ou_under": 1.92,
@@ -192,6 +205,7 @@
       "team2_cn": "拉多米亚克",
       "season": "2026",
       "_league": "POL",
+      "fid": 1553131,
       "ou_line": 2.5,
       "ou_over": 1.65,
       "ou_under": 2.2,
@@ -206,6 +220,7 @@
       "team2_cn": "卡斯特利翁",
       "season": "2026",
       "_league": "SP2",
+      "fid": 1569881,
       "ou_line": 2.75,
       "ou_over": 1.88,
       "ou_under": 1.92,
@@ -220,6 +235,7 @@
       "team2_cn": "青岛队",
       "season": "2026",
       "_league": "CHN",
+      "fid": 1523235,
       "ou_line": 3.5,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -234,6 +250,7 @@
       "team2_cn": "上海上港",
       "season": "2026",
       "_league": "CHN",
+      "fid": 1523236,
       "ou_line": 3.0,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -248,6 +265,7 @@
       "team2_cn": "罗德兹",
       "season": "2026",
       "_league": "F2",
+      "fid": 1552432,
       "ou_line": 2.5,
       "ou_over": 1.8,
       "ou_under": 2.0,
@@ -262,6 +280,7 @@
       "team2_cn": "圣图尔登",
       "season": "2026",
       "_league": "B1",
+      "fid": 1558590,
       "ou_line": 2.75,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -275,7 +294,8 @@
       "team1_cn": "第戎",
       "team2_cn": "波城",
       "season": "2026",
-      "_league": "F2"
+      "_league": "F2",
+      "fid": 1552433
     },
     {
       "date": "2026-08-14",
@@ -285,7 +305,8 @@
       "team1_cn": "格勒诺布尔",
       "team2_cn": "梅斯",
       "season": "2026",
-      "_league": "F2"
+      "_league": "F2",
+      "fid": 1552434
     },
     {
       "date": "2026-08-14",
@@ -296,6 +317,7 @@
       "team2_cn": "布洛涅",
       "season": "2026",
       "_league": "F2",
+      "fid": 1552435,
       "ou_line": 2.5,
       "ou_over": 1.95,
       "ou_under": 1.83,
@@ -309,7 +331,8 @@
       "team1_cn": "拉瓦勒",
       "team2_cn": "南特",
       "season": "2026",
-      "_league": "F2"
+      "_league": "F2",
+      "fid": 1552436
     },
     {
       "date": "2026-08-14",
@@ -320,6 +343,7 @@
       "team2_cn": "蒙彼利埃",
       "season": "2026",
       "_league": "F2",
+      "fid": 1552437,
       "ou_line": 2.5,
       "ou_over": 1.85,
       "ou_under": 1.9,
@@ -333,7 +357,8 @@
       "team1_cn": "红星",
       "team2_cn": "索肖",
       "season": "2026",
-      "_league": "F2"
+      "_league": "F2",
+      "fid": 1552438
     },
     {
       "date": "2026-08-14",
@@ -344,6 +369,7 @@
       "team2_cn": "敦刻尔克",
       "season": "2026",
       "_league": "F2",
+      "fid": 1552439,
       "ou_line": 2.5,
       "ou_over": 1.83,
       "ou_under": 1.95,
@@ -358,6 +384,7 @@
       "team2_cn": "克莱蒙",
       "season": "2026",
       "_league": "F2",
+      "fid": 1552440,
       "ou_line": 2.5,
       "ou_over": 1.65,
       "ou_under": 2.2,
@@ -372,6 +399,7 @@
       "team2_cn": "重庆铜梁龙",
       "season": "2026",
       "_league": "CHN",
+      "fid": 1523237,
       "ou_line": 2.5,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -386,6 +414,7 @@
       "team2_cn": "康斯坦察灯塔",
       "season": "2026",
       "_league": "ROU",
+      "fid": 1565217,
       "ou_line": 2.25,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -400,6 +429,7 @@
       "team2_cn": "班菲尔德",
       "season": "2026",
       "_league": "ARG",
+      "fid": 1493072,
       "ou_line": 2.0,
       "ou_over": 1.88,
       "ou_under": 1.92,
@@ -414,6 +444,7 @@
       "team2_cn": "乔鲁姆",
       "season": "2026",
       "_league": "T1",
+      "fid": 1584370,
       "ou_line": 3.25,
       "ou_over": 2.0,
       "ou_under": 1.8,
@@ -428,6 +459,7 @@
       "team2_cn": "普雷斯顿",
       "season": "2026",
       "_league": "E1",
+      "fid": 1563084,
       "ou_line": 2.5,
       "ou_over": 2.0,
       "ou_under": 1.85,
@@ -442,6 +474,7 @@
       "team2_cn": "罗奇代尔",
       "season": "2026",
       "_league": "E3",
+      "fid": 1563683,
       "ou_line": 2.25,
       "ou_over": 1.78,
       "ou_under": 2.02,
@@ -456,6 +489,7 @@
       "team2_cn": "莱斯特城",
       "season": "2026",
       "_league": "E2",
+      "fid": 1564235,
       "ou_line": 2.5,
       "ou_over": 2.02,
       "ou_under": 1.82,
@@ -470,6 +504,7 @@
       "team2_cn": "维尔港",
       "season": "2026",
       "_league": "E3",
+      "fid": 1563684,
       "ou_line": 2.25,
       "ou_over": 1.88,
       "ou_under": 1.98,
@@ -484,6 +519,7 @@
       "team2_cn": "米尔顿凯恩斯",
       "season": "2026",
       "_league": "E2",
+      "fid": 1564236,
       "ou_line": 2.25,
       "ou_over": 1.88,
       "ou_under": 1.98,
@@ -498,6 +534,7 @@
       "team2_cn": "卢顿",
       "season": "2026",
       "_league": "E2",
+      "fid": 1564237,
       "ou_line": 2.5,
       "ou_over": 1.9,
       "ou_under": 1.95,
@@ -512,6 +549,7 @@
       "team2_cn": "纽伦堡",
       "season": "2026",
       "_league": "D2",
+      "fid": 1576145,
       "ou_line": 2.5,
       "ou_over": 1.67,
       "ou_under": 2.15,
@@ -526,6 +564,7 @@
       "team2_cn": "海登海姆",
       "season": "2026",
       "_league": "D2",
+      "fid": 1576147,
       "ou_line": 2.5,
       "ou_over": 1.62,
       "ou_under": 2.25,
@@ -540,6 +579,7 @@
       "team2_cn": "马格德堡",
       "season": "2026",
       "_league": "D2",
+      "fid": 1576151,
       "ou_line": 2.5,
       "ou_over": 1.62,
       "ou_under": 2.25,
@@ -553,7 +593,8 @@
       "team1_cn": "卢宾",
       "team2_cn": "弗罗茨瓦夫",
       "season": "2026",
-      "_league": "POL"
+      "_league": "POL",
+      "fid": 1553136
     },
     {
       "date": "2026-08-15",
@@ -564,6 +605,7 @@
       "team2_cn": "科尔切斯特",
       "season": "2026",
       "_league": "E3",
+      "fid": 1563685,
       "ou_line": 2.25,
       "ou_over": 1.88,
       "ou_under": 1.98,
@@ -578,6 +620,7 @@
       "team2_cn": "哈特尔浦",
       "season": "2026",
       "_league": "EC",
+      "fid": 1585149,
       "ou_line": 2.75,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -592,6 +635,7 @@
       "team2_cn": "蒙特罗斯",
       "season": "2026",
       "_league": "SC2",
+      "fid": 1557016,
       "ou_line": 2.75,
       "ou_over": 1.92,
       "ou_under": 1.88,
@@ -606,6 +650,7 @@
       "team2_cn": "克莱德",
       "season": "2026",
       "_league": "SC3",
+      "fid": 1557759,
       "ou_line": 2.5,
       "ou_over": 1.8,
       "ou_under": 2.0,
@@ -620,6 +665,7 @@
       "team2_cn": "索尔福德城",
       "season": "2026",
       "_league": "E3",
+      "fid": 1563686,
       "ou_line": 2.5,
       "ou_over": 2.05,
       "ou_under": 1.8,
@@ -634,6 +680,7 @@
       "team2_cn": "布罗姆利",
       "season": "2026",
       "_league": "E2",
+      "fid": 1564238,
       "ou_line": 2.5,
       "ou_over": 1.9,
       "ou_under": 1.95,
@@ -648,6 +695,7 @@
       "team2_cn": "霍恩彻奇",
       "season": "2026",
       "_league": "EC",
+      "fid": 1585150,
       "ou_line": 2.75,
       "ou_over": 1.98,
       "ou_under": 1.82,
@@ -662,6 +710,7 @@
       "team2_cn": "韦康比",
       "season": "2026",
       "_league": "E2",
+      "fid": 1564239,
       "ou_line": 2.5,
       "ou_over": 1.95,
       "ou_under": 1.9,
@@ -676,6 +725,7 @@
       "team2_cn": "彼得堡",
       "season": "2026",
       "_league": "E2",
+      "fid": 1564240,
       "ou_line": 2.5,
       "ou_over": 1.82,
       "ou_under": 2.02,
@@ -690,6 +740,7 @@
       "team2_cn": "米尔沃尔",
       "season": "2026",
       "_league": "E1",
+      "fid": 1563085,
       "ou_line": 2.5,
       "ou_over": 1.98,
       "ou_under": 1.88,
@@ -704,6 +755,7 @@
       "team2_cn": "斯蒂夫尼奇",
       "season": "2026",
       "_league": "E2",
+      "fid": 1564241,
       "ou_line": 2.0,
       "ou_over": 1.8,
       "ou_under": 2.05,
@@ -718,6 +770,7 @@
       "team2_cn": "维冈",
       "season": "2026",
       "_league": "E2",
+      "fid": 1564242,
       "ou_line": 2.25,
       "ou_over": 2.0,
       "ou_under": 1.85,
@@ -732,6 +785,7 @@
       "team2_cn": "德比郡",
       "season": "2026",
       "_league": "E1",
+      "fid": 1563086,
       "ou_line": 2.5,
       "ou_over": 2.02,
       "ou_under": 1.82,
@@ -746,6 +800,7 @@
       "team2_cn": "罗瑟汉姆",
       "season": "2026",
       "_league": "E3",
+      "fid": 1563687,
       "ou_line": 2.5,
       "ou_over": 1.95,
       "ou_under": 1.9,
@@ -760,6 +815,7 @@
       "team2_cn": "弗利特伍德",
       "season": "2026",
       "_league": "E3",
+      "fid": 1563688,
       "ou_line": 2.5,
       "ou_over": 2.0,
       "ou_under": 1.85,
@@ -774,6 +830,7 @@
       "team2_cn": "克鲁",
       "season": "2026",
       "_league": "E3",
+      "fid": 1563689,
       "ou_line": 2.5,
       "ou_over": 2.0,
       "ou_under": 1.85,
@@ -788,6 +845,7 @@
       "team2_cn": "爱丁堡城",
       "season": "2026",
       "_league": "SC3",
+      "fid": 1557760,
       "ou_line": 2.75,
       "ou_over": 2.0,
       "ou_under": 1.8,
@@ -802,6 +860,7 @@
       "team2_cn": "科夫流浪者",
       "season": "2026",
       "_league": "SC2",
+      "fid": 1557017,
       "ou_line": 3.0,
       "ou_over": 1.98,
       "ou_under": 1.82,
@@ -816,6 +875,7 @@
       "team2_cn": "凯尔蒂之心",
       "season": "2026",
       "_league": "SC3",
+      "fid": 1557761,
       "ou_line": 2.5,
       "ou_over": 1.8,
       "ou_under": 2.0,
@@ -830,6 +890,7 @@
       "team2_cn": "斯特灵",
       "season": "2026",
       "_league": "SC3",
+      "fid": 1557762,
       "ou_line": 2.5,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -844,6 +905,7 @@
       "team2_cn": "沃金",
       "season": "2026",
       "_league": "EC",
+      "fid": 1585152,
       "ou_line": 2.75,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -858,6 +920,7 @@
       "team2_cn": "沃尔索尔",
       "season": "2026",
       "_league": "E3",
+      "fid": 1563690,
       "ou_line": 2.25,
       "ou_over": 1.78,
       "ou_under": 2.02,
@@ -872,6 +935,7 @@
       "team2_cn": "埃克塞特",
       "season": "2026",
       "_league": "E3",
+      "fid": 1563691,
       "ou_line": 2.5,
       "ou_over": 1.9,
       "ou_under": 1.95,
@@ -886,6 +950,7 @@
       "team2_cn": "博勒汉姆伍德",
       "season": "2026",
       "_league": "EC",
+      "fid": 1585151,
       "ou_line": 3.0,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -900,6 +965,7 @@
       "team2_cn": "艾尔德里联",
       "season": "2026",
       "_league": "SC2",
+      "fid": 1557018,
       "ou_line": 2.5,
       "ou_over": 1.88,
       "ou_under": 1.92,
@@ -914,6 +980,7 @@
       "team2_cn": "AFC温布尔登",
       "season": "2026",
       "_league": "E2",
+      "fid": 1564243,
       "ou_line": 2.75,
       "ou_over": 1.98,
       "ou_under": 1.88,
@@ -928,6 +995,7 @@
       "team2_cn": "伊斯特利",
       "season": "2026",
       "_league": "EC",
+      "fid": 1585153,
       "ou_line": 2.75,
       "ou_over": 1.78,
       "ou_under": 2.02,
@@ -942,6 +1010,7 @@
       "team2_cn": "谢周三",
       "season": "2026",
       "_league": "E2",
+      "fid": 1564244,
       "ou_line": 2.5,
       "ou_over": 1.95,
       "ou_under": 1.9,
@@ -956,6 +1025,7 @@
       "team2_cn": "唐卡斯特",
       "season": "2026",
       "_league": "E2",
+      "fid": 1564245,
       "ou_line": 2.5,
       "ou_over": 1.98,
       "ou_under": 1.88,
@@ -970,6 +1040,7 @@
       "team2_cn": "林肯城",
       "season": "2026",
       "_league": "E1",
+      "fid": 1563087,
       "ou_line": 2.75,
       "ou_over": 1.82,
       "ou_under": 2.02,
@@ -984,6 +1055,7 @@
       "team2_cn": "天狼星",
       "season": "2026",
       "_league": "SWE",
+      "fid": 1494248,
       "ou_line": 2.75,
       "ou_over": 1.82,
       "ou_under": 1.98,
@@ -998,6 +1070,7 @@
       "team2_cn": "斯温登",
       "season": "2026",
       "_league": "E3",
+      "fid": 1563692,
       "ou_line": 2.5,
       "ou_over": 1.95,
       "ou_under": 1.9,
@@ -1012,6 +1085,7 @@
       "team2_cn": "西布罗姆维奇",
       "season": "2026",
       "_league": "E1",
+      "fid": 1563088,
       "ou_line": 2.5,
       "ou_over": 1.98,
       "ou_under": 1.88,
@@ -1026,6 +1100,7 @@
       "team2_cn": "东法夫",
       "season": "2026",
       "_league": "SC2",
+      "fid": 1557019,
       "ou_line": 2.5,
       "ou_over": 1.98,
       "ou_under": 1.82,
@@ -1040,6 +1115,7 @@
       "team2_cn": "斯托克波特",
       "season": "2026",
       "_league": "E2",
+      "fid": 1564246,
       "ou_line": 2.75,
       "ou_over": 1.95,
       "ou_under": 1.9,
@@ -1054,6 +1130,7 @@
       "team2_cn": "女王公园巡游者",
       "season": "2026",
       "_league": "E1",
+      "fid": 1563089,
       "ou_line": 2.5,
       "ou_over": 1.88,
       "ou_under": 1.98,
@@ -1068,6 +1145,7 @@
       "team2_cn": "陶里亚蒂",
       "season": "2026",
       "_league": "RUS",
+      "fid": 1561361,
       "ou_line": 2.75,
       "ou_over": 1.88,
       "ou_under": 1.85,
@@ -1082,6 +1160,7 @@
       "team2_cn": "波士顿联",
       "season": "2026",
       "_league": "EC",
+      "fid": 1585154,
       "ou_line": 2.75,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -1096,6 +1175,7 @@
       "team2_cn": "斯肯索普",
       "season": "2026",
       "_league": "EC",
+      "fid": 1585155,
       "ou_line": 2.75,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -1110,6 +1190,7 @@
       "team2_cn": "斯旺西",
       "season": "2026",
       "_league": "E1",
+      "fid": 1563090,
       "ou_line": 2.25,
       "ou_over": 1.88,
       "ou_under": 1.98,
@@ -1124,6 +1205,7 @@
       "team2_cn": "斯巴达人",
       "season": "2026",
       "_league": "SC3",
+      "fid": 1557763,
       "ou_line": 2.5,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -1138,6 +1220,7 @@
       "team2_cn": "奥特林厄姆",
       "season": "2026",
       "_league": "EC",
+      "fid": 1585156,
       "ou_line": 2.75,
       "ou_over": 1.85,
       "ou_under": 1.95,
@@ -1152,6 +1235,7 @@
       "team2_cn": "法尔德",
       "season": "2026",
       "_league": "EC",
+      "fid": 1585157,
       "ou_line": 2.75,
       "ou_over": 1.85,
       "ou_under": 1.95,
@@ -1166,6 +1250,7 @@
       "team2_cn": "什鲁斯伯里",
       "season": "2026",
       "_league": "E3",
+      "fid": 1563693,
       "ou_line": 2.25,
       "ou_over": 1.85,
       "ou_under": 2.0,
@@ -1180,6 +1265,7 @@
       "team2_cn": "哈罗盖特",
       "season": "2026",
       "_league": "EC",
+      "fid": 1585158,
       "ou_line": 2.75,
       "ou_over": 1.98,
       "ou_under": 1.82,
@@ -1194,6 +1280,7 @@
       "team2_cn": "绿色森林流浪",
       "season": "2026",
       "_league": "EC",
+      "fid": 1585159,
       "ou_line": 2.75,
       "ou_over": 1.85,
       "ou_under": 1.95,
@@ -1208,6 +1295,7 @@
       "team2_cn": "卡莱尔",
       "season": "2026",
       "_league": "EC",
+      "fid": 1585160,
       "ou_line": 2.75,
       "ou_over": 1.88,
       "ou_under": 1.92,
@@ -1222,6 +1310,7 @@
       "team2_cn": "布里斯托尔流浪者",
       "season": "2026",
       "_league": "E3",
+      "fid": 1563694,
       "ou_line": 2.25,
       "ou_over": 1.8,
       "ou_under": 2.05,
@@ -1236,6 +1325,7 @@
       "team2_cn": "蒂格雷",
       "season": "2026",
       "_league": "ARG",
+      "fid": 1493062,
       "ou_line": 1.75,
       "ou_over": 1.82,
       "ou_under": 1.98,
@@ -1250,6 +1340,7 @@
       "team2_cn": "阿马多拉之星",
       "season": "2026",
       "_league": "P1",
+      "fid": 1575456,
       "ou_line": 2.25,
       "ou_over": 1.92,
       "ou_under": 1.92,
@@ -1264,6 +1355,7 @@
       "team2_cn": "圣菲联合",
       "season": "2026",
       "_league": "ARG",
+      "fid": 1493074,
       "ou_line": 2.0,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -1278,6 +1370,7 @@
       "team2_cn": "利勒斯特罗姆",
       "season": "2026",
       "_league": "NOR",
+      "fid": 1494736,
       "ou_line": 3.0,
       "ou_over": 1.98,
       "ou_under": 1.82,
@@ -1292,6 +1385,7 @@
       "team2_cn": "威尔郡",
       "season": "2026",
       "_league": "B1",
+      "fid": 1558591,
       "ou_line": 3.0,
       "ou_over": 1.98,
       "ou_under": 1.82,
@@ -1306,6 +1400,7 @@
       "team2_cn": "奈梅亨",
       "season": "2026",
       "_league": "N1",
+      "fid": 1552127,
       "ou_line": 3.25,
       "ou_over": 1.82,
       "ou_under": 1.98,
@@ -1320,6 +1415,7 @@
       "team2_cn": "沃尔夫斯贝格",
       "season": "2026",
       "_league": "AUT",
+      "fid": 1561907,
       "ou_line": 2.5,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -1333,7 +1429,8 @@
       "team1_cn": "FC安道尔",
       "team2_cn": "休达",
       "season": "2026",
-      "_league": "SP2"
+      "_league": "SP2",
+      "fid": 1569872
     },
     {
       "date": "2026-08-15",
@@ -1344,6 +1441,7 @@
       "team2_cn": "沃罗涅日火炬",
       "season": "2026",
       "_league": "RUS",
+      "fid": 1561356,
       "ou_line": 2.5,
       "ou_over": 1.91,
       "ou_under": 1.91,
@@ -1358,6 +1456,7 @@
       "team2_cn": "帕尔梅拉斯",
       "season": "2026",
       "_league": "BRA",
+      "fid": 1492334,
       "ou_line": 2.25,
       "ou_over": 2.0,
       "ou_under": 1.85,
@@ -1371,7 +1470,8 @@
       "team1_cn": "格利维采",
       "team2_cn": "克拉科夫维耶奇斯塔",
       "season": "2026",
-      "_league": "POL"
+      "_league": "POL",
+      "fid": 1553133
     },
     {
       "date": "2026-08-15",
@@ -1382,6 +1482,7 @@
       "team2_cn": "伯明翰",
       "season": "2026",
       "_league": "E1",
+      "fid": 1563091,
       "ou_line": 2.5,
       "ou_over": 2.02,
       "ou_under": 1.82,
@@ -1396,6 +1497,7 @@
       "team2_cn": "拉普拉塔体操",
       "season": "2026",
       "_league": "ARG",
+      "fid": 1493066,
       "ou_line": 1.75,
       "ou_over": 1.78,
       "ou_under": 2.02,
@@ -1410,6 +1512,7 @@
       "team2_cn": "圣克拉拉",
       "season": "2026",
       "_league": "P1",
+      "fid": 1575455,
       "ou_line": 2.25,
       "ou_over": 1.95,
       "ou_under": 1.9,
@@ -1424,6 +1527,7 @@
       "team2_cn": "托卢卡",
       "season": "2026",
       "_league": "MEX",
+      "fid": 1550921,
       "ou_line": 3.0,
       "ou_over": 2.02,
       "ou_under": 1.78,
@@ -1438,6 +1542,7 @@
       "team2_cn": "安特卫普",
       "season": "2026",
       "_league": "B1",
+      "fid": 1558592,
       "ou_line": 2.25,
       "ou_over": 1.85,
       "ou_under": 1.95,
@@ -1452,6 +1557,7 @@
       "team2_cn": "圣格奥尔基",
       "season": "2026",
       "_league": "ROU",
+      "fid": 1565216,
       "ou_line": 2.5,
       "ou_over": 2.1,
       "ou_under": 1.7,
@@ -1466,6 +1572,7 @@
       "team2_cn": "阿尔克马尔",
       "season": "2026",
       "_league": "N1",
+      "fid": 1552128,
       "ou_line": 3.0,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -1480,6 +1587,7 @@
       "team2_cn": "塞尔塔B队",
       "season": "2026",
       "_league": "SP2",
+      "fid": 1569874,
       "ou_line": 2.5,
       "ou_over": 1.98,
       "ou_under": 1.82,
@@ -1494,6 +1602,7 @@
       "team2_cn": "名古屋鲸",
       "season": "2026",
       "_league": "JPN",
+      "fid": 1554010,
       "ou_line": 2.5,
       "ou_over": 2.02,
       "ou_under": 1.78,
@@ -1508,6 +1617,7 @@
       "team2_cn": "塞伊奈约基",
       "season": "2026",
       "_league": "FIN",
+      "fid": 1495760,
       "ou_line": 3.25,
       "ou_over": 1.88,
       "ou_under": 1.92,
@@ -1522,6 +1632,7 @@
       "team2_cn": "大阪钢巴",
       "season": "2026",
       "_league": "JPN",
+      "fid": 1554012,
       "ou_line": 2.25,
       "ou_over": 1.78,
       "ou_under": 2.02,
@@ -1536,6 +1647,7 @@
       "team2_cn": "格拉纳达",
       "season": "2026",
       "_league": "SP2",
+      "fid": 1569880,
       "ou_line": 2.25,
       "ou_over": 1.78,
       "ou_under": 2.02,
@@ -1550,6 +1662,7 @@
       "team2_cn": "赫塔菲",
       "season": "2026",
       "_league": "SP1",
+      "fid": 1570333,
       "ou_line": 1.75,
       "ou_over": 1.95,
       "ou_under": 1.9,
@@ -1564,6 +1677,7 @@
       "team2_cn": "布拉干蒂诺",
       "season": "2026",
       "_league": "BRA",
+      "fid": 1492330,
       "ou_line": 2.25,
       "ou_over": 1.92,
       "ou_under": 1.92,
@@ -1578,6 +1692,7 @@
       "team2_cn": "纽约红牛",
       "season": "2026",
       "_league": "USA",
+      "fid": 1490377,
       "ou_line": 3.25,
       "ou_over": 1.8,
       "ou_under": 2.0,
@@ -1592,6 +1707,7 @@
       "team2_cn": "华盛顿联",
       "season": "2026",
       "_league": "USA",
+      "fid": 1490380,
       "ou_line": 2.75,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -1606,6 +1722,7 @@
       "team2_cn": "哥伦布机员",
       "season": "2026",
       "_league": "USA",
+      "fid": 1490378,
       "ou_line": 2.75,
       "ou_over": 1.88,
       "ou_under": 1.92,
@@ -1620,6 +1737,7 @@
       "team2_cn": "喀山鲁宾",
       "season": "2026",
       "_league": "RUS",
+      "fid": 1561357,
       "ou_line": 2.0,
       "ou_over": 1.86,
       "ou_under": 1.85,
@@ -1634,6 +1752,7 @@
       "team2_cn": "辛辛那提FC",
       "season": "2026",
       "_league": "USA",
+      "fid": 1490376,
       "ou_line": 3.75,
       "ou_over": 1.88,
       "ou_under": 1.92,
@@ -1648,6 +1767,7 @@
       "team2_cn": "横滨水手",
       "season": "2026",
       "_league": "JPN",
+      "fid": 1554014,
       "ou_line": 2.5,
       "ou_over": 1.98,
       "ou_under": 1.82,
@@ -1662,6 +1782,7 @@
       "team2_cn": "阿尔塔赫",
       "season": "2026",
       "_league": "AUT",
+      "fid": 1561908,
       "ou_line": 2.5,
       "ou_over": 1.85,
       "ou_under": 1.95,
@@ -1676,6 +1797,7 @@
       "team2_cn": "新英格兰革命",
       "season": "2026",
       "_league": "USA",
+      "fid": 1490379,
       "ou_line": 2.75,
       "ou_over": 1.88,
       "ou_under": 1.92,
@@ -1690,6 +1812,7 @@
       "team2_cn": "长崎航海",
       "season": "2026",
       "_league": "JPN",
+      "fid": 1554013,
       "ou_line": 2.25,
       "ou_over": 1.85,
       "ou_under": 1.95,
@@ -1704,6 +1827,7 @@
       "team2_cn": "大阪樱花",
       "season": "2026",
       "_league": "JPN",
+      "fid": 1556022,
       "ou_line": 2.5,
       "ou_over": 2.02,
       "ou_under": 1.78,
@@ -1718,6 +1842,7 @@
       "team2_cn": "里瓦达维亚独立",
       "season": "2026",
       "_league": "ARG",
+      "fid": 1493064,
       "ou_line": 2.0,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -1732,6 +1857,7 @@
       "team2_cn": "町田泽维亚",
       "season": "2026",
       "_league": "JPN",
+      "fid": 1554009,
       "ou_line": 2.25,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -1746,6 +1872,7 @@
       "team2_cn": "埃因霍温",
       "season": "2026",
       "_league": "N1",
+      "fid": 1552129,
       "ou_line": 3.5,
       "ou_over": 1.92,
       "ou_under": 1.88,
@@ -1760,6 +1887,7 @@
       "team2_cn": "特拉布宗体育",
       "season": "2026",
       "_league": "T1",
+      "fid": 1584373,
       "ou_line": 2.75,
       "ou_over": 2.0,
       "ou_under": 1.8,
@@ -1774,6 +1902,7 @@
       "team2_cn": "京都不死鸟",
       "season": "2026",
       "_league": "JPN",
+      "fid": 1554011,
       "ou_line": 2.75,
       "ou_over": 1.98,
       "ou_under": 1.82,
@@ -1788,6 +1917,7 @@
       "team2_cn": "里泽体育",
       "season": "2026",
       "_league": "T1",
+      "fid": 1584374,
       "ou_line": 2.5,
       "ou_over": 1.88,
       "ou_under": 1.92,
@@ -1802,6 +1932,7 @@
       "team2_cn": "深圳新鹏城",
       "season": "2026",
       "_league": "CHN",
+      "fid": 1523238,
       "ou_line": 3.0,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -1816,6 +1947,7 @@
       "team2_cn": "列斯特拉",
       "season": "2026",
       "_league": "ARG",
+      "fid": 1493070,
       "ou_line": 1.75,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -1830,6 +1962,7 @@
       "team2_cn": "广岛三箭",
       "season": "2026",
       "_league": "JPN",
+      "fid": 1554015,
       "ou_line": 2.5,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -1844,6 +1977,7 @@
       "team2_cn": "FC东京",
       "season": "2026",
       "_league": "JPN",
+      "fid": 1554016,
       "ou_line": 2.25,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -1858,6 +1992,7 @@
       "team2_cn": "华雷斯",
       "season": "2026",
       "_league": "MEX",
+      "fid": 1550922,
       "ou_line": 3.0,
       "ou_over": 1.8,
       "ou_under": 2.0,
@@ -1872,6 +2007,7 @@
       "team2_cn": "凯尔采科罗纳",
       "season": "2026",
       "_league": "POL",
+      "fid": 1553134,
       "ou_line": 2.5,
       "ou_over": 2.1,
       "ou_under": 1.7,
@@ -1886,6 +2022,7 @@
       "team2_cn": "洛杉矶银河",
       "season": "2026",
       "_league": "USA",
+      "fid": 1490382,
       "ou_line": 3.0,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -1900,6 +2037,7 @@
       "team2_cn": "卡尔斯鲁厄",
       "season": "2026",
       "_league": "D2",
+      "fid": 1576149,
       "ou_line": 3.5,
       "ou_over": 2.3,
       "ou_under": 1.6,
@@ -1914,6 +2052,7 @@
       "team2_cn": "迈阿密国际",
       "season": "2026",
       "_league": "USA",
+      "fid": 1490381,
       "ou_line": 3.25,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -1928,6 +2067,7 @@
       "team2_cn": "波尔图",
       "season": "2026",
       "_league": "P1",
+      "fid": 1575462,
       "ou_line": 2.75,
       "ou_over": 1.98,
       "ou_under": 1.88,
@@ -1942,6 +2082,7 @@
       "team2_cn": "成都蓉城",
       "season": "2026",
       "_league": "CHN",
+      "fid": 1523240,
       "ou_line": 3.5,
       "ou_over": 2.0,
       "ou_under": 1.8,
@@ -1956,6 +2097,7 @@
       "team2_cn": "北京国安",
       "season": "2026",
       "_league": "CHN",
+      "fid": 1523239,
       "ou_line": 2.5,
       "ou_over": 1.8,
       "ou_under": 2.0,
@@ -1970,6 +2112,7 @@
       "team2_cn": "韦斯特洛",
       "season": "2026",
       "_league": "B1",
+      "fid": 1558593,
       "ou_line": 3.25,
       "ou_over": 2.0,
       "ou_under": 1.8,
@@ -1984,6 +2127,7 @@
       "team2_cn": "布鲁日",
       "season": "2026",
       "_league": "B1",
+      "fid": 1558594,
       "ou_line": 3.25,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -1998,6 +2142,7 @@
       "team2_cn": "坎布尔",
       "season": "2026",
       "_league": "N1",
+      "fid": 1552130,
       "ou_line": 3.25,
       "ou_over": 2.0,
       "ou_under": 1.8,
@@ -2012,6 +2157,7 @@
       "team2_cn": "河南嵩山龙门",
       "season": "2026",
       "_league": "CHN",
+      "fid": 1523241,
       "ou_line": 3.25,
       "ou_over": 1.85,
       "ou_under": 1.95,
@@ -2026,6 +2172,7 @@
       "team2_cn": "大连英博",
       "season": "2026",
       "_league": "CHN",
+      "fid": 1523242,
       "ou_line": 3.25,
       "ou_over": 1.85,
       "ou_under": 1.95,
@@ -2040,6 +2187,7 @@
       "team2_cn": "堪萨斯城体育",
       "season": "2026",
       "_league": "USA",
+      "fid": 1490385,
       "ou_line": 3.25,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -2053,7 +2201,8 @@
       "team1_cn": "布加勒斯特快速",
       "team2_cn": "布加勒斯特迪纳摩",
       "season": "2026",
-      "_league": "ROU"
+      "_league": "ROU",
+      "fid": 1565218
     },
     {
       "date": "2026-08-15",
@@ -2064,6 +2213,7 @@
       "team2_cn": "巴拉多利德",
       "season": "2026",
       "_league": "SP2",
+      "fid": 1569879,
       "ou_line": 2.5,
       "ou_over": 1.98,
       "ou_under": 1.82,
@@ -2078,6 +2228,7 @@
       "team2_cn": "明尼苏达联",
       "season": "2026",
       "_league": "USA",
+      "fid": 1490384,
       "ou_line": 3.0,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -2092,6 +2243,7 @@
       "team2_cn": "巴列卡诺",
       "season": "2026",
       "_league": "SP1",
+      "fid": 1570341,
       "ou_line": 2.25,
       "ou_over": 2.02,
       "ou_under": 1.82,
@@ -2106,6 +2258,7 @@
       "team2_cn": "格罗兹尼",
       "season": "2026",
       "_league": "RUS",
+      "fid": 1561358,
       "ou_line": 2.75,
       "ou_over": 1.88,
       "ou_under": 1.85,
@@ -2120,6 +2273,7 @@
       "team2_cn": "科里蒂巴",
       "season": "2026",
       "_league": "BRA",
+      "fid": 1492337,
       "ou_line": 2.5,
       "ou_over": 1.98,
       "ou_under": 1.88,
@@ -2134,6 +2288,7 @@
       "team2_cn": "老虎大学",
       "season": "2026",
       "_league": "MEX",
+      "fid": 1550923,
       "ou_line": 2.25,
       "ou_over": 1.82,
       "ou_under": 1.98,
@@ -2148,6 +2303,7 @@
       "team2_cn": "博卡青年",
       "season": "2026",
       "_league": "ARG",
+      "fid": 1493071,
       "ou_line": 1.75,
       "ou_over": 1.85,
       "ou_under": 1.95,
@@ -2162,6 +2318,7 @@
       "team2_cn": "阿拉尼亚体育",
       "season": "2026",
       "_league": "T1",
+      "fid": 1584371,
       "ou_line": 2.5,
       "ou_over": 1.85,
       "ou_under": 1.95,
@@ -2176,6 +2333,7 @@
       "team2_cn": "费内巴切",
       "season": "2026",
       "_league": "T1",
+      "fid": 1584372,
       "ou_line": 2.75,
       "ou_over": 1.9,
       "ou_under": 1.9,
@@ -2190,6 +2348,7 @@
       "team2_cn": "圣地亚哥FC",
       "season": "2026",
       "_league": "USA",
+      "fid": 1490386,
       "ou_line": 3.25,
       "ou_over": 1.92,
       "ou_under": 1.88,
@@ -2204,6 +2363,7 @@
       "team2_cn": "圣路易斯城",
       "season": "2026",
       "_league": "USA",
+      "fid": 1490387,
       "ou_line": 3.0,
       "ou_over": 1.78,
       "ou_under": 2.02,
@@ -2218,6 +2378,7 @@
       "team2_cn": "巴伊亚",
       "season": "2026",
       "_league": "BRA",
+      "fid": 1492332,
       "ou_line": 2.5,
       "ou_over": 1.9,
       "ou_under": 1.95,
@@ -2232,6 +2393,7 @@
       "team2_cn": "格罗宁根",
       "season": "2026",
       "_league": "N1",
+      "fid": 1552131,
       "ou_line": 3.0,
       "ou_over": 1.95,
       "ou_under": 1.85,
@@ -2245,7 +2407,12 @@
       "team1_cn": "美洲狮",
       "team2_cn": "克雷塔罗",
       "season": "2026",
-      "_league": "MEX"
+      "_league": "MEX",
+      "fid": 1550924,
+      "ou_line": 2.75,
+      "ou_over": 1.92,
+      "ou_under": 1.88,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2255,7 +2422,12 @@
       "team1_cn": "贝弗伦",
       "team2_cn": "安德莱赫特",
       "season": "2026",
-      "_league": "B1"
+      "_league": "B1",
+      "fid": 1558595,
+      "ou_line": 2.5,
+      "ou_over": 1.85,
+      "ou_under": 1.95,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2265,7 +2437,12 @@
       "team1_cn": "比勒费尔德",
       "team2_cn": "科特布斯",
       "season": "2026",
-      "_league": "D2"
+      "_league": "D2",
+      "fid": 1576143,
+      "ou_line": 2.5,
+      "ou_over": 1.57,
+      "ou_under": 2.35,
+      "ou_bm": "10Bet"
     },
     {
       "date": "2026-08-16",
@@ -2275,7 +2452,12 @@
       "team1_cn": "德累斯顿",
       "team2_cn": "达姆施塔特",
       "season": "2026",
-      "_league": "D2"
+      "_league": "D2",
+      "fid": 1576150,
+      "ou_line": 2.5,
+      "ou_over": 1.62,
+      "ou_under": 2.25,
+      "ou_bm": "10Bet"
     },
     {
       "date": "2026-08-16",
@@ -2285,7 +2467,12 @@
       "team1_cn": "汉诺威96",
       "team2_cn": "沃尔夫斯堡",
       "season": "2026",
-      "_league": "D2"
+      "_league": "D2",
+      "fid": 1576146,
+      "ou_line": 2.5,
+      "ou_over": 1.67,
+      "ou_under": 2.15,
+      "ou_bm": "10Bet"
     },
     {
       "date": "2026-08-16",
@@ -2295,7 +2482,12 @@
       "team1_cn": "沃特福德",
       "team2_cn": "南安普顿",
       "season": "2026",
-      "_league": "E1"
+      "_league": "E1",
+      "fid": 1563092,
+      "ou_line": 2.75,
+      "ou_over": 1.98,
+      "ou_under": 1.88,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2305,7 +2497,12 @@
       "team1_cn": "布洛马波卡纳",
       "team2_cn": "奥格里特",
       "season": "2026",
-      "_league": "SWE"
+      "_league": "SWE",
+      "fid": 1494241,
+      "ou_line": 3.0,
+      "ou_over": 1.95,
+      "ou_under": 1.85,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2315,7 +2512,12 @@
       "team1_cn": "代格福什",
       "team2_cn": "哥德堡",
       "season": "2026",
-      "_league": "SWE"
+      "_league": "SWE",
+      "fid": 1494242,
+      "ou_line": 2.5,
+      "ou_over": 1.9,
+      "ou_under": 1.9,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2325,7 +2527,12 @@
       "team1_cn": "佐加顿斯",
       "team2_cn": "AIK索尔纳",
       "season": "2026",
-      "_league": "SWE"
+      "_league": "SWE",
+      "fid": 1494243,
+      "ou_line": 3.0,
+      "ou_over": 1.78,
+      "ou_under": 2.02,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2335,7 +2542,12 @@
       "team1_cn": "北西兰",
       "team2_cn": "锡尔克堡",
       "season": "2026",
-      "_league": "DNK"
+      "_league": "DNK",
+      "fid": 1548992,
+      "ou_line": 3.5,
+      "ou_over": 1.98,
+      "ou_under": 1.82,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2345,7 +2557,12 @@
       "team1_cn": "欧登塞",
       "team2_cn": "霍尔森斯",
       "season": "2026",
-      "_league": "DNK"
+      "_league": "DNK",
+      "fid": 1548991,
+      "ou_line": 2.75,
+      "ou_over": 2.0,
+      "ou_under": 1.8,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2355,7 +2572,12 @@
       "team1_cn": "奥勒松",
       "team2_cn": "瓦勒伦加",
       "season": "2026",
-      "_league": "NOR"
+      "_league": "NOR",
+      "fid": 1494733,
+      "ou_line": 3.5,
+      "ou_over": 1.98,
+      "ou_under": 1.82,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2365,7 +2587,12 @@
       "team1_cn": "费耶诺德",
       "team2_cn": "前进之鹰",
       "season": "2026",
-      "_league": "N1"
+      "_league": "N1",
+      "fid": 1552132,
+      "ou_line": 3.5,
+      "ou_over": 1.9,
+      "ou_under": 1.9,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2375,7 +2602,12 @@
       "team1_cn": "特温特",
       "team2_cn": "兹沃勒",
       "season": "2026",
-      "_league": "N1"
+      "_league": "N1",
+      "fid": 1552133,
+      "ou_line": 3.5,
+      "ou_over": 1.9,
+      "ou_under": 1.9,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2385,7 +2617,12 @@
       "team1_cn": "卢布林汽车",
       "team2_cn": "卡托维兹",
       "season": "2026",
-      "_league": "POL"
+      "_league": "POL",
+      "fid": 1553132,
+      "ou_line": 3.0,
+      "ou_over": 1.98,
+      "ou_under": 1.82,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2395,7 +2632,12 @@
       "team1_cn": "马德拉国民",
       "team2_cn": "埃斯托里尔",
       "season": "2026",
-      "_league": "P1"
+      "_league": "P1",
+      "fid": 1575461,
+      "ou_line": 2.5,
+      "ou_over": 1.88,
+      "ou_under": 1.98,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2405,7 +2647,12 @@
       "team1_cn": "泽尼特",
       "team2_cn": "莫斯科迪纳摩",
       "season": "2026",
-      "_league": "RUS"
+      "_league": "RUS",
+      "fid": 1561362,
+      "ou_line": 2.75,
+      "ou_over": 1.93,
+      "ou_under": 1.8,
+      "ou_bm": "Marathonbet"
     },
     {
       "date": "2026-08-16",
@@ -2415,7 +2662,12 @@
       "team1_cn": "伯恩利",
       "team2_cn": "西汉姆联",
       "season": "2026",
-      "_league": "E1"
+      "_league": "E1",
+      "fid": 1563093,
+      "ou_line": 2.75,
+      "ou_over": 1.92,
+      "ou_under": 1.92,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2425,7 +2677,12 @@
       "team1_cn": "科尔多瓦中央",
       "team2_cn": "科尔多瓦学院",
       "season": "2026",
-      "_league": "ARG"
+      "_league": "ARG",
+      "fid": 1493065,
+      "ou_line": 2.0,
+      "ou_over": 2.0,
+      "ou_under": 1.8,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2435,7 +2692,12 @@
       "team1_cn": "赫尔辛基",
       "team2_cn": "雅各布斯塔德",
       "season": "2026",
-      "_league": "FIN"
+      "_league": "FIN",
+      "fid": 1495761,
+      "ou_line": 3.25,
+      "ou_over": 1.85,
+      "ou_under": 1.95,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2445,7 +2707,12 @@
       "team1_cn": "灵比",
       "team2_cn": "中日德兰",
       "season": "2026",
-      "_league": "DNK"
+      "_league": "DNK",
+      "fid": 1548993,
+      "ou_line": 3.0,
+      "ou_over": 1.9,
+      "ou_under": 1.9,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2455,7 +2722,12 @@
       "team1_cn": "拉卢维耶尔",
       "team2_cn": "根特",
       "season": "2026",
-      "_league": "B1"
+      "_league": "B1",
+      "fid": 1558596,
+      "ou_line": 2.5,
+      "ou_over": 1.9,
+      "ou_under": 1.9,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2465,7 +2737,12 @@
       "team1_cn": "萨米恩托",
       "team2_cn": "飓风",
       "season": "2026",
-      "_league": "ARG"
+      "_league": "ARG",
+      "fid": 1493075,
+      "ou_line": 1.75,
+      "ou_over": 1.92,
+      "ou_under": 1.88,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2475,7 +2752,12 @@
       "team1_cn": "加伊斯",
       "team2_cn": "马尔默",
       "season": "2026",
-      "_league": "SWE"
+      "_league": "SWE",
+      "fid": 1494245,
+      "ou_line": 2.75,
+      "ou_over": 1.82,
+      "ou_under": 1.98,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2485,7 +2767,12 @@
       "team1_cn": "卡尔马",
       "team2_cn": "哈马比",
       "season": "2026",
-      "_league": "SWE"
+      "_league": "SWE",
+      "fid": 1494247,
+      "ou_line": 2.75,
+      "ou_over": 1.82,
+      "ou_under": 1.98,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2495,7 +2782,12 @@
       "team1_cn": "阿贾克斯",
       "team2_cn": "海伦芬",
       "season": "2026",
-      "_league": "N1"
+      "_league": "N1",
+      "fid": 1552134,
+      "ou_line": 3.25,
+      "ou_over": 1.8,
+      "ou_under": 2.0,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2505,7 +2797,12 @@
       "team1_cn": "AC奥卢",
       "team2_cn": "国际图尔库",
       "season": "2026",
-      "_league": "FIN"
+      "_league": "FIN",
+      "fid": 1495759,
+      "ou_line": 2.25,
+      "ou_over": 1.78,
+      "ou_under": 2.02,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2515,7 +2812,12 @@
       "team1_cn": "米内罗竞技",
       "team2_cn": "格雷米奥",
       "season": "2026",
-      "_league": "BRA"
+      "_league": "BRA",
+      "fid": 1492331,
+      "ou_line": 2.5,
+      "ou_over": 2.0,
+      "ou_under": 1.85,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2525,7 +2827,12 @@
       "team1_cn": "布兰",
       "team2_cn": "汉坎",
       "season": "2026",
-      "_league": "NOR"
+      "_league": "NOR",
+      "fid": 1494734,
+      "ou_line": 3.25,
+      "ou_over": 1.92,
+      "ou_under": 1.88,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2535,7 +2842,12 @@
       "team1_cn": "埃瓦尔",
       "team2_cn": "特内里费",
       "season": "2026",
-      "_league": "SP2"
+      "_league": "SP2",
+      "fid": 1569875,
+      "ou_line": 2.25,
+      "ou_over": 2.0,
+      "ou_under": 1.8,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2545,7 +2857,12 @@
       "team1_cn": "哈特贝格",
       "team2_cn": "奥地利维也纳",
       "season": "2026",
-      "_league": "AUT"
+      "_league": "AUT",
+      "fid": 1561909,
+      "ou_line": 2.5,
+      "ou_over": 2.0,
+      "ou_under": 1.8,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2555,7 +2872,12 @@
       "team1_cn": "拉赫蒂",
       "team2_cn": "库普斯",
       "season": "2026",
-      "_league": "FIN"
+      "_league": "FIN",
+      "fid": 1495758,
+      "ou_line": 2.5,
+      "ou_over": 1.9,
+      "ou_under": 1.9,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2565,7 +2887,12 @@
       "team1_cn": "莫尔德",
       "team2_cn": "特罗姆瑟",
       "season": "2026",
-      "_league": "NOR"
+      "_league": "NOR",
+      "fid": 1494737,
+      "ou_line": 2.75,
+      "ou_over": 1.85,
+      "ou_under": 1.95,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2575,7 +2902,12 @@
       "team1_cn": "桑坦德竞技",
       "team2_cn": "比利亚雷亚尔",
       "season": "2026",
-      "_league": "SP1"
+      "_league": "SP1",
+      "fid": 1570339,
+      "ou_line": 2.5,
+      "ou_over": 1.88,
+      "ou_under": 1.98,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2585,7 +2917,12 @@
       "team1_cn": "萨尔普斯堡",
       "team2_cn": "桑讷菲尤尔",
       "season": "2026",
-      "_league": "NOR"
+      "_league": "NOR",
+      "fid": 1494739,
+      "ou_line": 3.0,
+      "ou_over": 1.78,
+      "ou_under": 2.02,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2595,7 +2932,12 @@
       "team1_cn": "蒂罗尔",
       "team2_cn": "萨尔茨堡红牛",
       "season": "2026",
-      "_league": "AUT"
+      "_league": "AUT",
+      "fid": 1561910,
+      "ou_line": 3.0,
+      "ou_over": 1.95,
+      "ou_under": 1.85,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2605,7 +2947,12 @@
       "team1_cn": "瓦斯科达伽马",
       "team2_cn": "桑托斯",
       "season": "2026",
-      "_league": "BRA"
+      "_league": "BRA",
+      "fid": 1492338,
+      "ou_line": 2.5,
+      "ou_over": 2.05,
+      "ou_under": 1.8,
+      "ou_bm": "Bet365"
     },
     {
       "date": "2026-08-16",
@@ -2615,7 +2962,8 @@
       "team1_cn": "克拉科维亚",
       "team2_cn": "琴斯托霍瓦",
       "season": "2026",
-      "_league": "POL"
+      "_league": "POL",
+      "fid": 1553128
     },
     {
       "date": "2026-08-16",
@@ -2625,7 +2973,8 @@
       "team1_cn": "阿罗卡",
       "team2_cn": "莫雷伦斯",
       "season": "2026",
-      "_league": "P1"
+      "_league": "P1",
+      "fid": 1575457
     },
     {
       "date": "2026-08-16",
@@ -2635,7 +2984,8 @@
       "team1_cn": "芝加哥火焰",
       "team2_cn": "波特兰伐木者",
       "season": "2026",
-      "_league": "USA"
+      "_league": "USA",
+      "fid": 1490389
     },
     {
       "date": "2026-08-16",
@@ -2645,7 +2995,8 @@
       "team1_cn": "美洲",
       "team2_cn": "圣路易斯竞技",
       "season": "2026",
-      "_league": "MEX"
+      "_league": "MEX",
+      "fid": 1550925
     },
     {
       "date": "2026-08-16",
@@ -2655,7 +3006,8 @@
       "team1_cn": "苏维埃之翼",
       "team2_cn": "马哈奇卡拉迪纳摩",
       "season": "2026",
-      "_league": "RUS"
+      "_league": "RUS",
+      "fid": 1561359
     },
     {
       "date": "2026-08-16",
@@ -2665,7 +3017,8 @@
       "team1_cn": "纽约城",
       "team2_cn": "费城联合",
       "season": "2026",
-      "_league": "USA"
+      "_league": "USA",
+      "fid": 1490388
     },
     {
       "date": "2026-08-16",
@@ -2675,7 +3028,8 @@
       "team1_cn": "兰德斯",
       "team2_cn": "哥本哈根",
       "season": "2026",
-      "_league": "DNK"
+      "_league": "DNK",
+      "fid": 1548994
     },
     {
       "date": "2026-08-16",
@@ -2685,7 +3039,8 @@
       "team1_cn": "梅赫伦",
       "team2_cn": "标准列日",
       "season": "2026",
-      "_league": "B1"
+      "_league": "B1",
+      "fid": 1558597
     },
     {
       "date": "2026-08-16",
@@ -2695,7 +3050,8 @@
       "team1_cn": "加拉茨",
       "team2_cn": "克拉约瓦大学",
       "season": "2026",
-      "_league": "ROU"
+      "_league": "ROU",
+      "fid": 1565221
     },
     {
       "date": "2026-08-16",
@@ -2705,7 +3061,8 @@
       "team1_cn": "布尔戈斯",
       "team2_cn": "科尔多瓦",
       "season": "2026",
-      "_league": "SP2"
+      "_league": "SP2",
+      "fid": 1569873
     },
     {
       "date": "2026-08-16",
@@ -2715,7 +3072,8 @@
       "team1_cn": "西班牙人",
       "team2_cn": "莱万特",
       "season": "2026",
-      "_league": "SP1"
+      "_league": "SP1",
+      "fid": 1570338
     },
     {
       "date": "2026-08-16",
@@ -2725,7 +3083,8 @@
       "team1_cn": "赫罗纳",
       "team2_cn": "莱加内斯",
       "season": "2026",
-      "_league": "SP2"
+      "_league": "SP2",
+      "fid": 1569877
     },
     {
       "date": "2026-08-16",
@@ -2735,7 +3094,8 @@
       "team1_cn": "河床",
       "team2_cn": "阿根廷青年人",
       "season": "2026",
-      "_league": "ARG"
+      "_league": "ARG",
+      "fid": 1493073
     },
     {
       "date": "2026-08-16",
@@ -2745,7 +3105,8 @@
       "team1_cn": "维也纳快速",
       "team2_cn": "格拉茨AK",
       "season": "2026",
-      "_league": "AUT"
+      "_league": "AUT",
+      "fid": 1561911
     },
     {
       "date": "2026-08-16",
@@ -2755,7 +3116,8 @@
       "team1_cn": "腓特烈斯塔",
       "team2_cn": "克里斯蒂安松",
       "season": "2026",
-      "_league": "NOR"
+      "_league": "NOR",
+      "fid": 1494735
     },
     {
       "date": "2026-08-16",
@@ -2765,7 +3127,8 @@
       "team1_cn": "洛默尔",
       "team2_cn": "沙勒罗瓦",
       "season": "2026",
-      "_league": "B1"
+      "_league": "B1",
+      "fid": 1558598
     },
     {
       "date": "2026-08-16",
@@ -2775,7 +3138,8 @@
       "team1_cn": "米拉索尔",
       "team2_cn": "弗拉门戈",
       "season": "2026",
-      "_league": "BRA"
+      "_league": "BRA",
+      "fid": 1492336
     },
     {
       "date": "2026-08-16",
@@ -2785,7 +3149,8 @@
       "team1_cn": "维多利亚",
       "team2_cn": "博塔弗戈",
       "season": "2026",
-      "_league": "BRA"
+      "_league": "BRA",
+      "fid": 1492339
     },
     {
       "date": "2026-08-16",
@@ -2795,7 +3160,8 @@
       "team1_cn": "伊斯坦布尔巴萨克赛尔",
       "team2_cn": "科贾埃利体育",
       "season": "2026",
-      "_league": "T1"
+      "_league": "T1",
+      "fid": 1584368
     },
     {
       "date": "2026-08-16",
@@ -2805,7 +3171,8 @@
       "team1_cn": "桑托斯拉古纳",
       "team2_cn": "瓜达拉哈拉",
       "season": "2026",
-      "_league": "MEX"
+      "_league": "MEX",
+      "fid": 1550926
     },
     {
       "date": "2026-08-16",
@@ -2815,7 +3182,8 @@
       "team1_cn": "扎布热矿工",
       "team2_cn": "维斯瓦克拉科夫",
       "season": "2026",
-      "_league": "POL"
+      "_league": "POL",
+      "fid": 1553129
     },
     {
       "date": "2026-08-16",
@@ -2825,7 +3193,8 @@
       "team1_cn": "奥斯汀FC",
       "team2_cn": "达拉斯FC",
       "season": "2026",
-      "_league": "USA"
+      "_league": "USA",
+      "fid": 1490383
     },
     {
       "date": "2026-08-16",
@@ -2835,7 +3204,8 @@
       "team1_cn": "波罗的海",
       "team2_cn": "莫斯科斯巴达",
       "season": "2026",
-      "_league": "RUS"
+      "_league": "RUS",
+      "fid": 1561355
     },
     {
       "date": "2026-08-16",
@@ -2845,7 +3215,8 @@
       "team1_cn": "科林蒂安",
       "team2_cn": "克鲁塞罗",
       "season": "2026",
-      "_league": "BRA"
+      "_league": "BRA",
+      "fid": 1492333
     },
     {
       "date": "2026-08-16",
@@ -2855,7 +3226,8 @@
       "team1_cn": "法马利康",
       "team2_cn": "马里迪莫",
       "season": "2026",
-      "_league": "P1"
+      "_league": "P1",
+      "fid": 1575460
     },
     {
       "date": "2026-08-16",
@@ -2865,7 +3237,8 @@
       "team1_cn": "布拉加",
       "team2_cn": "吉尔维森特",
       "season": "2026",
-      "_league": "P1"
+      "_league": "P1",
+      "fid": 1575458
     },
     {
       "date": "2026-08-16",
@@ -2875,7 +3248,8 @@
       "team1_cn": "巴拉卡斯中央",
       "team2_cn": "罗萨里奥中央",
       "season": "2026",
-      "_league": "ARG"
+      "_league": "ARG",
+      "fid": 1493063
     },
     {
       "date": "2026-08-16",
@@ -2885,7 +3259,8 @@
       "team1_cn": "塞尔塔",
       "team2_cn": "奥萨苏纳",
       "season": "2026",
-      "_league": "SP1"
+      "_league": "SP1",
+      "fid": 1570336
     },
     {
       "date": "2026-08-16",
@@ -2895,7 +3270,8 @@
       "team1_cn": "胡内多阿拉",
       "team2_cn": "克卢日",
       "season": "2026",
-      "_league": "ROU"
+      "_league": "ROU",
+      "fid": 1565215
     },
     {
       "date": "2026-08-16",
@@ -2905,7 +3281,8 @@
       "team1_cn": "拉斯帕尔马斯",
       "team2_cn": "阿尔巴塞特",
       "season": "2026",
-      "_league": "SP2"
+      "_league": "SP2",
+      "fid": 1569878
     },
     {
       "date": "2026-08-16",
@@ -2915,7 +3292,8 @@
       "team1_cn": "蒂华纳",
       "team2_cn": "蓝十字",
       "season": "2026",
-      "_league": "MEX"
+      "_league": "MEX",
+      "fid": 1550927
     },
     {
       "date": "2026-08-16",
@@ -2925,7 +3303,8 @@
       "team1_cn": "阿美德",
       "team2_cn": "埃尔祖鲁姆",
       "season": "2026",
-      "_league": "T1"
+      "_league": "T1",
+      "fid": 1584367
     },
     {
       "date": "2026-08-16",
@@ -2935,7 +3314,8 @@
       "team1_cn": "贝西克塔斯",
       "team2_cn": "埃于普体育",
       "season": "2026",
-      "_league": "T1"
+      "_league": "T1",
+      "fid": 1584369
     },
     {
       "date": "2026-08-16",
@@ -2945,7 +3325,8 @@
       "team1_cn": "西雅图海湾人",
       "team2_cn": "温哥华白帽",
       "season": "2026",
-      "_league": "USA"
+      "_league": "USA",
+      "fid": 1490390
     },
     {
       "date": "2026-08-17",
@@ -2955,7 +3336,8 @@
       "team1_cn": "里奥夸尔托大学生",
       "team2_cn": "图库曼竞技",
       "season": "2026",
-      "_league": "ARG"
+      "_league": "ARG",
+      "fid": 1493067
     },
     {
       "date": "2026-08-17",
@@ -2965,7 +3347,8 @@
       "team1_cn": "格尼斯坦",
       "team2_cn": "伊尔维斯",
       "season": "2026",
-      "_league": "FIN"
+      "_league": "FIN",
+      "fid": 1495762
     },
     {
       "date": "2026-08-17",
@@ -2975,7 +3358,8 @@
       "team1_cn": "拉努斯",
       "team2_cn": "独立",
       "season": "2026",
-      "_league": "ARG"
+      "_league": "ARG",
+      "fid": 1493069
     },
     {
       "date": "2026-08-17",
@@ -2985,7 +3369,8 @@
       "team1_cn": "克卢日大学",
       "team2_cn": "UTA阿拉德",
       "season": "2026",
-      "_league": "ROU"
+      "_league": "ROU",
+      "fid": 1565222
     },
     {
       "date": "2026-08-17",
@@ -2995,7 +3380,8 @@
       "team1_cn": "布隆德比",
       "team2_cn": "桑德捷斯基",
       "season": "2026",
-      "_league": "DNK"
+      "_league": "DNK",
+      "fid": 1548995
     },
     {
       "date": "2026-08-17",
@@ -3005,7 +3391,8 @@
       "team1_cn": "赫根",
       "team2_cn": "哈尔姆斯塔德",
       "season": "2026",
-      "_league": "SWE"
+      "_league": "SWE",
+      "fid": 1494246
     },
     {
       "date": "2026-08-17",
@@ -3015,7 +3402,8 @@
       "team1_cn": "希洪竞技",
       "team2_cn": "萨瓦德尔",
       "season": "2026",
-      "_league": "SP2"
+      "_league": "SP2",
+      "fid": 1569876
     },
     {
       "date": "2026-08-17",
@@ -3025,7 +3413,8 @@
       "team1_cn": "卡迪夫城",
       "team2_cn": "雷克瑟姆",
       "season": "2026",
-      "_league": "E1"
+      "_league": "E1",
+      "fid": 1563094
     },
     {
       "date": "2026-08-17",
@@ -3035,7 +3424,8 @@
       "team1_cn": "内卡萨",
       "team2_cn": "莱昂",
       "season": "2026",
-      "_league": "MEX"
+      "_league": "MEX",
+      "fid": 1550928
     },
     {
       "date": "2026-08-17",
@@ -3045,7 +3435,8 @@
       "team1_cn": "卡萨皮亚",
       "team2_cn": "本菲卡",
       "season": "2026",
-      "_league": "P1"
+      "_league": "P1",
+      "fid": 1575459
     },
     {
       "date": "2026-08-17",
@@ -3055,7 +3446,8 @@
       "team1_cn": "萨斯菲尔德",
       "team2_cn": "国防与司法",
       "season": "2026",
-      "_league": "ARG"
+      "_league": "ARG",
+      "fid": 1493076
     },
     {
       "date": "2026-08-17",
@@ -3065,7 +3457,8 @@
       "team1_cn": "巴西国际",
       "team2_cn": "雷莫",
       "season": "2026",
-      "_league": "BRA"
+      "_league": "BRA",
+      "fid": 1492335
     },
     {
       "date": "2026-08-17",
@@ -3075,7 +3468,8 @@
       "team1_cn": "拉科鲁尼亚",
       "team2_cn": "埃尔切",
       "season": "2026",
-      "_league": "SP1"
+      "_league": "SP1",
+      "fid": 1570337
     },
     {
       "date": "2026-08-17",
@@ -3085,7 +3479,8 @@
       "team1_cn": "阿尔梅里亚",
       "team2_cn": "埃登斯",
       "season": "2026",
-      "_league": "SP2"
+      "_league": "SP2",
+      "fid": 1569871
     },
     {
       "date": "2026-08-17",
@@ -3095,7 +3490,8 @@
       "team1_cn": "布加勒斯特星",
       "team2_cn": "博托沙尼",
       "season": "2026",
-      "_league": "ROU"
+      "_league": "ROU",
+      "fid": 1565219
     },
     {
       "date": "2026-08-17",
@@ -3105,7 +3501,8 @@
       "team1_cn": "帕丘卡",
       "team2_cn": "普埃布拉",
       "season": "2026",
-      "_league": "MEX"
+      "_league": "MEX",
+      "fid": 1550929
     },
     {
       "date": "2026-08-17",
@@ -3115,7 +3512,8 @@
       "team1_cn": "门多萨体操",
       "team2_cn": "塔列雷斯",
       "season": "2026",
-      "_league": "ARG"
+      "_league": "ARG",
+      "fid": 1493068
     },
     {
       "date": "2026-08-17",
@@ -3125,7 +3523,8 @@
       "team1_cn": "萨姆松体育",
       "team2_cn": "哥兹塔比",
       "season": "2026",
-      "_league": "T1"
+      "_league": "T1",
+      "fid": 1584375
     },
     {
       "date": "2026-08-18",
@@ -3135,7 +3534,8 @@
       "team1_cn": "上海申花",
       "team2_cn": "北京国安",
       "season": "2026",
-      "_league": "CHN"
+      "_league": "CHN",
+      "fid": 1523198
     },
     {
       "date": "2026-08-19",
@@ -3145,7 +3545,8 @@
       "team1_cn": "哥伦布机员",
       "team2_cn": "CF蒙特利尔",
       "season": "2026",
-      "_league": "USA"
+      "_league": "USA",
+      "fid": 1490393
     },
     {
       "date": "2026-08-19",
@@ -3155,7 +3556,8 @@
       "team1_cn": "华盛顿联",
       "team2_cn": "新英格兰革命",
       "season": "2026",
-      "_league": "USA"
+      "_league": "USA",
+      "fid": 1490397
     },
     {
       "date": "2026-08-19",
@@ -3165,7 +3567,8 @@
       "team1_cn": "辛辛那提FC",
       "team2_cn": "纽约城",
       "season": "2026",
-      "_league": "USA"
+      "_league": "USA",
+      "fid": 1490392
     },
     {
       "date": "2026-08-19",
@@ -3175,7 +3578,8 @@
       "team1_cn": "纽约红牛",
       "team2_cn": "纳什维尔",
       "season": "2026",
-      "_league": "USA"
+      "_league": "USA",
+      "fid": 1490394
     },
     {
       "date": "2026-08-19",
@@ -3185,7 +3589,8 @@
       "team1_cn": "奥兰多城",
       "team2_cn": "芝加哥火焰",
       "season": "2026",
-      "_league": "USA"
+      "_league": "USA",
+      "fid": 1490395
     },
     {
       "date": "2026-08-19",
@@ -3195,7 +3600,8 @@
       "team1_cn": "费城联合",
       "team2_cn": "迈阿密国际",
       "season": "2026",
-      "_league": "USA"
+      "_league": "USA",
+      "fid": 1490391
     },
     {
       "date": "2026-08-19",
@@ -3205,7 +3611,8 @@
       "team1_cn": "多伦多FC",
       "team2_cn": "夏洛特FC",
       "season": "2026",
-      "_league": "USA"
+      "_league": "USA",
+      "fid": 1490396
     },
     {
       "date": "2026-08-19",
@@ -3215,7 +3622,8 @@
       "team1_cn": "上海上港",
       "team2_cn": "大连英博",
       "season": "2026",
-      "_league": "CHN"
+      "_league": "CHN",
+      "fid": 1523202
     },
     {
       "date": "2026-08-19",
@@ -3225,7 +3633,8 @@
       "team1_cn": "马德里竞技",
       "team2_cn": "马拉加",
       "season": "2026",
-      "_league": "SP1"
+      "_league": "SP1",
+      "fid": 1570334
     }
   ]
 }

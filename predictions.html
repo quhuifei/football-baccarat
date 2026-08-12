@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>赛先知 · 比赛预测（演示）</title>
+<style>
+  :root {
+    --gold: #d4af37;
+    --gold-bright: #f0d57a;
+    --gold-line: rgba(212, 175, 55, 0.18);
+    --txt: #e9e7de;
+    --muted: #8fa39b;
+    --panel: rgba(15, 32, 27, 0.72);
+    --panel-solid: #0e1f1a;
+    --banker: #ff6b6b;
+    --player: #5eb0f8;
+    --tie: #3fd3b6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(1200px 600px at 50% -100px, rgba(212,175,55,0.08), transparent),
+                linear-gradient(180deg, #0a1a14, #071510 60%);
+    color: var(--txt);
+    font-family: "PingFang SC", "Hiragino Sans GB", -apple-system, sans-serif;
+    min-height: 100vh;
+    padding: 20px 12px 40px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 860px; margin: 0 auto; }
+
+  /* ===== 顶部 ===== */
+  .topbar { text-align: center; padding: 14px 0 18px; border-bottom: 1px solid var(--gold-line); margin-bottom: 18px; }
+  .topbar h1 {
+    font-family: "Oswald", "Noto Sans SC", sans-serif;
+    font-size: 26px; letter-spacing: 4px; color: var(--gold);
+  }
+  .topbar .updated { font-size: 12px; color: var(--muted); margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .topbar .disclaimer { font-size: 12px; color: var(--gold); opacity: .8; margin-top: 4px; }
+
+  /* ===== 日期分组 ===== */
+  .date-title {
+    font-family: "Oswald", "Noto Sans SC", sans-serif;
+    color: var(--gold); font-size: 14px; letter-spacing: 3px;
+    margin: 20px 2px 10px;
+  }
+
+  /* ===== 比赛卡片 ===== */
+  .card {
+    background: linear-gradient(180deg, rgba(15, 32, 27, 0.85), rgba(8, 18, 14, 0.9));
+    border: 1px solid var(--gold-line);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    transition: border-color .15s;
+  }
+  .card:hover { border-color: rgba(212, 175, 55, 0.4); }
+  .card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .lg-badge {
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    color: var(--gold); border: 1px solid rgba(212,175,55,0.35);
+    border-radius: 6px; padding: 2px 7px; flex-shrink: 0;
+  }
+  .ko-time { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .chev { margin-left: auto; color: var(--muted); transition: transform .2s; flex-shrink: 0; }
+  .card.open .chev { transform: rotate(180deg); }
+
+  .teams { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .teams .t { font-size: 16px; font-weight: 700; }
+  .teams .vs { font-size: 12px; color: var(--muted); }
+  .teams .t.win { color: var(--gold-bright); }
+  .win-mark { font-size: 11px; color: #071510; background: linear-gradient(135deg, #d4af37, #b8952e); border-radius: 999px; padding: 1px 8px; font-weight: 700; vertical-align: 2px; margin-left: 4px; }
+
+  .pred-line { font-size: 13px; color: var(--txt); margin: 8px 0 10px; }
+  .pred-line b { color: var(--gold-bright); }
+  .pred-line .cmt { color: var(--muted); font-size: 12px; margin-left: 6px; }
+
+  /* 概率条 */
+  .probs { display: flex; flex-direction: column; gap: 6px; }
+  .prob-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .prob-row .lb { flex: 0 0 34px; color: var(--muted); }
+  .prob-row .bar { flex: 1; height: 10px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; }
+  .prob-row .fill { height: 100%; border-radius: 999px; }
+  .fill.home { background: linear-gradient(90deg, #c94f4f, var(--banker)); }
+  .fill.draw { background: linear-gradient(90deg, #2fae93, var(--tie)); }
+  .fill.away { background: linear-gradient(90deg, #3f8fd8, var(--player)); }
+  .prob-row .pc { flex: 0 0 38px; text-align: right; font-variant-numeric: tabular-nums; }
+
+  .meta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; font-size: 12px; color: var(--muted); }
+  .meta b { color: var(--txt); font-weight: 600; }
+
+  /* 展开对比 */
+  .cmp { display: none; margin-top: 12px; border-top: 1px dashed var(--gold-line); padding-top: 12px; }
+  .card.open .cmp { display: block; }
+  .cmp-title { font-size: 12px; letter-spacing: 2px; color: var(--gold); margin-bottom: 8px; }
+  .cmp-row { margin-bottom: 8px; }
+  .cmp-row .cmp-head { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); margin-bottom: 3px; }
+  .cmp-row .cmp-head .v { font-variant-numeric: tabular-nums; color: var(--txt); }
+  .cmp-bars { display: flex; flex-direction: column; gap: 3px; }
+  .cmp-bar { height: 7px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; }
+  .cmp-bar .fill { height: 100%; }
+  .cmp-bar .fill.h { background: var(--banker); }
+  .cmp-bar .fill.a { background: var(--player); }
+
+  .empty { text-align: center; color: var(--muted); padding: 60px 0; font-size: 14px; }
+
+  footer { text-align: center; margin-top: 26px; font-size: 12px; color: var(--muted); }
+  footer .warn { color: var(--gold); opacity: .85; }
+
+  @media (max-width: 640px) {
+    body { padding: 14px 8px 30px; }
+    .topbar h1 { font-size: 21px; letter-spacing: 2px; }
+    .teams .t { font-size: 15px; }
+    .card { padding: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="topbar">
+    <h1>赛先知 · 比赛预测（演示）</h1>
+    <div class="updated" id="updated">数据加载中…</div>
+    <div class="disclaimer">预测由 API-Football 模型生成，仅供参考</div>
+  </div>
+  <div id="list"><div class="empty">数据加载中…</div></div>
+  <footer><span class="warn">数据仅供参考，不构成投资建议</span></footer>
+</div>
+
+<script src="predictions.js"></script>
+<script>
+'use strict';
+(function () {
+  var box = document.getElementById('list');
+  var data = window.PREDICTIONS_DATA;
+  if (!data || !Array.isArray(data.items) || !data.items.length) {
+    box.innerHTML = '<div class="empty">暂无预测数据（请先运行 fetch_predictions.py）</div>';
+    return;
+  }
+  document.getElementById('updated').textContent = '数据更新：' + (data.updated_at || '—');
+
+  var esc = function (s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  };
+  var weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+  var CMP_LABELS = [
+    ['form', '近期状态'], ['att', '进攻'], ['def', '防守'],
+    ['poisson_distribution', '泊松分布'], ['h2h', '历史交锋'],
+    ['goals', '进球能力'], ['total', '综合对比']
+  ];
+  var goalVal = function (v) {
+    if (v == null) return '—';
+    var n = parseFloat(String(v).replace('-', ''));
+    return isNaN(n) ? '—' : String(n);
+  };
+  var cmtZh = function (c) {
+    if (c === 'Win or draw') return '胜或平';
+    if (c === 'Win') return '胜';
+    return c || '';
+  };
+
+  var html = '';
+  var lastDate = null;
+  data.items.forEach(function (it) {
+    if (it.date !== lastDate) {
+      var d = new Date(it.date + 'T00:00:00');
+      var wd = isNaN(d.getTime()) ? '' : ' · ' + weekdays[d.getDay()];
+      html += '<div class="date-title">' + esc(it.date) + wd + '</div>';
+      lastDate = it.date;
+    }
+    var homeWin = it.winner_side === 'home';
+    var awayWin = it.winner_side === 'away';
+    var winnerCn = homeWin ? it.team1_cn : (awayWin ? it.team2_cn : null);
+    var ph = it.pct_home == null ? 0 : it.pct_home;
+    var pd = it.pct_draw == null ? 0 : it.pct_draw;
+    var pa = it.pct_away == null ? 0 : it.pct_away;
+
+    html += '<div class="card">' +
+      '<div class="card-top">' +
+        '<span class="lg-badge">' + esc(it._league) + '</span>' +
+        '<span class="ko-time">' + esc(it.time || '--:--') + ' 开赛</span>' +
+        '<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+      '</div>' +
+      '<div class="teams">' +
+        '<span class="t' + (homeWin ? ' win' : '') + '">' + esc(it.team1_cn) + '</span>' +
+        (homeWin ? '<span class="win-mark">预测胜</span>' : '') +
+        '<span class="vs">vs</span>' +
+        '<span class="t' + (awayWin ? ' win' : '') + '">' + esc(it.team2_cn) + '</span>' +
+        (awayWin ? '<span class="win-mark">预测胜</span>' : '') +
+      '</div>' +
+      '<div class="pred-line">预测：<b>' +
+        (winnerCn ? esc(winnerCn) + ' ' + esc(cmtZh(it.winner_comment) || '胜') : '双方势均力敌') +
+        '</b>' + (it.winner_comment && winnerCn ? '' : '') +
+      '</div>' +
+      '<div class="probs">' +
+        '<div class="prob-row"><span class="lb">主胜</span><div class="bar"><div class="fill home" style="width:' + ph + '%"></div></div><span class="pc">' + ph + '%</span></div>' +
+        '<div class="prob-row"><span class="lb">平局</span><div class="bar"><div class="fill draw" style="width:' + pd + '%"></div></div><span class="pc">' + pd + '%</span></div>' +
+        '<div class="prob-row"><span class="lb">客胜</span><div class="bar"><div class="fill away" style="width:' + pa + '%"></div></div><span class="pc">' + pa + '%</span></div>' +
+      '</div>' +
+      '<div class="meta">' +
+        (it.advice ? '<span>建议：<b>' + esc(it.advice) + '</b></span>' : '') +
+        '<span>预期进球：主 <b>' + goalVal(it.goals_home) + '</b> · 客 <b>' + goalVal(it.goals_away) + '</b></span>' +
+        (it.under_over ? '<span>大小参考：<b>' + esc(it.under_over) + '</b></span>' : '') +
+      '</div>' +
+      '<div class="cmp"><div class="cmp-title">两队对比（主队 vs 客队）</div>';
+
+    CMP_LABELS.forEach(function (pair) {
+      var c = (it.comparison || {})[pair[0]] || {};
+      var h = c.home, a = c.away;
+      html += '<div class="cmp-row">' +
+        '<div class="cmp-head"><span>' + pair[1] + '</span>' +
+        '<span class="v">' + (h == null ? '—' : h + '%') + ' / ' + (a == null ? '—' : a + '%') + '</span></div>' +
+        '<div class="cmp-bars">' +
+          '<div class="cmp-bar"><div class="fill h" style="width:' + (h || 0) + '%"></div></div>' +
+          '<div class="cmp-bar"><div class="fill a" style="width:' + (a || 0) + '%"></div></div>' +
+        '</div></div>';
+    });
+    html += '</div></div>';
+  });
+  box.innerHTML = html;
+
+  box.addEventListener('click', function (e) {
+    var card = e.target.closest('.card');
+    if (card) card.classList.toggle('open');
+  });
+})();
+</script>
+</body>
+</html>

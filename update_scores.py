@@ -713,8 +713,7 @@ def main():
                                        "LATEST_DATA", output, "matches", "赛果增量")
 
     # ---- 近期赛程：按 (联赛, 日期, 时间, 主, 客) 去重后按开球时间排序 ----
-    for fx in all_fixtures:
-        fx.pop("fid", None)  # fixture id 仅供内部抓 odds，不输出
+    # 保留 fid（API-Football fixture id）：fetch_predictions.py 等下游脚本需要它调 /predictions
     fx_merged = {}
     for fx in all_fixtures:
         fx_merged[(fx["_league"], fx["date"], fx["time"], fx["team1"], fx["team2"])] = fx
