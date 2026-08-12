@@ -73,8 +73,9 @@ FTR_MAP = {"H": "B", "A": "P", "D": "T"}
 # ---- 快速通道：API-Football（api-sports.io）----
 APIFB_KEY = os.environ.get("API_FOOTBALL_KEY", "").strip()
 APIFB_URL = "https://v3.football.api-sports.io/fixtures?date={d}"
-FAST_DAYS = 2      # 拉取 昨天+今天（免费版只开放 [昨天, 明天] 窗口且 100 次/天：2×24=48 次/天；升级 Pro 后调大可回溯更多天）
-APIFB_SLEEP = 6    # 调用间隔秒数（免费版限流保护）
+FAST_DAYS = 4      # 拉取 最近3天+今天（Pro 7500 次/天，余量充足；免费版只能填 2）
+FIXTURE_DAYS = 7   # 赛程向前拉取天数（今天+未来7天；免费版窗口只到明天，填 1）
+APIFB_SLEEP = 6    # 调用间隔秒数（限流保护）
 # API-Football league.id → 本站联赛码（2026-08 逐一用 /leagues 接口按 国家+名称+League 类型核实）
 APIFB_LEAGUES = {
     39: "E0", 40: "E1", 41: "E2", 42: "E3", 43: "EC",
@@ -279,12 +280,12 @@ def fetch_apifb_fast(csv_index, team_cn, missing_teams):
     csv_index: {(联赛码, 主队, 客队): {CSV 已有日期}} —— 用于「同队 ±2 天吸附」兜底。
     单日请求失败只警告不中断；队名未映射整场跳过。返回 (赛果列表, 赛程列表)。
     赛果只收 FT（完场）；AET/PEN 按惯例取常规时间比分（score.fulltime）。
-    赛程收 NS（未开赛）：免费版窗口含明天，故额外多拉 1 天（FAST_DAYS+1 次调用），
-    得出「今天+明天」的近期赛程；CSV 一旦出现排期行会与之按同键去重合并。
+    赛程收 NS（未开赛）：除赛果窗口外再向前拉 FIXTURE_DAYS 天（今天+未来7天），
+    得出未来一周赛程；CSV 一旦出现排期行会与之按同键去重合并。
     """
     today = datetime.now(timezone.utc).date()
     dates = [(today - timedelta(days=FAST_DAYS - 1 - i)) for i in range(FAST_DAYS)]
-    dates.append(today + timedelta(days=1))  # 免费版窗口含明天，多拉 1 天补近期赛程
+    dates += [today + timedelta(days=i) for i in range(1, FIXTURE_DAYS + 1)]  # 未来赛程窗口
     start_year = current_season_start()
     out = []
     out_fixtures = []
