@@ -48,7 +48,6 @@ OUTPUT_PATH = os.path.join(BASE_DIR, "football_latest.json")
 OUTPUT_JS_PATH = os.path.join(BASE_DIR, "football_latest.js")
 FIXTURES_PATH = os.path.join(BASE_DIR, "football_fixtures.json")
 FIXTURES_JS_PATH = os.path.join(BASE_DIR, "football_fixtures.js")
-FIXTURES_DAYS = 7  # 近期赛程窗口：今天起未来 7 天
 
 # A 类：mmz4281/{赛季码}/{联赛码}.csv
 LEAGUES_A = ["E0", "SP1", "D1", "I1", "F1",
@@ -220,9 +219,9 @@ def make_fixture(date, time_s, home, away, season, league, team_cn):
 
 def parse_main_fixtures(text, league, season_start, team_cn, today):
     """A 类 CSV 中比分为空（FTHG 无值）的已排期行 = 未来赛程。
-    只保留 [今天, 今天+FIXTURES_DAYS] 窗口内的场次。B 类 /new/*.csv 只含已赛场次，
+    只保留 [今天, 今天+FIXTURE_DAYS] 窗口内的场次。B 类 /new/*.csv 只含已赛场次，
     经核实文件末尾即为最新已赛日期、无未来行，故未来赛程仅取 A 类。"""
-    last_day = today + timedelta(days=FIXTURES_DAYS)
+    last_day = today + timedelta(days=FIXTURE_DAYS)
     fixtures = []
     reader = csv.DictReader(io.StringIO(text))
     for row in reader:
@@ -335,7 +334,7 @@ def fetch_apifb_fast(csv_index, team_cn, missing_teams):
 
             if status == "NS":  # 未开赛 → 近期赛程
                 local_day = dt.date()
-                if today <= local_day <= today + timedelta(days=FIXTURES_DAYS):
+                if today <= local_day <= today + timedelta(days=FIXTURE_DAYS):
                     out_fixtures.append(make_fixture(
                         local_day.isoformat(), dt.strftime("%H:%M"),
                         home, away, season, league, team_cn))
@@ -530,7 +529,7 @@ def main():
     print(f"  输出文件: {OUTPUT_PATH}")
     print(f"  输出文件: {OUTPUT_JS_PATH}")
     fx_total = len(all_fixtures)
-    print(f"\n===== 近期赛程（未来 {FIXTURES_DAYS} 天） =====")
+    print(f"\n===== 近期赛程（未来 {FIXTURE_DAYS} 天） =====")
     for league in sorted(fixtures_summary):
         if fixtures_summary[league]:
             print(f"  {league}: {fixtures_summary[league]} 场")
