@@ -286,6 +286,11 @@
   .ou-push       { color: #9aa5b1; border: 1px solid rgba(154, 165, 177, 0.4); background: rgba(154, 165, 177, 0.08); }
   .ou-score { color: var(--gold-bright); font-size: 12px; white-space: nowrap; flex-shrink: 0; font-weight: 700; }
   .ou-section { color: var(--gold); font-size: 13px; letter-spacing: 2px; margin: 16px 4px 6px; }
+  /* 赛果表「大小」列迷你徽章 */
+  .ou-mini { font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .ou-mini-B { color: var(--banker); }
+  .ou-mini-P { color: var(--player); }
+  .ou-mini-T { color: var(--tie); }
   .export-btn {
     padding: 9px 16px;
     border: 1px solid rgba(212, 175, 55, 0.35);
@@ -366,6 +371,23 @@
     box-shadow: 0 10px 34px rgba(0, 0, 0, 0.45), inset 0 2px 22px rgba(0, 0, 0, 0.55);
     margin-bottom: 14px;
     animation: riseIn 0.5s ease 0.08s both;
+  }
+  /* ===== 路图切换 tab（胜平负 / 大小球） ===== */
+  .road-tabs { display: flex; gap: 8px; justify-content: center; margin: 0 auto 10px; }
+  .road-tab {
+    padding: 7px 24px; border-radius: 999px; cursor: pointer;
+    font-size: 13px; font-weight: 600; letter-spacing: 2px; font-family: inherit;
+    color: var(--muted); background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .road-tab:hover:not(.active) { border-color: var(--gold); color: var(--gold-bright); }
+  .road-tab.active {
+    color: #071510;
+    background: linear-gradient(135deg, #d4af37, #b8952e);
+    border-color: var(--gold);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
   }
   .road {
     display: grid;
@@ -501,6 +523,7 @@
     color: var(--gold);
     font-weight: bold;
   }
+  .tooltip .match-ou { color: var(--muted); font-size: 11px; margin-top: 1px; }
   .tooltip .result-B { color: var(--banker); }
   .tooltip .result-P { color: var(--player); }
   .tooltip .result-T { color: var(--tie); }
@@ -768,6 +791,7 @@
     table { font-size: 12px; }
     th, td { padding: 4px 5px; }
     th:nth-child(2), td:nth-child(2) { display: none; }
+    th.ou-col, td.ou-col { display: none; }  /* 手机端藏「大小」列，保行高 */
     td:nth-child(4), td:nth-child(6) { overflow-wrap: anywhere; }
     th { top: -10px; font-size: 11px; }
     td.result-B::before, td.result-P::before, td.result-T::before {
@@ -900,6 +924,10 @@
     <div class="stat-card"><div class="stat-number" style="color:#ffd700" id="stat-total">0</div><div class="stat-label">总场次</div></div>
   </div>
 
+  <div class="road-tabs">
+    <button type="button" class="road-tab active" id="road-tab-bpt" onclick="setRoadMode('bpt')">胜平负</button>
+    <button type="button" class="road-tab" id="road-tab-ou" onclick="setRoadMode('ou')">大小球</button>
+  </div>
   <div class="road-wrapper" id="single-road-wrapper">
     <div class="road" id="road"></div>
   </div>
@@ -908,7 +936,7 @@
   <div class="match-list">
     <h2>完整赛果列表</h2>
     <table>
-      <thead><tr><th>#</th><th>年份</th><th>日期</th><th>左队（庄）</th><th>比分</th><th>右队（闲）</th><th>结果</th></tr></thead>
+      <thead><tr><th>#</th><th>年份</th><th>日期</th><th>左队（庄）</th><th>比分</th><th>右队（闲）</th><th>结果</th><th class="ou-col">大小</th></tr></thead>
       <tbody id="match-table-body">
       </tbody>
     </table>
@@ -1093,6 +1121,76 @@ function getFilteredMatches() {
   }).map(m => ({...m, _seq: seq++}));
 }
 
+// ===== 大小球大路图 =====
+let roadMode = 'bpt';            // 'bpt' 胜平负 | 'ou' 大小球
+const OU_DEFAULT_LINE = 2.5;     // 历史场次无盘口快照时的默认线（通用惯例：≥3 球大，≤2 球小，无走）
+const OU_ROAD_DAYS = 365;        // 大小球路图数据范围：联赛最新比赛日期往前一年
+let ouRoadCache = { key: null, matches: [] };
+
+function setRoadMode(mode) {
+  if (mode === roadMode) return;
+  roadMode = mode;
+  document.getElementById('road-tab-bpt').classList.toggle('active', mode === 'bpt');
+  document.getElementById('road-tab-ou').classList.toggle('active', mode === 'ou');
+  renderRoad();
+  renderStats();  // 统计卡随路图模式联动（庄闲和 ↔ 大小走）
+}
+
+function addDays(dateStr, days) {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + days);
+  const p = n => String(n).padStart(2, '0');
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+}
+
+// 判定单场比赛的大小球结果：返回 {token(B=大/P=小/T=走), label(大/小/走/半大/半小), line, isDefault}
+// 有快照初盘（ou_line）用真实盘口：x.5 无走；x.0 等线=走；x.25/x.75 拆两半，赢半→半大按大、输半→半小按小
+// 无快照的历史场：2.5 默认线，无走
+function ouOutcome(m) {
+  if (m.s1 == null || m.s2 == null) return null;
+  const total = m.s1 + m.s2;
+  if (m.ou_line != null) {
+    const line = m.ou_line;
+    const q = Math.round(line * 4);
+    if (q % 2 === 0) {
+      const l = q / 4;
+      if (total > l) return { token: 'B', label: '大', line, isDefault: false };
+      if (total < l) return { token: 'P', label: '小', line, isDefault: false };
+      return { token: 'T', label: '走', line, isDefault: false };
+    }
+    let pts = 0;
+    [(q - 1) / 4, (q + 1) / 4].forEach(h => { pts += total > h ? 1 : (total < h ? -1 : 0); });
+    if (pts > 0) return { token: 'B', label: pts === 2 ? '大' : '半大', line, isDefault: false };
+    if (pts < 0) return { token: 'P', label: pts === -2 ? '小' : '半小', line, isDefault: false };
+    return { token: 'T', label: '走', line, isDefault: false };
+  }
+  return total >= 3
+    ? { token: 'B', label: '大', line: OU_DEFAULT_LINE, isDefault: true }
+    : { token: 'P', label: '小', line: OU_DEFAULT_LINE, isDefault: true };
+}
+
+// 大小球路图数据：赛季过滤 ∩ 近一年（锚点=该联赛最新比赛日期），结果按 ouOutcome 映射成路图符号
+// 按 联赛|赛季|锚点|场次 做缓存，切换 tab 不重算
+function getOuRoadMatches() {
+  const data = allData[currentLeague];
+  if (!data) return [];
+  let anchor = '';
+  data.matches.forEach(m => { if (m.date && m.date > anchor) anchor = m.date; });
+  const cacheKey = currentLeague + '|' + currentSeason + '|' + anchor + '|' + data.matches.length;
+  if (ouRoadCache.key === cacheKey) return ouRoadCache.matches;
+  const cutoff = anchor ? addDays(anchor, -OU_ROAD_DAYS) : '';
+  let seq = 0;
+  const out = [];
+  getFilteredMatches().forEach(m => {
+    if (m.date < cutoff) return;
+    const ou = ouOutcome(m);
+    if (!ou) return;
+    out.push({ ...m, result: ou.token, _seq: seq++, _ou: ou });
+  });
+  ouRoadCache = { key: cacheKey, matches: out };
+  return out;
+}
+
 function generateStandardRoad(results, maxRows = 6) {
   const grid = {};
   const cellMatches = {};
@@ -1161,6 +1259,17 @@ function getTooltipContent(refs) {
   return refs.map(ref => {
     const league = ref._league || currentLeague;
     const m = allData[league].matches[ref.idx];
+    if (roadMode === 'ou') {
+      // 大小球模式：显示总进球 + 盘口线（快照场真实初盘，历史场 2.5 默认线）
+      const ou = m._ou || ouOutcome(m);
+      const total = (m.s1 || 0) + (m.s2 || 0);
+      const lineTxt = ou.isDefault ? '2.5 默认线' : '初盘 ' + ou.line;
+      return `<div class="match-row">
+      <div class="match-date">#${ref.seq + 1} · ${m.date}</div>
+      <div>${m.team1_cn} ${m.s1}–${m.s2} ${m.team2_cn} <span class="result-${ou.token}">[${ou.label}]</span></div>
+      <div class="match-ou">总进球 ${total} · ${lineTxt}</div>
+    </div>`;
+    }
     const label = resultLabels[m.result];
     const cls = 'result-' + m.result;
     return `<div class="match-row">
@@ -1196,12 +1305,17 @@ function renderRoadInto(roadEl, matches, league) {
       if (grid[key]) {
         const circle = document.createElement('div');
         circle.className = 'cell-circle cell-' + grid[key];
-        circle.textContent = grid[key];
+        // 大小球模式格子显示 大/小/走，胜平负模式显示 B/P/T
+        circle.textContent = roadMode === 'ou'
+          ? ({ B: '大', P: '小', T: '走' })[grid[key]]
+          : grid[key];
         cell.appendChild(circle);
 
         const refs = cellMatches[key] || [];
         const mainRef = refs[0];
-        const tieRefs = refs.slice(1).filter(ref => allData[league].matches[ref.idx].result === 'T');
+        // 斜杠（和/走）判定要按当前路图模式的结果：matches[seq] 是模式内结果，
+        // 直接查 allData 会拿到原始胜平负结果（大小球模式下「走」不等于「和」）
+        const tieRefs = refs.slice(1).filter(ref => matches[ref.seq] && matches[ref.seq].result === 'T');
 
         // tooltip 显示该单元格所有相关比赛（包括和局）
         const tooltipRefs = refs;
@@ -1285,7 +1399,8 @@ function renderRoadInto(roadEl, matches, league) {
 }
 
 function renderRoad() {
-  renderRoadInto(document.getElementById('road'), getFilteredMatches(), currentLeague);
+  const matches = roadMode === 'ou' ? getOuRoadMatches() : getFilteredMatches();
+  renderRoadInto(document.getElementById('road'), matches, currentLeague);
   hideTooltip();
   // 渲染完成后立即定位到最新比赛（路图按时间从左到右排列，即滚动到最右端）
   requestAnimationFrame(() => {
@@ -1429,13 +1544,19 @@ async function setLeague(league) {
 }
 
 function renderStats() {
-  const filtered = getFilteredMatches();
+  const isOu = roadMode === 'ou';
+  // 大小球模式：按 OU 结果统计（范围与路图一致：近一年 ∩ 赛季过滤）；胜平负模式：原逻辑
+  const filtered = isOu ? getOuRoadMatches() : getFilteredMatches();
   const counts = { B: 0, P: 0, T: 0 };
   for (const m of filtered) counts[m.result]++;
   document.getElementById('stat-b').textContent = counts.B;
   document.getElementById('stat-p').textContent = counts.P;
   document.getElementById('stat-t').textContent = counts.T;
   document.getElementById('stat-total').textContent = filtered.length;
+  // 卡片标签联动（颜色本就对齐：红=大/庄，蓝=小/闲，灰绿=走/和）
+  document.querySelector('#stat-b + .stat-label').textContent = isOu ? '大（总进球过线）' : '庄（主队胜）';
+  document.querySelector('#stat-p + .stat-label').textContent = isOu ? '小（总进球欠线）' : '闲（客队胜）';
+  document.querySelector('#stat-t + .stat-label').textContent = isOu ? '走（走水退本金）' : '和（平局）';
 }
 
 function renderTable() {
@@ -1450,12 +1571,16 @@ function renderTable() {
     if (currentSeason === 'all' && year !== lastGroup) {
       const sep = document.createElement('tr');
       sep.className = 'year-separator';
-      sep.innerHTML = `<td colspan="7">${groupLabel}</td>`;
+      sep.innerHTML = `<td colspan="8">${groupLabel}</td>`;
       tbody.appendChild(sep);
       lastGroup = year;
     }
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${i + 1}</td><td>${year}</td><td>${m.date}</td><td>${m.team1_cn}</td><td>${m.s1}–${m.s2}</td><td>${m.team2_cn}</td><td class="result-${m.result}">${resultLabels[m.result]}</td>`;
+    const ou = ouOutcome(m);  // 大小球结果（快照场真实初盘线，历史场 2.5 默认线）
+    const ouTxt = ou ? ou.label : '';
+    const ouTitle = ou ? `总进球 ${m.s1 + m.s2} · ${ou.isDefault ? '2.5 默认线' : '初盘 ' + ou.line}` : '';
+    tr.innerHTML = `<td>${i + 1}</td><td>${year}</td><td>${m.date}</td><td>${m.team1_cn}</td><td>${m.s1}–${m.s2}</td><td>${m.team2_cn}</td><td class="result-${m.result}">${resultLabels[m.result]}</td>` +
+      `<td class="ou-col">${ou ? `<span class="ou-mini ou-mini-${ou.token}" title="${ouTitle}">${ouTxt}</span>` : ''}</td>`;
     tbody.appendChild(tr);
   });
 }
