@@ -1563,9 +1563,9 @@ function renderStats() {
   document.getElementById('stat-t').textContent = counts.T;
   document.getElementById('stat-total').textContent = filtered.length;
   // 卡片标签联动（颜色本就对齐：红=大/庄，蓝=小/闲，灰绿=走/和）
-  document.querySelector('#stat-b + .stat-label').textContent = isOu ? '大（总进球过线）' : '庄（主队胜）';
-  document.querySelector('#stat-p + .stat-label').textContent = isOu ? '小（总进球欠线）' : '闲（客队胜）';
-  document.querySelector('#stat-t + .stat-label').textContent = isOu ? '走（走水退本金）' : '和（平局）';
+  document.querySelector('#stat-b + .stat-label').textContent = isOu ? '大（大于初盘）' : '庄（主队胜）';
+  document.querySelector('#stat-p + .stat-label').textContent = isOu ? '小（小于初盘）' : '闲（客队胜）';
+  document.querySelector('#stat-t + .stat-label').textContent = isOu ? '走（走水）' : '和（平局）';
 }
 
 function renderTable() {
