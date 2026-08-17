@@ -328,6 +328,14 @@ def read_existing_counts():
 def write_manifest():
     counts = read_existing_counts()
     manifest = []
+    # 世界杯（import_worldcup.py 生成 data/WC.js）置顶；不在 LEAGUE_META 里，fetch_history 不抓它
+    if "WC" in counts:
+        cnt, stype = counts["WC"]
+        manifest.append({
+            "code": "WC", "name": "FIFA World Cup", "cn": "世界杯",
+            "country_cn": "国际足联", "flag": "🏆", "group": "杯赛·世界杯",
+            "season_type": stype, "matches": cnt,
+        })
     for code, name, cn, country_cn, flag, group, kind in LEAGUE_META:
         cnt, stype = counts.get(code, (0, "split" if kind == "A" else "calendar"))
         manifest.append({

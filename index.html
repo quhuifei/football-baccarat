@@ -933,7 +933,7 @@
   #account-chip #register-link:hover { filter: brightness(1.1); }
 </style>
 <div class="container">
-  <h1 id="page-title">全球 27 国联赛</h1>
+  <h1 id="page-title">世界杯 · 全球 27 国联赛</h1>
 
   <div class="controls">
     <label for="league-btn" style="color:#778da9;font-size:14px;">选择赛事：</label>
@@ -992,7 +992,7 @@
 
   <div class="subtitle" id="api-status" style="font-size:12px;color:#4dd0a8;min-height:18px;margin-top:18px;">正在加载联赛目录...</div>
 
-  <div class="footer" id="footer">数据来源：football-data.co.uk · 全球 27 国联赛 2014 起</div>
+  <div class="footer" id="footer">数据来源：football-data.co.uk · API-Football · 世界杯近 4 届 + 全球 27 国联赛 2014 起</div>
   <div class="footer" style="margin-top:8px;color:#c9a227;opacity:0.85;">数据仅供参考，不构成投资建议</div>
 </div>
 
@@ -1000,7 +1000,7 @@
 <div class="league-overlay" id="league-overlay" onclick="if(event.target===this)closeLeaguePanel()">
   <div class="league-panel" role="dialog" aria-label="选择联赛">
     <div class="league-panel-head">
-      <span>选择联赛 · 27 国 38 项赛事</span>
+      <span>选择联赛 · 世界杯 + 27 国 38 项赛事</span>
       <button type="button" class="league-panel-close" onclick="closeLeaguePanel()" aria-label="关闭">✕</button>
     </div>
     <div class="league-panel-body" id="league-panel-body"></div>
@@ -1604,7 +1604,7 @@ function updatePageInfo() {
   document.getElementById('page-title').textContent = leagueInfo.cn;
   document.title = leagueInfo.cn + ' · 赛果路图';
   document.getElementById('footer').textContent =
-    '数据来源：football-data.co.uk · 全球 27 国联赛 2014 起 · ' + leagueInfo.cn + ' 共 ' + leagueInfo.matches.length + ' 场比赛';
+    '数据来源：football-data.co.uk · API-Football · 世界杯近 4 届 + 全球 27 国联赛 2014 起 · ' + leagueInfo.cn + ' 共 ' + leagueInfo.matches.length + ' 场比赛';
 }
 
 function renderAll() {
