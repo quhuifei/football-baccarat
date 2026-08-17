@@ -555,6 +555,29 @@ def safe_write_output(json_path, js_path, js_var, payload, list_key, label):
     return True
 
 
+def attach_beijing_time(fx):
+    """给赛程记录补 date_bj / time_bj（北京时间，UTC+8）：
+    联赛当地时间 + (8 - LEAGUE_UTC_OFFSET[联赛]) 小时，跨天自动进位。
+    固定偏移不追夏令时，±1 小时误差可接受；找不到偏移按 UTC+0 处理。
+    time 为空（CSV 缺开球时间）时 time_bj 同样留空、date_bj 按当天 12:00 折算（不跨天）。"""
+    off = LEAGUE_UTC_OFFSET.get(fx.get("_league"), 0)
+    time_s = (fx.get("time") or "").strip()
+    hh, mm = 12, 0  # 无开球时间按正午算，日期不因换算漂移
+    if time_s:
+        try:
+            hh, mm = int(time_s[:2]), int(time_s[3:5])
+        except (ValueError, IndexError):
+            pass
+    try:
+        dt = datetime.strptime(fx["date"], "%Y-%m-%d").replace(hour=hh, minute=mm)
+    except (KeyError, ValueError):
+        return fx
+    dt += timedelta(hours=8 - off)
+    fx["date_bj"] = dt.date().isoformat()
+    fx["time_bj"] = dt.strftime("%H:%M") if time_s else ""
+    return fx
+
+
 def settle_ou(total, line):
     """总进球 vs 初盘线 → 大/小/走/半大/半小。
     半球盘（x.5）：无走水；整盘（x.0）：进球数等于线=走水退本金；
@@ -719,6 +742,8 @@ def main():
         fx_merged[(fx["_league"], fx["date"], fx["time"], fx["team1"], fx["team2"])] = fx
     all_fixtures = sorted(fx_merged.values(),
                           key=lambda x: (x["date"], x["time"] or "99:99", x["team1"]))
+    for fx in all_fixtures:
+        attach_beijing_time(fx)  # 补 date_bj / time_bj 北京时间字段（显示层用，原 date/time 不动）
     fixtures_output = {
         "updated_at": output["updated_at"],
         "fixtures": all_fixtures,

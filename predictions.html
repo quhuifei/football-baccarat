@@ -164,12 +164,19 @@
 
   var html = '';
   var lastDate = null;
-  data.items.forEach(function (it) {
-    if (it.date !== lastDate) {
-      var d = new Date(it.date + 'T00:00:00');
+  // 显示层统一用北京时间（date_bj/time_bj），旧数据缺该字段时回退原 date/time
+  var dispDate = function (it) { return it.date_bj || it.date; };
+  var dispTime = function (it) { return it.time_bj || it.time || '--:--'; };
+  var sorted = data.items.slice().sort(function (a, b) {
+    return (dispDate(a) + dispTime(a)).localeCompare(dispDate(b) + dispTime(b));
+  });
+  sorted.forEach(function (it) {
+    var dd = dispDate(it);
+    if (dd !== lastDate) {
+      var d = new Date(dd + 'T00:00:00');
       var wd = isNaN(d.getTime()) ? '' : ' · ' + weekdays[d.getDay()];
-      html += '<div class="date-title">' + esc(it.date) + wd + '</div>';
-      lastDate = it.date;
+      html += '<div class="date-title">' + esc(dd) + wd + '</div>';
+      lastDate = dd;
     }
     var homeWin = it.winner_side === 'home';
     var awayWin = it.winner_side === 'away';
@@ -181,7 +188,7 @@
     html += '<div class="card">' +
       '<div class="card-top">' +
         '<span class="lg-badge">' + esc(it._league) + '</span>' +
-        '<span class="ko-time">' + esc(it.time || '--:--') + ' 开赛</span>' +
+        '<span class="ko-time">' + esc(dispTime(it)) + ' 开赛（北京时间）</span>' +
         '<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
       '</div>' +
       '<div class="teams">' +

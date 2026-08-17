@@ -1,49 +1,51 @@
 {
-  "updated_at": "2026-08-12T15:38:14+08:00",
+  "updated_at": "2026-08-17T10:10:43+08:00",
   "items": [
     {
-      "fid": 1576144,
-      "date": "2026-08-14",
-      "time": "17:30",
-      "_league": "D2",
-      "team1": "Braunschweig",
-      "team2": "Bochum",
-      "team1_cn": "布伦瑞克",
-      "team2_cn": "波鸿",
-      "winner_name": "Eintracht Braunschweig",
-      "winner_side": "home",
-      "winner_comment": null,
-      "advice": "Combo Winner : Eintracht Braunschweig and +1.5 goals",
-      "pct_home": 35,
-      "pct_draw": 35,
-      "pct_away": 30,
-      "goals_home": "-6.5",
-      "goals_away": null,
-      "under_over": "+1.5",
+      "fid": 1493067,
+      "date": "2026-08-17",
+      "time": "14:45",
+      "date_bj": "2026-08-18",
+      "time_bj": "01:45",
+      "_league": "ARG",
+      "team1": "Estudiantes Rio Cuarto",
+      "team2": "Atl. Tucuman",
+      "team1_cn": "里奥夸尔托大学生",
+      "team2_cn": "图库曼竞技",
+      "winner_name": "Atletico Tucuman",
+      "winner_side": "away",
+      "winner_comment": "Win or draw",
+      "advice": "Combo Double chance : draw or Atletico Tucuman and -3.5 goals",
+      "pct_home": 10,
+      "pct_draw": 45,
+      "pct_away": 45,
+      "goals_home": "-1.5",
+      "goals_away": "-1.5",
+      "under_over": "-3.5",
       "comparison": {
         "form": {
-          "home": 100,
-          "away": 0
+          "home": 33,
+          "away": 67
         },
         "att": {
-          "home": 100,
-          "away": 0
+          "home": 33,
+          "away": 67
         },
         "def": {
+          "home": 22,
+          "away": 78
+        },
+        "poisson_distribution": {
+          "home": 37,
+          "away": 63
+        },
+        "h2h": {
           "home": 50,
           "away": 50
         },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 20,
-          "away": 80
-        },
         "goals": {
-          "home": 21,
-          "away": 79
+          "home": 38,
+          "away": 63
         },
         "total": {
           "home": null,
@@ -52,98 +54,102 @@
       }
     },
     {
-      "fid": 1576148,
-      "date": "2026-08-14",
-      "time": "17:30",
-      "_league": "D2",
-      "team1": "Holstein Kiel",
-      "team2": "St Pauli",
-      "team1_cn": "荷尔斯泰因基尔",
-      "team2_cn": "圣保利",
-      "winner_name": "FC St. Pauli",
+      "fid": 1495762,
+      "date": "2026-08-17",
+      "time": "17:00",
+      "date_bj": "2026-08-17",
+      "time_bj": "23:00",
+      "_league": "FIN",
+      "team1": "Gnistan",
+      "team2": "Ilves",
+      "team1_cn": "格尼斯坦",
+      "team2_cn": "伊尔维斯",
+      "winner_name": "Ilves",
       "winner_side": "away",
       "winner_comment": "Win or draw",
-      "advice": "Double chance : draw or FC St. Pauli",
+      "advice": "Double chance : draw or Ilves",
+      "pct_home": 10,
+      "pct_draw": 45,
+      "pct_away": 45,
+      "goals_home": "-3.5",
+      "goals_away": "-2.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 53,
+          "away": 47
+        },
+        "att": {
+          "home": 59,
+          "away": 41
+        },
+        "def": {
+          "home": 40,
+          "away": 60
+        },
+        "poisson_distribution": {
+          "home": 58,
+          "away": 42
+        },
+        "h2h": {
+          "home": 7,
+          "away": 93
+        },
+        "goals": {
+          "home": 31,
+          "away": 69
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1493069,
+      "date": "2026-08-17",
+      "time": "17:00",
+      "date_bj": "2026-08-18",
+      "time_bj": "04:00",
+      "_league": "ARG",
+      "team1": "Lanus",
+      "team2": "Independiente",
+      "team1_cn": "拉努斯",
+      "team2_cn": "独立",
+      "winner_name": "Independiente",
+      "winner_side": "away",
+      "winner_comment": "Win or draw",
+      "advice": "Combo Double chance : draw or Independiente and -3.5 goals",
       "pct_home": 10,
       "pct_draw": 45,
       "pct_away": 45,
       "goals_home": "-2.5",
       "goals_away": "-1.5",
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 50,
-          "away": 50
-        },
-        "att": {
-          "home": 67,
-          "away": 33
-        },
-        "def": {
-          "home": 33,
-          "away": 67
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 0,
-          "away": 100
-        },
-        "goals": {
-          "home": 33,
-          "away": 67
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1552126,
-      "date": "2026-08-14",
-      "time": "19:00",
-      "_league": "N1",
-      "team1": "Telstar",
-      "team2": "Sparta Rotterdam",
-      "team1_cn": "特尔斯达",
-      "team2_cn": "鹿特丹斯巴达",
-      "winner_name": "Telstar",
-      "winner_side": "home",
-      "winner_comment": null,
-      "advice": "Combo Winner : Telstar and -3.5 goals",
-      "pct_home": 45,
-      "pct_draw": 45,
-      "pct_away": 10,
-      "goals_home": "-2.5",
-      "goals_away": null,
       "under_over": "-3.5",
       "comparison": {
         "form": {
-          "home": 100,
-          "away": 0
+          "home": 50,
+          "away": 50
         },
         "att": {
-          "home": 100,
-          "away": 0
+          "home": 56,
+          "away": 44
         },
         "def": {
           "home": 50,
           "away": 50
         },
         "poisson_distribution": {
-          "home": 0,
-          "away": 0
+          "home": 61,
+          "away": 39
         },
         "h2h": {
           "home": 38,
           "away": 62
         },
         "goals": {
-          "home": 57,
-          "away": 43
+          "home": 40,
+          "away": 60
         },
         "total": {
           "home": null,
@@ -152,18 +158,72 @@
       }
     },
     {
-      "fid": 1563083,
-      "date": "2026-08-14",
-      "time": "19:00",
-      "_league": "E1",
-      "team1": "Wolves",
-      "team2": "Blackburn",
-      "team1_cn": "狼队",
-      "team2_cn": "布莱克本",
-      "winner_name": "Wolves",
+      "fid": 1565222,
+      "date": "2026-08-17",
+      "time": "17:30",
+      "date_bj": "2026-08-17",
+      "time_bj": "23:30",
+      "_league": "ROU",
+      "team1": "U. Cluj",
+      "team2": "UTA Arad",
+      "team1_cn": "克卢日大学",
+      "team2_cn": "UTA阿拉德",
+      "winner_name": "Universitatea Cluj",
+      "winner_side": "home",
+      "winner_comment": null,
+      "advice": "Winner : Universitatea Cluj",
+      "pct_home": 45,
+      "pct_draw": 45,
+      "pct_away": 10,
+      "goals_home": "-3.5",
+      "goals_away": "-1.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 75,
+          "away": 25
+        },
+        "att": {
+          "home": 67,
+          "away": 33
+        },
+        "def": {
+          "home": 70,
+          "away": 30
+        },
+        "poisson_distribution": {
+          "home": 100,
+          "away": 0
+        },
+        "h2h": {
+          "home": 50,
+          "away": 50
+        },
+        "goals": {
+          "home": 60,
+          "away": 40
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1569876,
+      "date": "2026-08-17",
+      "time": "18:00",
+      "date_bj": "2026-08-18",
+      "time_bj": "01:00",
+      "_league": "SP2",
+      "team1": "Sp Gijon",
+      "team2": "Sabadell",
+      "team1_cn": "希洪竞技",
+      "team2_cn": "萨瓦德尔",
+      "winner_name": "Sporting Gijon",
       "winner_side": "home",
       "winner_comment": "Win or draw",
-      "advice": "Double chance : Wolves or draw",
+      "advice": "Double chance : Sporting Gijon or draw",
       "pct_home": 50,
       "pct_draw": 50,
       "pct_away": 0,
@@ -188,58 +248,8 @@
           "away": 0
         },
         "h2h": {
-          "home": 75,
-          "away": 25
-        },
-        "goals": {
-          "home": 71,
-          "away": 29
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1575463,
-      "date": "2026-08-14",
-      "time": "19:15",
-      "_league": "P1",
-      "team1": "Sp Lisbon",
-      "team2": "Guimaraes",
-      "team1_cn": "里斯本竞技",
-      "team2_cn": "吉马良斯",
-      "winner_name": "Sporting CP",
-      "winner_side": "home",
-      "winner_comment": null,
-      "advice": "Winner : Sporting CP",
-      "pct_home": 45,
-      "pct_draw": 45,
-      "pct_away": 10,
-      "goals_home": "-2.5",
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 100,
-          "away": 0
-        },
-        "att": {
-          "home": 100,
-          "away": 0
-        },
-        "def": {
-          "home": 33,
-          "away": 67
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 71,
-          "away": 29
+          "home": 80,
+          "away": 20
         },
         "goals": {
           "home": 67,
@@ -252,14 +262,588 @@
       }
     },
     {
-      "fid": 1569881,
-      "date": "2026-08-14",
-      "time": "19:30",
+      "fid": 1548995,
+      "date": "2026-08-17",
+      "time": "18:00",
+      "date_bj": "2026-08-18",
+      "time_bj": "01:00",
+      "_league": "DNK",
+      "team1": "Brondby",
+      "team2": "Sonderjyske",
+      "team1_cn": "布隆德比",
+      "team2_cn": "桑德捷斯基",
+      "winner_name": "Brondby",
+      "winner_side": "home",
+      "winner_comment": "Win or draw",
+      "advice": "Combo Double chance : Brondby or draw and -3.5 goals",
+      "pct_home": 45,
+      "pct_draw": 45,
+      "pct_away": 10,
+      "goals_home": "-2.5",
+      "goals_away": "-1.5",
+      "under_over": "-3.5",
+      "comparison": {
+        "form": {
+          "home": 88,
+          "away": 13
+        },
+        "att": {
+          "home": 67,
+          "away": 33
+        },
+        "def": {
+          "home": 80,
+          "away": 20
+        },
+        "poisson_distribution": {
+          "home": 100,
+          "away": 0
+        },
+        "h2h": {
+          "home": 38,
+          "away": 62
+        },
+        "goals": {
+          "home": 53,
+          "away": 47
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1494246,
+      "date": "2026-08-17",
+      "time": "18:00",
+      "date_bj": "2026-08-18",
+      "time_bj": "01:00",
+      "_league": "SWE",
+      "team1": "Hacken",
+      "team2": "Halmstad",
+      "team1_cn": "赫根",
+      "team2_cn": "哈尔姆斯塔德",
+      "winner_name": "BK Hacken",
+      "winner_side": "home",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : BK Hacken or draw",
+      "pct_home": 45,
+      "pct_draw": 45,
+      "pct_away": 10,
+      "goals_home": "-2.5",
+      "goals_away": "-1.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 83,
+          "away": 17
+        },
+        "att": {
+          "home": 86,
+          "away": 14
+        },
+        "def": {
+          "home": 56,
+          "away": 44
+        },
+        "poisson_distribution": {
+          "home": 73,
+          "away": 27
+        },
+        "h2h": {
+          "home": 71,
+          "away": 29
+        },
+        "goals": {
+          "home": 83,
+          "away": 17
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1563094,
+      "date": "2026-08-17",
+      "time": "19:00",
+      "date_bj": "2026-08-18",
+      "time_bj": "03:00",
+      "_league": "E1",
+      "team1": "Cardiff",
+      "team2": "Wrexham",
+      "team1_cn": "卡迪夫城",
+      "team2_cn": "雷克瑟姆",
+      "winner_name": "Cardiff",
+      "winner_side": "home",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : Cardiff or draw",
+      "pct_home": 50,
+      "pct_draw": 50,
+      "pct_away": 0,
+      "goals_home": null,
+      "goals_away": null,
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 0,
+          "away": 0
+        },
+        "att": {
+          "home": 0,
+          "away": 0
+        },
+        "def": {
+          "home": 0,
+          "away": 0
+        },
+        "poisson_distribution": {
+          "home": 0,
+          "away": 0
+        },
+        "h2h": {
+          "home": 100,
+          "away": 0
+        },
+        "goals": {
+          "home": 67,
+          "away": 33
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1550928,
+      "date": "2026-08-17",
+      "time": "19:00",
+      "date_bj": "2026-08-18",
+      "time_bj": "09:00",
+      "_league": "MEX",
+      "team1": "Necaxa",
+      "team2": "Club Leon",
+      "team1_cn": "内卡萨",
+      "team2_cn": "莱昂",
+      "winner_name": "Necaxa",
+      "winner_side": "home",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : Necaxa or draw",
+      "pct_home": 45,
+      "pct_draw": 45,
+      "pct_away": 10,
+      "goals_home": "-2.5",
+      "goals_away": "-1.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 67,
+          "away": 33
+        },
+        "att": {
+          "home": 63,
+          "away": 38
+        },
+        "def": {
+          "home": 44,
+          "away": 56
+        },
+        "poisson_distribution": {
+          "home": 100,
+          "away": 0
+        },
+        "h2h": {
+          "home": 50,
+          "away": 50
+        },
+        "goals": {
+          "home": 50,
+          "away": 50
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1575459,
+      "date": "2026-08-17",
+      "time": "19:15",
+      "date_bj": "2026-08-18",
+      "time_bj": "03:15",
+      "_league": "P1",
+      "team1": "Casa Pia",
+      "team2": "Benfica",
+      "team1_cn": "卡萨皮亚",
+      "team2_cn": "本菲卡",
+      "winner_name": "Benfica",
+      "winner_side": "away",
+      "winner_comment": null,
+      "advice": "Winner : Benfica",
+      "pct_home": 10,
+      "pct_draw": 45,
+      "pct_away": 45,
+      "goals_home": null,
+      "goals_away": "-2.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 0,
+          "away": 100
+        },
+        "att": {
+          "home": 0,
+          "away": 100
+        },
+        "def": {
+          "home": 67,
+          "away": 33
+        },
+        "poisson_distribution": {
+          "home": 0,
+          "away": 0
+        },
+        "h2h": {
+          "home": 38,
+          "away": 62
+        },
+        "goals": {
+          "home": 43,
+          "away": 57
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1493076,
+      "date": "2026-08-17",
+      "time": "19:15",
+      "date_bj": "2026-08-18",
+      "time_bj": "06:15",
+      "_league": "ARG",
+      "team1": "Velez Sarsfield",
+      "team2": "Defensa y Justicia",
+      "team1_cn": "萨斯菲尔德",
+      "team2_cn": "国防与司法",
+      "winner_name": "Velez Sarsfield",
+      "winner_side": "home",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : Velez Sarsfield or draw",
+      "pct_home": 45,
+      "pct_draw": 45,
+      "pct_away": 10,
+      "goals_home": "-2.5",
+      "goals_away": "-2.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 59,
+          "away": 41
+        },
+        "att": {
+          "home": 50,
+          "away": 50
+        },
+        "def": {
+          "home": 73,
+          "away": 27
+        },
+        "poisson_distribution": {
+          "home": 60,
+          "away": 40
+        },
+        "h2h": {
+          "home": 64,
+          "away": 36
+        },
+        "goals": {
+          "home": 71,
+          "away": 29
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1570337,
+      "date": "2026-08-17",
+      "time": "20:00",
+      "date_bj": "2026-08-18",
+      "time_bj": "03:00",
+      "_league": "SP1",
+      "team1": "La Coruna",
+      "team2": "Elche",
+      "team1_cn": "拉科鲁尼亚",
+      "team2_cn": "埃尔切",
+      "winner_name": "Elche",
+      "winner_side": "away",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : draw or Elche",
+      "pct_home": 0,
+      "pct_draw": 50,
+      "pct_away": 50,
+      "goals_home": null,
+      "goals_away": null,
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 0,
+          "away": 0
+        },
+        "att": {
+          "home": 0,
+          "away": 0
+        },
+        "def": {
+          "home": 0,
+          "away": 0
+        },
+        "poisson_distribution": {
+          "home": 0,
+          "away": 0
+        },
+        "h2h": {
+          "home": 38,
+          "away": 62
+        },
+        "goals": {
+          "home": 22,
+          "away": 78
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1492335,
+      "date": "2026-08-17",
+      "time": "20:00",
+      "date_bj": "2026-08-18",
+      "time_bj": "07:00",
+      "_league": "BRA",
+      "team1": "Internacional",
+      "team2": "Remo",
+      "team1_cn": "巴西国际",
+      "team2_cn": "雷莫",
+      "winner_name": "Internacional",
+      "winner_side": "home",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : Internacional or draw",
+      "pct_home": 45,
+      "pct_draw": 45,
+      "pct_away": 10,
+      "goals_home": "-2.5",
+      "goals_away": "-2.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 22,
+          "away": 78
+        },
+        "att": {
+          "home": 33,
+          "away": 67
+        },
+        "def": {
+          "home": 47,
+          "away": 53
+        },
+        "poisson_distribution": {
+          "home": 63,
+          "away": 37
+        },
+        "h2h": {
+          "home": 80,
+          "away": 20
+        },
+        "goals": {
+          "home": 60,
+          "away": 40
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1569871,
+      "date": "2026-08-17",
+      "time": "20:30",
+      "date_bj": "2026-08-18",
+      "time_bj": "03:30",
       "_league": "SP2",
-      "team1": "Sociedad B",
-      "team2": "Castellon",
-      "team1_cn": "皇家社会B队",
-      "team2_cn": "卡斯特利翁",
+      "team1": "Almeria",
+      "team2": "Eldense",
+      "team1_cn": "阿尔梅里亚",
+      "team2_cn": "埃登斯",
+      "winner_name": null,
+      "winner_side": null,
+      "winner_comment": null,
+      "advice": "No predictions available",
+      "pct_home": 33,
+      "pct_draw": 33,
+      "pct_away": 33,
+      "goals_home": null,
+      "goals_away": null,
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 0,
+          "away": 0
+        },
+        "att": {
+          "home": 0,
+          "away": 0
+        },
+        "def": {
+          "home": 0,
+          "away": 0
+        },
+        "poisson_distribution": {
+          "home": 0,
+          "away": 0
+        },
+        "h2h": {
+          "home": 33,
+          "away": 67
+        },
+        "goals": {
+          "home": 67,
+          "away": 33
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1565219,
+      "date": "2026-08-17",
+      "time": "20:30",
+      "date_bj": "2026-08-18",
+      "time_bj": "02:30",
+      "_league": "ROU",
+      "team1": "FCSB",
+      "team2": "FC Botosani",
+      "team1_cn": "布加勒斯特星",
+      "team2_cn": "博托沙尼",
+      "winner_name": "FCSB",
+      "winner_side": "home",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : FCSB or draw",
+      "pct_home": 45,
+      "pct_draw": 45,
+      "pct_away": 10,
+      "goals_home": "-2.5",
+      "goals_away": "-2.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 73,
+          "away": 27
+        },
+        "att": {
+          "home": 60,
+          "away": 40
+        },
+        "def": {
+          "home": 71,
+          "away": 29
+        },
+        "poisson_distribution": {
+          "home": 51,
+          "away": 49
+        },
+        "h2h": {
+          "home": 60,
+          "away": 40
+        },
+        "goals": {
+          "home": 50,
+          "away": 50
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1550929,
+      "date": "2026-08-17",
+      "time": "21:06",
+      "date_bj": "2026-08-18",
+      "time_bj": "11:06",
+      "_league": "MEX",
+      "team1": "Pachuca",
+      "team2": "Puebla",
+      "team1_cn": "帕丘卡",
+      "team2_cn": "普埃布拉",
+      "winner_name": "CF Pachuca",
+      "winner_side": "home",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : CF Pachuca or draw",
+      "pct_home": 45,
+      "pct_draw": 45,
+      "pct_away": 10,
+      "goals_home": "-1.5",
+      "goals_away": "-2.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 43,
+          "away": 57
+        },
+        "att": {
+          "home": 57,
+          "away": 43
+        },
+        "def": {
+          "home": 50,
+          "away": 50
+        },
+        "poisson_distribution": {
+          "home": 32,
+          "away": 68
+        },
+        "h2h": {
+          "home": 93,
+          "away": 7
+        },
+        "goals": {
+          "home": 63,
+          "away": 37
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1584375,
+      "date": "2026-08-17",
+      "time": "21:30",
+      "date_bj": "2026-08-18",
+      "time_bj": "02:30",
+      "_league": "T1",
+      "team1": "Samsunspor",
+      "team2": "Goztep",
+      "team1_cn": "萨姆松体育",
+      "team2_cn": "哥兹塔比",
       "winner_name": null,
       "winner_side": null,
       "winner_comment": null,
@@ -302,473 +886,25 @@
       }
     },
     {
-      "fid": 1552432,
-      "date": "2026-08-14",
-      "time": "19:45",
-      "_league": "F2",
-      "team1": "Annecy",
-      "team2": "Rodez",
-      "team1_cn": "阿讷西",
-      "team2_cn": "罗德兹",
-      "winner_name": "Rodez",
-      "winner_side": "away",
-      "winner_comment": null,
-      "advice": "Winner : Rodez",
-      "pct_home": 10,
-      "pct_draw": 45,
-      "pct_away": 45,
-      "goals_home": "-1.5",
-      "goals_away": "-3.5",
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 50,
-          "away": 50
-        },
-        "att": {
-          "home": 25,
-          "away": 75
-        },
-        "def": {
-          "home": 100,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 29,
-          "away": 71
-        },
-        "goals": {
-          "home": 39,
-          "away": 61
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1558590,
-      "date": "2026-08-14",
-      "time": "19:45",
-      "_league": "B1",
-      "team1": "Cercle Brugge",
-      "team2": "St Truiden",
-      "team1_cn": "色格拉布鲁日",
-      "team2_cn": "圣图尔登",
-      "winner_name": "St. Truiden",
-      "winner_side": "away",
+      "fid": 1493068,
+      "date": "2026-08-17",
+      "time": "21:30",
+      "date_bj": "2026-08-18",
+      "time_bj": "08:30",
+      "_league": "ARG",
+      "team1": "Gimnasia Mendoza",
+      "team2": "Talleres Cordoba",
+      "team1_cn": "门多萨体操",
+      "team2_cn": "塔列雷斯",
+      "winner_name": "Gimnasia M.",
+      "winner_side": "home",
       "winner_comment": "Win or draw",
-      "advice": "Double chance : draw or St. Truiden",
-      "pct_home": 10,
+      "advice": "Double chance : Gimnasia M. or draw",
+      "pct_home": 45,
       "pct_draw": 45,
-      "pct_away": 45,
-      "goals_home": "-2.5",
+      "pct_away": 10,
+      "goals_home": "-1.5",
       "goals_away": "-1.5",
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 50,
-          "away": 50
-        },
-        "att": {
-          "home": 67,
-          "away": 33
-        },
-        "def": {
-          "home": 33,
-          "away": 67
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 38,
-          "away": 62
-        },
-        "goals": {
-          "home": 47,
-          "away": 53
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1552433,
-      "date": "2026-08-14",
-      "time": "19:45",
-      "_league": "F2",
-      "team1": "Dijon",
-      "team2": "Pau FC",
-      "team1_cn": "第戎",
-      "team2_cn": "波城",
-      "winner_name": "Dijon",
-      "winner_side": "home",
-      "winner_comment": "Win or draw",
-      "advice": "Combo Double chance : Dijon or draw and -3.5 goals",
-      "pct_home": 35,
-      "pct_draw": 35,
-      "pct_away": 30,
-      "goals_home": "-1.5",
-      "goals_away": null,
-      "under_over": "-3.5",
-      "comparison": {
-        "form": {
-          "home": 100,
-          "away": 0
-        },
-        "att": {
-          "home": 100,
-          "away": 0
-        },
-        "def": {
-          "home": 50,
-          "away": 50
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 9,
-          "away": 91
-        },
-        "goals": {
-          "home": 0,
-          "away": 100
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1552434,
-      "date": "2026-08-14",
-      "time": "19:45",
-      "_league": "F2",
-      "team1": "Grenoble",
-      "team2": "Metz",
-      "team1_cn": "格勒诺布尔",
-      "team2_cn": "梅斯",
-      "winner_name": "Metz",
-      "winner_side": "away",
-      "winner_comment": "Win or draw",
-      "advice": "Combo Double chance : draw or Metz and +1.5 goals",
-      "pct_home": 10,
-      "pct_draw": 45,
-      "pct_away": 45,
-      "goals_home": "-2.5",
-      "goals_away": "-2.5",
-      "under_over": "+1.5",
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 100
-        },
-        "att": {
-          "home": 50,
-          "away": 50
-        },
-        "def": {
-          "home": 20,
-          "away": 80
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 29,
-          "away": 71
-        },
-        "goals": {
-          "home": 33,
-          "away": 67
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1552435,
-      "date": "2026-08-14",
-      "time": "19:45",
-      "_league": "F2",
-      "team1": "Guingamp",
-      "team2": "Boulogne",
-      "team1_cn": "甘冈",
-      "team2_cn": "布洛涅",
-      "winner_name": "Boulogne",
-      "winner_side": "away",
-      "winner_comment": "Win or draw",
-      "advice": "Combo Double chance : draw or Boulogne and -3.5 goals",
-      "pct_home": 10,
-      "pct_draw": 45,
-      "pct_away": 45,
-      "goals_home": "-1.5",
-      "goals_away": null,
-      "under_over": "-3.5",
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 100
-        },
-        "att": {
-          "home": 100,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 100
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 50,
-          "away": 50
-        },
-        "goals": {
-          "home": 55,
-          "away": 45
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1552436,
-      "date": "2026-08-14",
-      "time": "19:45",
-      "_league": "F2",
-      "team1": "Laval",
-      "team2": "Nantes",
-      "team1_cn": "拉瓦勒",
-      "team2_cn": "南特",
-      "winner_name": "Laval",
-      "winner_side": "home",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : Laval or draw",
-      "pct_home": 35,
-      "pct_draw": 35,
-      "pct_away": 30,
-      "goals_home": "-1.5",
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 100,
-          "away": 0
-        },
-        "def": {
-          "home": 25,
-          "away": 75
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 50,
-          "away": 50
-        },
-        "goals": {
-          "home": 55,
-          "away": 45
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1552437,
-      "date": "2026-08-14",
-      "time": "19:45",
-      "_league": "F2",
-      "team1": "Nancy",
-      "team2": "Montpellier",
-      "team1_cn": "南锡",
-      "team2_cn": "蒙彼利埃",
-      "winner_name": "Montpellier",
-      "winner_side": "away",
-      "winner_comment": "Win or draw",
-      "advice": "Combo Double chance : draw or Montpellier and -2.5 goals",
-      "pct_home": 10,
-      "pct_draw": 45,
-      "pct_away": 45,
-      "goals_home": null,
-      "goals_away": "-1.5",
-      "under_over": "-2.5",
-      "comparison": {
-        "form": {
-          "home": 50,
-          "away": 50
-        },
-        "att": {
-          "home": 0,
-          "away": 100
-        },
-        "def": {
-          "home": 100,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 7,
-          "away": 93
-        },
-        "goals": {
-          "home": 19,
-          "away": 81
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1552438,
-      "date": "2026-08-14",
-      "time": "19:45",
-      "_league": "F2",
-      "team1": "Red Star",
-      "team2": "Sochaux",
-      "team1_cn": "红星",
-      "team2_cn": "索肖",
-      "winner_name": "RED Star FC 93",
-      "winner_side": "home",
-      "winner_comment": "Win or draw",
-      "advice": "Combo Double chance : RED Star FC 93 or draw and -3.5 goals",
-      "pct_home": 50,
-      "pct_draw": 50,
-      "pct_away": 0,
-      "goals_home": "-1.5",
-      "goals_away": null,
-      "under_over": "-3.5",
-      "comparison": {
-        "form": {
-          "home": 100,
-          "away": 0
-        },
-        "att": {
-          "home": 100,
-          "away": 0
-        },
-        "def": {
-          "home": 100,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 93,
-          "away": 7
-        },
-        "goals": {
-          "home": 73,
-          "away": 27
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1552439,
-      "date": "2026-08-14",
-      "time": "19:45",
-      "_league": "F2",
-      "team1": "Reims",
-      "team2": "Dunkerque",
-      "team1_cn": "兰斯",
-      "team2_cn": "敦刻尔克",
-      "winner_name": "Dunkerque",
-      "winner_side": "away",
-      "winner_comment": null,
-      "advice": "Winner : Dunkerque",
-      "pct_home": 10,
-      "pct_draw": 45,
-      "pct_away": 45,
-      "goals_home": null,
-      "goals_away": "-4.5",
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 25,
-          "away": 75
-        },
-        "att": {
-          "home": 0,
-          "away": 100
-        },
-        "def": {
-          "home": 100,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 29,
-          "away": 71
-        },
-        "goals": {
-          "home": 44,
-          "away": 56
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1552440,
-      "date": "2026-08-14",
-      "time": "19:45",
-      "_league": "F2",
-      "team1": "St Etienne",
-      "team2": "Clermont",
-      "team1_cn": "圣埃蒂安",
-      "team2_cn": "克莱蒙",
-      "winner_name": "Saint Etienne",
-      "winner_side": "home",
-      "winner_comment": null,
-      "advice": "Winner : Saint Etienne",
-      "pct_home": 50,
-      "pct_draw": 50,
-      "pct_away": 0,
-      "goals_home": "-3.5",
-      "goals_away": null,
       "under_over": null,
       "comparison": {
         "form": {
@@ -776,916 +912,16 @@
           "away": 25
         },
         "att": {
-          "home": 100,
-          "away": 0
+          "home": 50,
+          "away": 50
         },
         "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 93,
-          "away": 7
-        },
-        "goals": {
           "home": 73,
           "away": 27
         },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1584370,
-      "date": "2026-08-14",
-      "time": "21:30",
-      "_league": "T1",
-      "team1": "Galatasaray",
-      "team2": "Corum",
-      "team1_cn": "加拉塔萨雷",
-      "team2_cn": "乔鲁姆",
-      "winner_name": null,
-      "winner_side": null,
-      "winner_comment": null,
-      "advice": "No predictions available",
-      "pct_home": 33,
-      "pct_draw": 33,
-      "pct_away": 33,
-      "goals_home": null,
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
         "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 0,
-          "away": 0
-        },
-        "goals": {
-          "home": 0,
-          "away": 0
-        },
-        "total": {
-          "home": 0,
-          "away": 0
-        }
-      }
-    },
-    {
-      "fid": 1563084,
-      "date": "2026-08-15",
-      "time": "11:30",
-      "_league": "E1",
-      "team1": "Bolton",
-      "team2": "Preston",
-      "team1_cn": "博尔顿",
-      "team2_cn": "普雷斯顿",
-      "winner_name": null,
-      "winner_side": null,
-      "winner_comment": null,
-      "advice": "No predictions available",
-      "pct_home": 33,
-      "pct_draw": 33,
-      "pct_away": 33,
-      "goals_home": null,
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 50,
-          "away": 50
-        },
-        "goals": {
-          "home": 50,
-          "away": 50
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1563683,
-      "date": "2026-08-15",
-      "time": "11:30",
-      "_league": "E3",
-      "team1": "Newport County",
-      "team2": "Rochdale",
-      "team1_cn": "纽波特郡",
-      "team2_cn": "罗奇代尔",
-      "winner_name": "Rochdale",
-      "winner_side": "away",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : draw or Rochdale",
-      "pct_home": 0,
-      "pct_draw": 50,
-      "pct_away": 50,
-      "goals_home": null,
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 29,
-          "away": 71
-        },
-        "goals": {
-          "home": 27,
-          "away": 73
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1564235,
-      "date": "2026-08-15",
-      "time": "11:30",
-      "_league": "E2",
-      "team1": "Notts County",
-      "team2": "Leicester",
-      "team1_cn": "诺茨郡",
-      "team2_cn": "莱斯特城",
-      "winner_name": "Notts County",
-      "winner_side": "home",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : Notts County or draw",
-      "pct_home": 50,
-      "pct_draw": 50,
-      "pct_away": 0,
-      "goals_home": null,
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 100,
-          "away": 0
-        },
-        "goals": {
-          "home": 67,
-          "away": 33
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1563684,
-      "date": "2026-08-15",
-      "time": "11:30",
-      "_league": "E3",
-      "team1": "Oldham",
-      "team2": "Port Vale",
-      "team1_cn": "奥尔德姆",
-      "team2_cn": "维尔港",
-      "winner_name": "Port Vale",
-      "winner_side": "away",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : draw or Port Vale",
-      "pct_home": 10,
-      "pct_draw": 45,
-      "pct_away": 45,
-      "goals_home": null,
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 38,
-          "away": 62
-        },
-        "goals": {
           "home": 46,
           "away": 54
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1564236,
-      "date": "2026-08-15",
-      "time": "11:30",
-      "_league": "E2",
-      "team1": "Oxford",
-      "team2": "Milton Keynes Dons",
-      "team1_cn": "牛津联",
-      "team2_cn": "米尔顿凯恩斯",
-      "winner_name": null,
-      "winner_side": null,
-      "winner_comment": null,
-      "advice": "No predictions available",
-      "pct_home": 33,
-      "pct_draw": 33,
-      "pct_away": 33,
-      "goals_home": null,
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 50,
-          "away": 50
-        },
-        "goals": {
-          "home": 50,
-          "away": 50
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1564237,
-      "date": "2026-08-15",
-      "time": "11:30",
-      "_league": "E2",
-      "team1": "Reading",
-      "team2": "Luton",
-      "team1_cn": "雷丁",
-      "team2_cn": "卢顿",
-      "winner_name": "Reading",
-      "winner_side": "home",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : Reading or draw",
-      "pct_home": 45,
-      "pct_draw": 45,
-      "pct_away": 10,
-      "goals_home": null,
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 62,
-          "away": 38
-        },
-        "goals": {
-          "home": 54,
-          "away": 46
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1576145,
-      "date": "2026-08-15",
-      "time": "12:00",
-      "_league": "D2",
-      "team1": "Greuther Furth",
-      "team2": "Nurnberg",
-      "team1_cn": "菲尔特",
-      "team2_cn": "纽伦堡",
-      "winner_name": "1. FC Nürnberg",
-      "winner_side": "away",
-      "winner_comment": null,
-      "advice": "Winner : 1. FC Nürnberg",
-      "pct_home": 0,
-      "pct_draw": 50,
-      "pct_away": 50,
-      "goals_home": "-1.5",
-      "goals_away": "-3.5",
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 25,
-          "away": 75
-        },
-        "att": {
-          "home": 25,
-          "away": 75
-        },
-        "def": {
-          "home": 0,
-          "away": 100
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 38,
-          "away": 62
-        },
-        "goals": {
-          "home": 31,
-          "away": 69
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1576147,
-      "date": "2026-08-15",
-      "time": "12:00",
-      "_league": "D2",
-      "team1": "Hertha",
-      "team2": "Heidenheim",
-      "team1_cn": "柏林赫塔",
-      "team2_cn": "海登海姆",
-      "winner_name": "Hertha BSC",
-      "winner_side": "home",
-      "winner_comment": "Win or draw",
-      "advice": "Combo Double chance : Hertha BSC or draw and +1.5 goals",
-      "pct_home": 45,
-      "pct_draw": 45,
-      "pct_away": 10,
-      "goals_home": "-1.5",
-      "goals_away": "-4.5",
-      "under_over": "+1.5",
-      "comparison": {
-        "form": {
-          "home": 50,
-          "away": 50
-        },
-        "att": {
-          "home": 20,
-          "away": 80
-        },
-        "def": {
-          "home": 100,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 100,
-          "away": 0
-        },
-        "goals": {
-          "home": 63,
-          "away": 38
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1576151,
-      "date": "2026-08-15",
-      "time": "12:00",
-      "_league": "D2",
-      "team1": "Osnabruck",
-      "team2": "Magdeburg",
-      "team1_cn": "奥斯纳布吕克",
-      "team2_cn": "马格德堡",
-      "winner_name": "VfL Osnabrück",
-      "winner_side": "home",
-      "winner_comment": null,
-      "advice": "Combo Winner : VfL Osnabrück and +3.5 goals",
-      "pct_home": 35,
-      "pct_draw": 35,
-      "pct_away": 30,
-      "goals_home": "-3.5",
-      "goals_away": "-1.5",
-      "under_over": "+3.5",
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 75,
-          "away": 25
-        },
-        "def": {
-          "home": 60,
-          "away": 40
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 7,
-          "away": 93
-        },
-        "goals": {
-          "home": 30,
-          "away": 70
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1563685,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "E3",
-      "team1": "Accrington",
-      "team2": "Colchester",
-      "team1_cn": "阿克灵顿",
-      "team2_cn": "科尔切斯特",
-      "winner_name": "Accrington ST",
-      "winner_side": "home",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : Accrington ST or draw",
-      "pct_home": 50,
-      "pct_draw": 50,
-      "pct_away": 0,
-      "goals_home": null,
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 62,
-          "away": 38
-        },
-        "goals": {
-          "home": 60,
-          "away": 40
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1585149,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "EC",
-      "team1": "Aldershot",
-      "team2": "Hartlepool",
-      "team1_cn": "奥尔德肖特",
-      "team2_cn": "哈特尔浦",
-      "winner_name": "Aldershot Town",
-      "winner_side": "home",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : Aldershot Town or draw",
-      "pct_home": 35,
-      "pct_draw": 35,
-      "pct_away": 30,
-      "goals_home": "-1.5",
-      "goals_away": "-2.5",
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 50,
-          "away": 50
-        },
-        "att": {
-          "home": 33,
-          "away": 67
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 60,
-          "away": 40
-        },
-        "goals": {
-          "home": 54,
-          "away": 46
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1557016,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "SC2",
-      "team1": "Alloa",
-      "team2": "Montrose",
-      "team1_cn": "阿洛厄",
-      "team2_cn": "蒙特罗斯",
-      "winner_name": "Alloa Athletic",
-      "winner_side": "home",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : Alloa Athletic or draw",
-      "pct_home": 45,
-      "pct_draw": 45,
-      "pct_away": 10,
-      "goals_home": null,
-      "goals_away": "-1.5",
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 100,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 100
-        },
-        "def": {
-          "home": 88,
-          "away": 13
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 60,
-          "away": 40
-        },
-        "goals": {
-          "home": 64,
-          "away": 36
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1557759,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "SC3",
-      "team1": "Annan Athletic",
-      "team2": "Clyde",
-      "team1_cn": "安南竞技",
-      "team2_cn": "克莱德",
-      "winner_name": "Clyde",
-      "winner_side": "away",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : draw or Clyde",
-      "pct_home": 10,
-      "pct_draw": 45,
-      "pct_away": 45,
-      "goals_home": "-2.5",
-      "goals_away": "-2.5",
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 50,
-          "away": 50
-        },
-        "att": {
-          "home": 50,
-          "away": 50
-        },
-        "def": {
-          "home": 33,
-          "away": 67
-        },
-        "poisson_distribution": {
-          "home": 100,
-          "away": 0
-        },
-        "h2h": {
-          "home": 29,
-          "away": 71
-        },
-        "goals": {
-          "home": 35,
-          "away": 65
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1563686,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "E3",
-      "team1": "Barnet",
-      "team2": "Salford",
-      "team1_cn": "巴尼特",
-      "team2_cn": "索尔福德城",
-      "winner_name": "Salford City",
-      "winner_side": "away",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : draw or Salford City",
-      "pct_home": 0,
-      "pct_draw": 50,
-      "pct_away": 50,
-      "goals_home": null,
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 9,
-          "away": 91
-        },
-        "goals": {
-          "home": 20,
-          "away": 80
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1564238,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "E2",
-      "team1": "Barnsley",
-      "team2": "Bromley",
-      "team1_cn": "巴恩斯利",
-      "team2_cn": "布罗姆利",
-      "winner_name": null,
-      "winner_side": null,
-      "winner_comment": null,
-      "advice": "No predictions available",
-      "pct_home": 33,
-      "pct_draw": 33,
-      "pct_away": 33,
-      "goals_home": null,
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 0,
-          "away": 0
-        },
-        "goals": {
-          "home": 0,
-          "away": 0
-        },
-        "total": {
-          "home": 0,
-          "away": 0
-        }
-      }
-    },
-    {
-      "fid": 1585150,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "EC",
-      "team1": "Barrow",
-      "team2": "Hornchurch",
-      "team1_cn": "巴罗",
-      "team2_cn": "霍恩彻奇",
-      "winner_name": "AFC Hornchurch",
-      "winner_side": "away",
-      "winner_comment": null,
-      "advice": "Winner : AFC Hornchurch",
-      "pct_home": 0,
-      "pct_draw": 50,
-      "pct_away": 50,
-      "goals_home": null,
-      "goals_away": "-3.5",
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 100
-        },
-        "att": {
-          "home": 0,
-          "away": 100
-        },
-        "def": {
-          "home": 0,
-          "away": 100
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 0,
-          "away": 0
-        },
-        "goals": {
-          "home": 0,
-          "away": 0
-        },
-        "total": {
-          "home": 0,
-          "away": 0
-        }
-      }
-    },
-    {
-      "fid": 1564239,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "E2",
-      "team1": "Blackpool",
-      "team2": "Wycombe",
-      "team1_cn": "布莱克浦",
-      "team2_cn": "韦康比",
-      "winner_name": "Blackpool",
-      "winner_side": "home",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : Blackpool or draw",
-      "pct_home": 45,
-      "pct_draw": 45,
-      "pct_away": 10,
-      "goals_home": null,
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
         },
         "h2h": {
           "home": 64,
@@ -1702,18 +938,592 @@
       }
     },
     {
-      "fid": 1564240,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "E2",
-      "team1": "Bradford",
-      "team2": "Peterboro",
-      "team1_cn": "布拉德福德",
-      "team2_cn": "彼得堡",
-      "winner_name": "Bradford",
+      "fid": 1523198,
+      "date": "2026-08-18",
+      "time": "19:35",
+      "date_bj": "2026-08-18",
+      "time_bj": "19:35",
+      "_league": "CHN",
+      "team1": "Shanghai Shenhua",
+      "team2": "Beijing Guoan",
+      "team1_cn": "上海申花",
+      "team2_cn": "北京国安",
+      "winner_name": "Beijing Guoan",
+      "winner_side": "away",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : draw or Beijing Guoan",
+      "pct_home": 10,
+      "pct_draw": 45,
+      "pct_away": 45,
+      "goals_home": "-2.5",
+      "goals_away": "-3.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 35,
+          "away": 65
+        },
+        "att": {
+          "home": 32,
+          "away": 68
+        },
+        "def": {
+          "home": 43,
+          "away": 57
+        },
+        "poisson_distribution": {
+          "home": 44,
+          "away": 56
+        },
+        "h2h": {
+          "home": 62,
+          "away": 38
+        },
+        "goals": {
+          "home": 56,
+          "away": 44
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1490393,
+      "date": "2026-08-19",
+      "time": "18:30",
+      "date_bj": "2026-08-20",
+      "time_bj": "07:30",
+      "_league": "USA",
+      "team1": "Columbus Crew",
+      "team2": "CF Montreal",
+      "team1_cn": "哥伦布机员",
+      "team2_cn": "CF蒙特利尔",
+      "winner_name": "Columbus Crew",
       "winner_side": "home",
       "winner_comment": "Win or draw",
-      "advice": "Double chance : Bradford or draw",
+      "advice": "Double chance : Columbus Crew or draw",
+      "pct_home": 45,
+      "pct_draw": 45,
+      "pct_away": 10,
+      "goals_home": "-2.5",
+      "goals_away": "-1.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 70,
+          "away": 30
+        },
+        "att": {
+          "home": 73,
+          "away": 27
+        },
+        "def": {
+          "home": 38,
+          "away": 62
+        },
+        "poisson_distribution": {
+          "home": 66,
+          "away": 34
+        },
+        "h2h": {
+          "home": 85,
+          "away": 15
+        },
+        "goals": {
+          "home": 67,
+          "away": 33
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1490397,
+      "date": "2026-08-19",
+      "time": "18:30",
+      "date_bj": "2026-08-20",
+      "time_bj": "07:30",
+      "_league": "USA",
+      "team1": "DC United",
+      "team2": "New England Revolution",
+      "team1_cn": "华盛顿联",
+      "team2_cn": "新英格兰革命",
+      "winner_name": "DC United",
+      "winner_side": "home",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : DC United or draw",
+      "pct_home": 45,
+      "pct_draw": 45,
+      "pct_away": 10,
+      "goals_home": "-2.5",
+      "goals_away": "-2.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 58,
+          "away": 42
+        },
+        "att": {
+          "home": 59,
+          "away": 41
+        },
+        "def": {
+          "home": 44,
+          "away": 56
+        },
+        "poisson_distribution": {
+          "home": 51,
+          "away": 49
+        },
+        "h2h": {
+          "home": 50,
+          "away": 50
+        },
+        "goals": {
+          "home": 50,
+          "away": 50
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1490392,
+      "date": "2026-08-19",
+      "time": "18:30",
+      "date_bj": "2026-08-20",
+      "time_bj": "07:30",
+      "_league": "USA",
+      "team1": "FC Cincinnati",
+      "team2": "New York City",
+      "team1_cn": "辛辛那提FC",
+      "team2_cn": "纽约城",
+      "winner_name": "New York City FC",
+      "winner_side": "away",
+      "winner_comment": "Win or draw",
+      "advice": "Combo Double chance : draw or New York City FC and +1.5 goals",
+      "pct_home": 10,
+      "pct_draw": 45,
+      "pct_away": 45,
+      "goals_home": "-3.5",
+      "goals_away": "-2.5",
+      "under_over": "+1.5",
+      "comparison": {
+        "form": {
+          "home": 56,
+          "away": 44
+        },
+        "att": {
+          "home": 67,
+          "away": 33
+        },
+        "def": {
+          "home": 38,
+          "away": 63
+        },
+        "poisson_distribution": {
+          "home": 54,
+          "away": 46
+        },
+        "h2h": {
+          "home": 15,
+          "away": 85
+        },
+        "goals": {
+          "home": 36,
+          "away": 64
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1490394,
+      "date": "2026-08-19",
+      "time": "18:30",
+      "date_bj": "2026-08-20",
+      "time_bj": "07:30",
+      "_league": "USA",
+      "team1": "New York Red Bulls",
+      "team2": "Nashville SC",
+      "team1_cn": "纽约红牛",
+      "team2_cn": "纳什维尔",
+      "winner_name": "Nashville SC",
+      "winner_side": "away",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : draw or Nashville SC",
+      "pct_home": 10,
+      "pct_draw": 45,
+      "pct_away": 45,
+      "goals_home": "-1.5",
+      "goals_away": "-2.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 38,
+          "away": 63
+        },
+        "att": {
+          "home": 47,
+          "away": 53
+        },
+        "def": {
+          "home": 29,
+          "away": 71
+        },
+        "poisson_distribution": {
+          "home": 24,
+          "away": 76
+        },
+        "h2h": {
+          "home": 62,
+          "away": 38
+        },
+        "goals": {
+          "home": 67,
+          "away": 33
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1490395,
+      "date": "2026-08-19",
+      "time": "18:30",
+      "date_bj": "2026-08-20",
+      "time_bj": "07:30",
+      "_league": "USA",
+      "team1": "Orlando City",
+      "team2": "Chicago Fire",
+      "team1_cn": "奥兰多城",
+      "team2_cn": "芝加哥火焰",
+      "winner_name": "Chicago Fire",
+      "winner_side": "away",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : draw or Chicago Fire",
+      "pct_home": 10,
+      "pct_draw": 45,
+      "pct_away": 45,
+      "goals_home": "-2.5",
+      "goals_away": "-2.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 44,
+          "away": 56
+        },
+        "att": {
+          "home": 53,
+          "away": 47
+        },
+        "def": {
+          "home": 44,
+          "away": 56
+        },
+        "poisson_distribution": {
+          "home": 43,
+          "away": 57
+        },
+        "h2h": {
+          "home": 38,
+          "away": 62
+        },
+        "goals": {
+          "home": 44,
+          "away": 56
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1490391,
+      "date": "2026-08-19",
+      "time": "18:30",
+      "date_bj": "2026-08-20",
+      "time_bj": "07:30",
+      "_league": "USA",
+      "team1": "Philadelphia Union",
+      "team2": "Inter Miami",
+      "team1_cn": "费城联合",
+      "team2_cn": "迈阿密国际",
+      "winner_name": "Inter Miami",
+      "winner_side": "away",
+      "winner_comment": "Win or draw",
+      "advice": "Combo Double chance : draw or Inter Miami and +1.5 goals",
+      "pct_home": 10,
+      "pct_draw": 45,
+      "pct_away": 45,
+      "goals_home": "-2.5",
+      "goals_away": "-3.5",
+      "under_over": "+1.5",
+      "comparison": {
+        "form": {
+          "home": 50,
+          "away": 50
+        },
+        "att": {
+          "home": 48,
+          "away": 52
+        },
+        "def": {
+          "home": 55,
+          "away": 45
+        },
+        "poisson_distribution": {
+          "home": 38,
+          "away": 62
+        },
+        "h2h": {
+          "home": 7,
+          "away": 93
+        },
+        "goals": {
+          "home": 38,
+          "away": 62
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1490396,
+      "date": "2026-08-19",
+      "time": "18:30",
+      "date_bj": "2026-08-20",
+      "time_bj": "07:30",
+      "_league": "USA",
+      "team1": "Toronto FC",
+      "team2": "Charlotte",
+      "team1_cn": "多伦多FC",
+      "team2_cn": "夏洛特FC",
+      "winner_name": "Charlotte",
+      "winner_side": "away",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : draw or Charlotte",
+      "pct_home": 10,
+      "pct_draw": 45,
+      "pct_away": 45,
+      "goals_home": "-2.5",
+      "goals_away": "-2.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 38,
+          "away": 63
+        },
+        "att": {
+          "home": 31,
+          "away": 69
+        },
+        "def": {
+          "home": 56,
+          "away": 44
+        },
+        "poisson_distribution": {
+          "home": 56,
+          "away": 44
+        },
+        "h2h": {
+          "home": 20,
+          "away": 80
+        },
+        "goals": {
+          "home": 29,
+          "away": 71
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1490398,
+      "date": "2026-08-19",
+      "time": "19:00",
+      "date_bj": "2026-08-20",
+      "time_bj": "08:00",
+      "_league": "USA",
+      "team1": "Sporting Kansas City",
+      "team2": "St. Louis City",
+      "team1_cn": "堪萨斯城体育",
+      "team2_cn": "圣路易斯城",
+      "winner_name": "St. Louis City",
+      "winner_side": "away",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : draw or St. Louis City",
+      "pct_home": 10,
+      "pct_draw": 45,
+      "pct_away": 45,
+      "goals_home": "-1.5",
+      "goals_away": "-2.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 19,
+          "away": 81
+        },
+        "att": {
+          "home": 27,
+          "away": 73
+        },
+        "def": {
+          "home": 29,
+          "away": 71
+        },
+        "poisson_distribution": {
+          "home": 39,
+          "away": 61
+        },
+        "h2h": {
+          "home": 38,
+          "away": 62
+        },
+        "goals": {
+          "home": 47,
+          "away": 53
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1490399,
+      "date": "2026-08-19",
+      "time": "19:30",
+      "date_bj": "2026-08-20",
+      "time_bj": "08:30",
+      "_league": "USA",
+      "team1": "Minnesota United",
+      "team2": "Atlanta Utd",
+      "team1_cn": "明尼苏达联",
+      "team2_cn": "亚特兰大联",
+      "winner_name": "Atlanta United FC",
+      "winner_side": "away",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : draw or Atlanta United FC",
+      "pct_home": 10,
+      "pct_draw": 45,
+      "pct_away": 45,
+      "goals_home": "-1.5",
+      "goals_away": "-1.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 50,
+          "away": 50
+        },
+        "att": {
+          "home": 36,
+          "away": 64
+        },
+        "def": {
+          "home": 69,
+          "away": 31
+        },
+        "poisson_distribution": {
+          "home": 66,
+          "away": 34
+        },
+        "h2h": {
+          "home": 40,
+          "away": 60
+        },
+        "goals": {
+          "home": 40,
+          "away": 60
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1523202,
+      "date": "2026-08-19",
+      "time": "19:35",
+      "date_bj": "2026-08-19",
+      "time_bj": "19:35",
+      "_league": "CHN",
+      "team1": "Shanghai SIPG",
+      "team2": "Dalian Yingbo",
+      "team1_cn": "上海上港",
+      "team2_cn": "大连英博",
+      "winner_name": "SHANGHAI SIPG",
+      "winner_side": "home",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : SHANGHAI SIPG or draw",
+      "pct_home": 45,
+      "pct_draw": 45,
+      "pct_away": 10,
+      "goals_home": "-3.5",
+      "goals_away": "-2.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 59,
+          "away": 41
+        },
+        "att": {
+          "home": 56,
+          "away": 44
+        },
+        "def": {
+          "home": 53,
+          "away": 47
+        },
+        "poisson_distribution": {
+          "home": 69,
+          "away": 31
+        },
+        "h2h": {
+          "home": 67,
+          "away": 33
+        },
+        "goals": {
+          "home": 80,
+          "away": 20
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1570334,
+      "date": "2026-08-19",
+      "time": "20:00",
+      "date_bj": "2026-08-20",
+      "time_bj": "03:00",
+      "_league": "SP1",
+      "team1": "Ath Madrid",
+      "team2": "Malaga",
+      "team1_cn": "马德里竞技",
+      "team2_cn": "马拉加",
+      "winner_name": "Atletico Madrid",
+      "winner_side": "home",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : Atletico Madrid or draw",
       "pct_home": 50,
       "pct_draw": 50,
       "pct_away": 0,
@@ -1738,12 +1548,12 @@
           "away": 0
         },
         "h2h": {
-          "home": 75,
-          "away": 25
+          "home": 100,
+          "away": 0
         },
         "goals": {
-          "home": 60,
-          "away": 40
+          "home": 82,
+          "away": 18
         },
         "total": {
           "home": null,
@@ -1752,98 +1562,50 @@
       }
     },
     {
-      "fid": 1563085,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "E1",
-      "team1": "Bristol City",
-      "team2": "Millwall",
-      "team1_cn": "布里斯托尔城",
-      "team2_cn": "米尔沃尔",
-      "winner_name": "Millwall",
+      "fid": 1490400,
+      "date": "2026-08-19",
+      "time": "20:30",
+      "date_bj": "2026-08-20",
+      "time_bj": "09:30",
+      "_league": "USA",
+      "team1": "Colorado Rapids",
+      "team2": "Los Angeles FC",
+      "team1_cn": "科罗拉多急流",
+      "team2_cn": "洛杉矶FC",
+      "winner_name": "Los Angeles FC",
       "winner_side": "away",
       "winner_comment": "Win or draw",
-      "advice": "Double chance : draw or Millwall",
+      "advice": "Double chance : draw or Los Angeles FC",
       "pct_home": 10,
       "pct_draw": 45,
       "pct_away": 45,
-      "goals_home": null,
-      "goals_away": null,
+      "goals_home": "-2.5",
+      "goals_away": "-2.5",
       "under_over": null,
       "comparison": {
         "form": {
-          "home": 0,
-          "away": 0
+          "home": 47,
+          "away": 53
         },
         "att": {
-          "home": 0,
-          "away": 0
+          "home": 31,
+          "away": 69
         },
         "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 40,
-          "away": 60
-        },
-        "goals": {
           "home": 50,
           "away": 50
         },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1564241,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "E2",
-      "team1": "Burton",
-      "team2": "Stevenage",
-      "team1_cn": "伯顿",
-      "team2_cn": "斯蒂夫尼奇",
-      "winner_name": "Stevenage",
-      "winner_side": "away",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : draw or Stevenage",
-      "pct_home": 0,
-      "pct_draw": 50,
-      "pct_away": 50,
-      "goals_home": null,
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
         "poisson_distribution": {
-          "home": 0,
-          "away": 0
+          "home": 54,
+          "away": 46
         },
         "h2h": {
           "home": 38,
           "away": 62
         },
         "goals": {
-          "home": 30,
-          "away": 70
+          "home": 36,
+          "away": 64
         },
         "total": {
           "home": null,
@@ -1852,90 +1614,42 @@
       }
     },
     {
-      "fid": 1564242,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "E2",
-      "team1": "Cambridge",
-      "team2": "Wigan",
-      "team1_cn": "剑桥联",
-      "team2_cn": "维冈",
-      "winner_name": "Wigan",
+      "fid": 1490402,
+      "date": "2026-08-19",
+      "time": "20:30",
+      "date_bj": "2026-08-20",
+      "time_bj": "09:30",
+      "_league": "USA",
+      "team1": "Real Salt Lake",
+      "team2": "FC Dallas",
+      "team1_cn": "皇家盐湖城",
+      "team2_cn": "达拉斯FC",
+      "winner_name": "FC Dallas",
       "winner_side": "away",
       "winner_comment": "Win or draw",
-      "advice": "Double chance : draw or Wigan",
+      "advice": "Double chance : draw or FC Dallas",
       "pct_home": 10,
       "pct_draw": 45,
       "pct_away": 45,
-      "goals_home": null,
-      "goals_away": null,
+      "goals_home": "-2.5",
+      "goals_away": "-2.5",
       "under_over": null,
       "comparison": {
         "form": {
-          "home": 0,
-          "away": 0
+          "home": 27,
+          "away": 73
         },
         "att": {
-          "home": 0,
-          "away": 0
+          "home": 42,
+          "away": 58
         },
         "def": {
-          "home": 0,
-          "away": 0
+          "home": 43,
+          "away": 57
         },
         "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 40,
-          "away": 60
-        },
-        "goals": {
-          "home": 54,
-          "away": 46
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1563086,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "E1",
-      "team1": "Charlton",
-      "team2": "Derby",
-      "team1_cn": "查尔顿",
-      "team2_cn": "德比郡",
-      "winner_name": "Derby",
-      "winner_side": "away",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : draw or Derby",
-      "pct_home": 0,
-      "pct_draw": 50,
-      "pct_away": 50,
-      "goals_home": null,
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
+          "home": 49,
+          "away": 51
         },
         "h2h": {
           "home": 29,
@@ -1952,48 +1666,154 @@
       }
     },
     {
-      "fid": 1563687,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "E3",
-      "team1": "Cheltenham",
-      "team2": "Rotherham",
-      "team1_cn": "切尔滕汉姆",
-      "team2_cn": "罗瑟汉姆",
-      "winner_name": "Rotherham",
-      "winner_side": "away",
+      "fid": 1490401,
+      "date": "2026-08-19",
+      "time": "20:30",
+      "date_bj": "2026-08-20",
+      "time_bj": "09:30",
+      "_league": "USA",
+      "team1": "Seattle Sounders",
+      "team2": "Austin FC",
+      "team1_cn": "西雅图海湾人",
+      "team2_cn": "奥斯汀FC",
+      "winner_name": "Seattle Sounders",
+      "winner_side": "home",
       "winner_comment": "Win or draw",
-      "advice": "Double chance : draw or Rotherham",
-      "pct_home": 10,
-      "pct_draw": 45,
-      "pct_away": 45,
-      "goals_home": null,
-      "goals_away": null,
+      "advice": "Double chance : Seattle Sounders or draw",
+      "pct_home": 35,
+      "pct_draw": 35,
+      "pct_away": 30,
+      "goals_home": "-2.5",
+      "goals_away": "-2.5",
       "under_over": null,
       "comparison": {
         "form": {
           "home": 0,
-          "away": 0
+          "away": 100
         },
         "att": {
-          "home": 0,
-          "away": 0
+          "home": 43,
+          "away": 57
         },
         "def": {
-          "home": 0,
-          "away": 0
+          "home": 45,
+          "away": 55
         },
         "poisson_distribution": {
-          "home": 0,
-          "away": 0
+          "home": 69,
+          "away": 31
+        },
+        "h2h": {
+          "home": 50,
+          "away": 50
+        },
+        "goals": {
+          "home": 50,
+          "away": 50
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1490403,
+      "date": "2026-08-19",
+      "time": "21:30",
+      "date_bj": "2026-08-20",
+      "time_bj": "10:30",
+      "_league": "USA",
+      "team1": "Los Angeles Galaxy",
+      "team2": "San Jose Earthquakes",
+      "team1_cn": "洛杉矶银河",
+      "team2_cn": "圣何塞地震",
+      "winner_name": "Los Angeles Galaxy",
+      "winner_side": "home",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : Los Angeles Galaxy or draw",
+      "pct_home": 35,
+      "pct_draw": 35,
+      "pct_away": 30,
+      "goals_home": "-1.5",
+      "goals_away": "-2.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 33,
+          "away": 67
+        },
+        "att": {
+          "home": 22,
+          "away": 78
+        },
+        "def": {
+          "home": 62,
+          "away": 38
+        },
+        "poisson_distribution": {
+          "home": 27,
+          "away": 73
+        },
+        "h2h": {
+          "home": 62,
+          "away": 38
+        },
+        "goals": {
+          "home": 64,
+          "away": 36
+        },
+        "total": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fid": 1490405,
+      "date": "2026-08-19",
+      "time": "21:30",
+      "date_bj": "2026-08-20",
+      "time_bj": "10:30",
+      "_league": "USA",
+      "team1": "Portland Timbers",
+      "team2": "San Diego FC",
+      "team1_cn": "波特兰伐木者",
+      "team2_cn": "圣地亚哥FC",
+      "winner_name": "Portland Timbers",
+      "winner_side": "home",
+      "winner_comment": "Win or draw",
+      "advice": "Double chance : Portland Timbers or draw",
+      "pct_home": 45,
+      "pct_draw": 45,
+      "pct_away": 10,
+      "goals_home": "-3.5",
+      "goals_away": "-2.5",
+      "under_over": null,
+      "comparison": {
+        "form": {
+          "home": 59,
+          "away": 41
+        },
+        "att": {
+          "home": 71,
+          "away": 29
+        },
+        "def": {
+          "home": 43,
+          "away": 57
+        },
+        "poisson_distribution": {
+          "home": 60,
+          "away": 40
         },
         "h2h": {
           "home": 40,
           "away": 60
         },
         "goals": {
-          "home": 50,
-          "away": 50
+          "home": 32,
+          "away": 68
         },
         "total": {
           "home": null,
@@ -2002,48 +1822,50 @@
       }
     },
     {
-      "fid": 1563688,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "E3",
-      "team1": "Chesterfield",
-      "team2": "Fleetwood Town",
-      "team1_cn": "切斯特菲尔德",
-      "team2_cn": "弗利特伍德",
-      "winner_name": "Fleetwood Town",
+      "fid": 1490404,
+      "date": "2026-08-19",
+      "time": "21:30",
+      "date_bj": "2026-08-20",
+      "time_bj": "10:30",
+      "_league": "USA",
+      "team1": "Vancouver Whitecaps",
+      "team2": "Houston Dynamo",
+      "team1_cn": "温哥华白帽",
+      "team2_cn": "休斯敦迪纳摩",
+      "winner_name": "Houston Dynamo",
       "winner_side": "away",
       "winner_comment": "Win or draw",
-      "advice": "Double chance : draw or Fleetwood Town",
+      "advice": "Double chance : draw or Houston Dynamo",
       "pct_home": 10,
       "pct_draw": 45,
       "pct_away": 45,
-      "goals_home": null,
-      "goals_away": null,
+      "goals_home": "-3.5",
+      "goals_away": "-2.5",
       "under_over": null,
       "comparison": {
         "form": {
-          "home": 0,
-          "away": 0
+          "home": 28,
+          "away": 72
         },
         "att": {
-          "home": 0,
-          "away": 0
+          "home": 47,
+          "away": 53
         },
         "def": {
-          "home": 0,
-          "away": 0
+          "home": 11,
+          "away": 89
         },
         "poisson_distribution": {
-          "home": 0,
-          "away": 0
+          "home": 78,
+          "away": 22
         },
         "h2h": {
           "home": 38,
           "away": 62
         },
         "goals": {
-          "home": 50,
-          "away": 50
+          "home": 53,
+          "away": 47
         },
         "total": {
           "home": null,
@@ -2052,36 +1874,38 @@
       }
     },
     {
-      "fid": 1563689,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "E3",
-      "team1": "Crawley Town",
-      "team2": "Crewe",
-      "team1_cn": "克劳利",
-      "team2_cn": "克鲁",
-      "winner_name": "Crewe",
+      "fid": 1564254,
+      "date": "2026-08-20",
+      "time": "19:00",
+      "date_bj": "2026-08-21",
+      "time_bj": "03:00",
+      "_league": "E2",
+      "team1": "Sheffield Weds",
+      "team2": "Bradford",
+      "team1_cn": "谢周三",
+      "team2_cn": "布拉德福德",
+      "winner_name": "Bradford",
       "winner_side": "away",
       "winner_comment": "Win or draw",
-      "advice": "Double chance : draw or Crewe",
-      "pct_home": 0,
-      "pct_draw": 50,
-      "pct_away": 50,
-      "goals_home": null,
-      "goals_away": null,
+      "advice": "Double chance : draw or Bradford",
+      "pct_home": 10,
+      "pct_draw": 45,
+      "pct_away": 45,
+      "goals_home": "-2.5",
+      "goals_away": "-2.5",
       "under_over": null,
       "comparison": {
         "form": {
-          "home": 0,
-          "away": 0
+          "home": 50,
+          "away": 50
         },
         "att": {
-          "home": 0,
-          "away": 0
+          "home": 50,
+          "away": 50
         },
         "def": {
           "home": 0,
-          "away": 0
+          "away": 100
         },
         "poisson_distribution": {
           "home": 0,
@@ -2090,106 +1914,6 @@
         "h2h": {
           "home": 20,
           "away": 80
-        },
-        "goals": {
-          "home": 36,
-          "away": 64
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1557760,
-      "date": "2026-08-15",
-      "time": "14:00",
-      "_league": "SC3",
-      "team1": "Dumbarton",
-      "team2": "Edinburgh City",
-      "team1_cn": "邓巴顿",
-      "team2_cn": "爱丁堡城",
-      "winner_name": "Dumbarton",
-      "winner_side": "home",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : Dumbarton or draw",
-      "pct_home": 35,
-      "pct_draw": 35,
-      "pct_away": 30,
-      "goals_home": "-1.5",
-      "goals_away": "-1.5",
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 75,
-          "away": 25
-        },
-        "att": {
-          "home": 33,
-          "away": 67
-        },
-        "def": {
-          "home": 78,
-          "away": 22
-        },
-        "poisson_distribution": {
-          "home": 100,
-          "away": 0
-        },
-        "h2h": {
-          "home": 7,
-          "away": 93
-        },
-        "goals": {
-          "home": 30,
-          "away": 70
-        },
-        "total": {
-          "home": null,
-          "away": null
-        }
-      }
-    },
-    {
-      "fid": 1570333,
-      "date": "2026-08-15",
-      "time": "18:30",
-      "_league": "SP1",
-      "team1": "Alaves",
-      "team2": "Getafe",
-      "team1_cn": "阿拉维斯",
-      "team2_cn": "赫塔菲",
-      "winner_name": "Getafe",
-      "winner_side": "away",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : draw or Getafe",
-      "pct_home": 0,
-      "pct_draw": 50,
-      "pct_away": 50,
-      "goals_home": null,
-      "goals_away": null,
-      "under_over": null,
-      "comparison": {
-        "form": {
-          "home": 0,
-          "away": 0
-        },
-        "att": {
-          "home": 0,
-          "away": 0
-        },
-        "def": {
-          "home": 0,
-          "away": 0
-        },
-        "poisson_distribution": {
-          "home": 0,
-          "away": 0
-        },
-        "h2h": {
-          "home": 29,
-          "away": 71
         },
         "goals": {
           "home": 25,
@@ -2202,44 +1926,46 @@
       }
     },
     {
-      "fid": 1570341,
-      "date": "2026-08-15",
-      "time": "20:30",
+      "fid": 1570351,
+      "date": "2026-08-20",
+      "time": "20:00",
+      "date_bj": "2026-08-21",
+      "time_bj": "03:00",
       "_league": "SP1",
-      "team1": "Sevilla",
-      "team2": "Vallecano",
-      "team1_cn": "塞维利亚",
-      "team2_cn": "巴列卡诺",
-      "winner_name": "Sevilla",
-      "winner_side": "home",
-      "winner_comment": "Win or draw",
-      "advice": "Double chance : Sevilla or draw",
-      "pct_home": 50,
-      "pct_draw": 50,
-      "pct_away": 0,
-      "goals_home": null,
-      "goals_away": null,
+      "team1": "Vallecano",
+      "team2": "Alaves",
+      "team1_cn": "巴列卡诺",
+      "team2_cn": "阿拉维斯",
+      "winner_name": "Alaves",
+      "winner_side": "away",
+      "winner_comment": null,
+      "advice": "Winner : Alaves",
+      "pct_home": 10,
+      "pct_draw": 45,
+      "pct_away": 45,
+      "goals_home": "-1.5",
+      "goals_away": "-3.5",
       "under_over": null,
       "comparison": {
         "form": {
           "home": 0,
-          "away": 0
+          "away": 100
         },
         "att": {
-          "home": 0,
-          "away": 0
+          "home": 25,
+          "away": 75
         },
         "def": {
           "home": 0,
-          "away": 0
+          "away": 100
         },
         "poisson_distribution": {
           "home": 0,
           "away": 0
         },
         "h2h": {
-          "home": 85,
-          "away": 15
+          "home": 80,
+          "away": 20
         },
         "goals": {
           "home": 67,

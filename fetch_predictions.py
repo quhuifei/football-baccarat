@@ -102,6 +102,7 @@ def parse_prediction(fx, data):
     return {
         "fid": fx.get("fid"),
         "date": fx.get("date"), "time": fx.get("time") or "",
+        "date_bj": fx.get("date_bj"), "time_bj": fx.get("time_bj") or "",
         "_league": fx.get("_league"),
         "team1": fx.get("team1"), "team2": fx.get("team2"),
         "team1_cn": fx.get("team1_cn") or fx.get("team1"),
@@ -115,6 +116,38 @@ def parse_prediction(fx, data):
         "under_over": p.get("under_over"),
         "comparison": comp,
     }
+
+
+PRED_FIELDS = ("winner_name", "winner_side", "winner_comment", "advice",
+               "pct_home", "pct_draw", "pct_away",
+               "goals_home", "goals_away", "under_over", "comparison")
+
+
+def reuse_record(fx, old):
+    """复用旧 predictions.json 中同 fid 的预测字段，赛程信息（含北京时间）用新 fixtures 刷新。"""
+    rec = {
+        "fid": fx.get("fid"),
+        "date": fx.get("date"), "time": fx.get("time") or "",
+        "date_bj": fx.get("date_bj"), "time_bj": fx.get("time_bj") or "",
+        "_league": fx.get("_league"),
+        "team1": fx.get("team1"), "team2": fx.get("team2"),
+        "team1_cn": fx.get("team1_cn") or fx.get("team1"),
+        "team2_cn": fx.get("team2_cn") or fx.get("team2"),
+    }
+    rec.update({k: old.get(k) for k in PRED_FIELDS})
+    return rec
+
+
+def load_existing():
+    """读已有 predictions.json，返回 {fid: 记录}；没有/损坏返回 {}。"""
+    if not os.path.exists(OUTPUT_PATH):
+        return {}
+    try:
+        with open(OUTPUT_PATH, encoding="utf-8") as f:
+            items = (json.load(f) or {}).get("items") or []
+        return {it["fid"]: it for it in items if it.get("fid") is not None}
+    except (ValueError, OSError):
+        return {}
 
 
 def main():
@@ -134,10 +167,18 @@ def main():
     print(f"窗口 {today} ~ {last_day} 内带 fid 的比赛 {len(window)} 场，"
           f"按联赛优先级取前 {len(picked)} 场（上限 {MAX_CALLS}）")
 
-    items, failed = [], 0
+    existing = load_existing()  # 复用旧预测：同 fid 不再调 API，只刷新赛程字段
+    items, failed, reused, calls = [], 0, 0, 0
     for i, fx in enumerate(picked, 1):
         label = f"{fx['_league']} {fx.get('team1_cn') or fx['team1']} vs {fx.get('team2_cn') or fx['team2']}"
+        old = existing.get(fx.get("fid"))
+        if old is not None:
+            items.append(reuse_record(fx, old))
+            reused += 1
+            print(f"[{i}/{len(picked)}] {label} → 复用旧预测（fid 命中，未调 API）")
+            continue
         time.sleep(SLEEP)
+        calls += 1
         try:
             data = fetch_prediction(fx["fid"])
         except Exception as e:
@@ -165,7 +206,8 @@ def main():
     written = safe_write_output(OUTPUT_PATH, OUTPUT_JS_PATH,
                                 "PREDICTIONS_DATA", output, "items", "比赛预测")
     print(f"\n===== 比赛预测 =====")
-    print(f"  成功 {len(items)} 场，跳过 {failed} 场，API 调用 {len(picked)} 次")
+    print(f"  成功 {len(items)} 场（复用 {reused}，新抓 {len(items) - reused}），"
+          f"跳过 {failed} 场，API 调用 {calls} 次")
     print(f"  输出文件: {OUTPUT_PATH}{'' if written else '（防空写：保留旧文件）'}")
     print(f"  输出文件: {OUTPUT_JS_PATH}{'' if written else '（防空写：保留旧文件）'}")
     return 0
