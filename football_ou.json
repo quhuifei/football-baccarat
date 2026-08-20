@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T09:01:22+00:00",
+  "updated_at": "2026-08-20T09:54:46+00:00",
   "items": [
     {
       "date": "2026-08-14",
@@ -2520,6 +2520,21 @@
       "ou_line": 2.25,
       "ou_bm": "Bet365",
       "ou_result": "半小"
+    },
+    {
+      "date": "2026-08-18",
+      "time": "",
+      "_league": "CHN",
+      "team1": "Shanghai Shenhua",
+      "team2": "Beijing Guoan",
+      "team1_cn": "上海申花",
+      "team2_cn": "北京国安",
+      "status": "FT",
+      "s1": 0,
+      "s2": 3,
+      "ou_line": 3.5,
+      "ou_bm": "Marathonbet",
+      "ou_result": "小"
     }
   ]
 }
