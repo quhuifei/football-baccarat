@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-21T09:03:35+00:00",
+  "updated_at": "2026-08-21T09:55:55+00:00",
   "matches": [
     {
       "date": "2025-08-15",
@@ -48248,6 +48248,18 @@
     },
     {
       "date": "2026-08-19",
+      "team1": "Atl. Madrid",
+      "s1": 2,
+      "s2": 0,
+      "team2": "Malaga",
+      "result": "B",
+      "team1_cn": "马德里竞技",
+      "team2_cn": "马拉加",
+      "season": "2026",
+      "_league": "SP1"
+    },
+    {
+      "date": "2026-08-19",
       "team1": "Shanghai Port",
       "s1": 1,
       "s2": 1,
@@ -48257,6 +48269,30 @@
       "team2_cn": "大连英博",
       "season": "2026",
       "_league": "CHN"
+    },
+    {
+      "date": "2026-08-20",
+      "team1": "Rayo Vallecano",
+      "s1": 1,
+      "s2": 1,
+      "team2": "Alaves",
+      "result": "T",
+      "team1_cn": "Rayo Vallecano",
+      "team2_cn": "阿拉维斯",
+      "season": "2026",
+      "_league": "SP1"
+    },
+    {
+      "date": "2026-08-20",
+      "team1": "Sheffield Wed",
+      "s1": 0,
+      "s2": 1,
+      "team2": "Bradford City",
+      "result": "P",
+      "team1_cn": "Sheffield Wed",
+      "team2_cn": "Bradford City",
+      "season": "2026",
+      "_league": "E2"
     },
     {
       "date": "2026-08-20",
