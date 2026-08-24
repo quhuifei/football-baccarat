@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-24T21:49:19+00:00",
+  "updated_at": "2026-08-24T22:49:14+00:00",
   "items": [
     {
       "date": "2026-08-14",
@@ -2449,6 +2449,21 @@
     {
       "date": "2026-08-17",
       "time": "",
+      "_league": "SP1",
+      "team1": "La Coruna",
+      "team2": "Elche",
+      "team1_cn": "拉科鲁尼亚",
+      "team2_cn": "埃尔切",
+      "status": "FT",
+      "s1": 1,
+      "s2": 1,
+      "ou_line": 2.25,
+      "ou_bm": "Bet365",
+      "ou_result": "半小"
+    },
+    {
+      "date": "2026-08-17",
+      "time": "",
       "_league": "ARG",
       "team1": "Lanus",
       "team2": "Independiente",
@@ -2534,6 +2549,21 @@
       "s2": 3,
       "ou_line": 3.5,
       "ou_bm": "Marathonbet",
+      "ou_result": "小"
+    },
+    {
+      "date": "2026-08-21",
+      "time": "",
+      "_league": "SC1",
+      "team1": "Inverness C",
+      "team2": "Partick",
+      "team1_cn": "因弗内斯",
+      "team2_cn": "帕尔蒂克",
+      "status": "FT",
+      "s1": 1,
+      "s2": 1,
+      "ou_line": 2.5,
+      "ou_bm": "Bet365",
       "ou_result": "小"
     }
   ]
