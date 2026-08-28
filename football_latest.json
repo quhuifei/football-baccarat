@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T20:36:33+00:00",
+  "updated_at": "2026-08-28T05:29:53+00:00",
   "matches": [
     {
       "date": "2025-08-22",
@@ -31720,6 +31720,18 @@
     },
     {
       "date": "2026-08-25",
+      "team1": "Valencia",
+      "s1": 0,
+      "s2": 1,
+      "team2": "Betis",
+      "result": "P",
+      "team1_cn": "瓦伦西亚",
+      "team2_cn": "皇家贝蒂斯",
+      "season": "2026",
+      "_league": "SP1"
+    },
+    {
+      "date": "2026-08-25",
       "team1": "Lanus",
       "s1": 1,
       "s2": 1,
@@ -31753,6 +31765,54 @@
       "team2_cn": "巴拉纳竞技",
       "season": "2026",
       "_league": "BRA"
+    },
+    {
+      "date": "2026-08-26",
+      "team1": "Real Madrid",
+      "s1": 4,
+      "s2": 1,
+      "team2": "Sociedad",
+      "result": "B",
+      "team1_cn": "皇家马德里",
+      "team2_cn": "皇家社会",
+      "season": "2026",
+      "_league": "SP1"
+    },
+    {
+      "date": "2026-08-27",
+      "team1": "Celta",
+      "s1": 1,
+      "s2": 2,
+      "team2": "Osasuna",
+      "result": "P",
+      "team1_cn": "塞尔塔",
+      "team2_cn": "奥萨苏纳",
+      "season": "2026",
+      "_league": "SP1"
+    },
+    {
+      "date": "2026-08-27",
+      "team1": "Barcelona",
+      "s1": 2,
+      "s2": 0,
+      "team2": "Ath Bilbao",
+      "result": "B",
+      "team1_cn": "巴塞罗那",
+      "team2_cn": "毕尔巴鄂竞技",
+      "season": "2026",
+      "_league": "SP1"
+    },
+    {
+      "date": "2026-08-27",
+      "team1": "Boreham Wood",
+      "s1": 2,
+      "s2": 1,
+      "team2": "Boston Utd",
+      "result": "B",
+      "team1_cn": "博勒汉姆伍德",
+      "team2_cn": "波士顿联",
+      "season": "2026",
+      "_league": "EC"
     }
   ]
 }
