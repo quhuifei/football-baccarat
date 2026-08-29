@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T02:18:33+00:00",
+  "updated_at": "2026-08-29T09:11:57+00:00",
   "matches": [
     {
       "date": "2025-08-22",
@@ -31811,6 +31811,138 @@
       "result": "B",
       "team1_cn": "博勒汉姆伍德",
       "team2_cn": "波士顿联",
+      "season": "2026",
+      "_league": "EC"
+    },
+    {
+      "date": "2026-08-28",
+      "team1": "Aldershot",
+      "s1": 3,
+      "s2": 1,
+      "team2": "Harrogate",
+      "result": "B",
+      "team1_cn": "奥尔德肖特",
+      "team2_cn": "哈罗盖特",
+      "season": "2026",
+      "_league": "EC"
+    },
+    {
+      "date": "2026-08-28",
+      "team1": "Altrincham",
+      "s1": 2,
+      "s2": 1,
+      "team2": "Halifax",
+      "result": "B",
+      "team1_cn": "奥特林厄姆",
+      "team2_cn": "哈利法克斯",
+      "season": "2026",
+      "_league": "EC"
+    },
+    {
+      "date": "2026-08-28",
+      "team1": "Barrow",
+      "s1": 1,
+      "s2": 2,
+      "team2": "Yeovil",
+      "result": "P",
+      "team1_cn": "巴罗",
+      "team2_cn": "约维尔",
+      "season": "2026",
+      "_league": "EC"
+    },
+    {
+      "date": "2026-08-28",
+      "team1": "Fylde",
+      "s1": 2,
+      "s2": 0,
+      "team2": "Forest Green",
+      "result": "B",
+      "team1_cn": "法尔德",
+      "team2_cn": "绿色森林流浪",
+      "season": "2026",
+      "_league": "EC"
+    },
+    {
+      "date": "2026-08-28",
+      "team1": "Gateshead",
+      "s1": 0,
+      "s2": 1,
+      "team2": "Sutton",
+      "result": "P",
+      "team1_cn": "盖茨黑德",
+      "team2_cn": "萨顿联",
+      "season": "2026",
+      "_league": "EC"
+    },
+    {
+      "date": "2026-08-28",
+      "team1": "Hartlepool",
+      "s1": 0,
+      "s2": 1,
+      "team2": "Eastleigh",
+      "result": "P",
+      "team1_cn": "哈特尔浦",
+      "team2_cn": "伊斯特利",
+      "season": "2026",
+      "_league": "EC"
+    },
+    {
+      "date": "2026-08-28",
+      "team1": "Hornchurch",
+      "s1": 1,
+      "s2": 0,
+      "team2": "Woking",
+      "result": "B",
+      "team1_cn": "霍恩彻奇",
+      "team2_cn": "沃金",
+      "season": "2026",
+      "_league": "EC"
+    },
+    {
+      "date": "2026-08-28",
+      "team1": "Scunthorpe",
+      "s1": 3,
+      "s2": 1,
+      "team2": "Solihull",
+      "result": "B",
+      "team1_cn": "斯肯索普",
+      "team2_cn": "索利哈尔",
+      "season": "2026",
+      "_league": "EC"
+    },
+    {
+      "date": "2026-08-28",
+      "team1": "Southend",
+      "s1": 1,
+      "s2": 3,
+      "team2": "Kidderminster",
+      "result": "P",
+      "team1_cn": "绍森德",
+      "team2_cn": "基德明斯特",
+      "season": "2026",
+      "_league": "EC"
+    },
+    {
+      "date": "2026-08-28",
+      "team1": "Tamworth",
+      "s1": 3,
+      "s2": 2,
+      "team2": "Worthing",
+      "result": "B",
+      "team1_cn": "塔姆沃思",
+      "team2_cn": "沃辛",
+      "season": "2026",
+      "_league": "EC"
+    },
+    {
+      "date": "2026-08-28",
+      "team1": "Wealdstone",
+      "s1": 1,
+      "s2": 1,
+      "team2": "Carlisle",
+      "result": "T",
+      "team1_cn": "威尔德斯通",
+      "team2_cn": "卡莱尔",
       "season": "2026",
       "_league": "EC"
     }
