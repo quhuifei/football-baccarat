@@ -194,6 +194,21 @@
   }
   .sub-h { font-size: 14px; color: var(--gold); margin: 18px 0 8px; font-weight: 700; }
   .ua-list { font-size: 12px; color: var(--muted); line-height: 1.9; word-break: break-all; }
+  /* 地区分布横向条 + 最近访客表 */
+  .geo-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+  .geo-col-t { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  .geo-row { display: flex; align-items: center; gap: 10px; margin: 5px 0; font-size: 12px; }
+  .geo-row .g-name {
+    width: 130px; flex-shrink: 0; color: var(--txt);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .geo-row .g-bar-wrap {
+    flex: 1; height: 14px; min-width: 0;
+    background: rgba(5, 13, 10, 0.6); border-radius: 4px; overflow: hidden;
+  }
+  .geo-row .g-bar { height: 100%; background: linear-gradient(90deg, rgba(212, 175, 55, 0.45), var(--gold)); border-radius: 4px; }
+  .geo-row .g-count { width: 62px; flex-shrink: 0; text-align: right; color: var(--muted); }
+  .visitor-table { font-size: 12px; }
   /* 数据更新 / 公告 */
   .kv { font-size: 13px; line-height: 2.1; color: var(--txt); }
   .kv b { color: var(--muted); font-weight: 500; display: inline-block; min-width: 96px; }
@@ -232,6 +247,8 @@
     .thread-list { width: 100%; max-height: 200px; }
     .chat-side { height: 420px; }
     .search-row input { width: 140px; }
+    .geo-cols { grid-template-columns: 1fr; }
+    .geo-row .g-name { width: 100px; }
   }
 </style>
 <style>
@@ -333,6 +350,24 @@
       <div class="chart" id="visitChart"><div class="chat-empty">暂无数据</div></div>
       <div class="sub-h">访问量 Top UA</div>
       <div class="ua-list" id="uaList">—</div>
+      <div class="sub-h">访客地区分布 <span id="geoNote" style="font-size:12px;color:var(--muted);font-weight:400"></span></div>
+      <div class="geo-cols">
+        <div>
+          <div class="geo-col-t">国家 / 地区 Top 20</div>
+          <div id="geoCountries"><div class="chat-empty">暂无数据</div></div>
+        </div>
+        <div>
+          <div class="geo-col-t">省份 / 州 Top 20</div>
+          <div id="geoProvinces"><div class="chat-empty">暂无数据</div></div>
+        </div>
+      </div>
+      <div class="sub-h">最近访客（最近 50 条访问）</div>
+      <div class="table-wrap">
+        <table class="visitor-table">
+          <thead><tr><th>时间</th><th>IP</th><th>地区</th><th>设备 / 浏览器</th></tr></thead>
+          <tbody id="visitorBody"><tr><td colspan="4" style="color:var(--muted)">暂无数据</td></tr></tbody>
+        </table>
+      </div>
     </div>
 
     <!-- 数据更新 -->
@@ -832,6 +867,54 @@
         ? v.top_uas.map(function (u) { return u.count + ' 次 · ' + u.ua; }).join('\n')
         : '—';
       $('uaList').style.whiteSpace = 'pre-wrap';
+      /* 地区分布 + 最近访客 */
+      var regions = d.regions || { countries: [], provinces: [], unresolved: 0 };
+      $('geoNote').textContent = regions.unresolved
+        ? '（另有 ' + regions.unresolved + ' 次访问来自中转/未解析 IP，不计入下图）'
+        : '';
+      function renderGeo(elId, list) {
+        var box = $(elId);
+        box.innerHTML = '';
+        if (!list.length) { box.innerHTML = '<div class="chat-empty">暂无数据</div>'; return; }
+        var gmax = list[0].count || 1;
+        list.forEach(function (g) {
+          var row = document.createElement('div');
+          row.className = 'geo-row';
+          var name = document.createElement('div');
+          name.className = 'g-name';
+          name.textContent = g.name;
+          name.title = g.name;
+          var wrap = document.createElement('div');
+          wrap.className = 'g-bar-wrap';
+          var bar = document.createElement('div');
+          bar.className = 'g-bar';
+          bar.style.width = Math.max(2, Math.round(g.count / gmax * 100)) + '%';
+          wrap.appendChild(bar);
+          var cnt = document.createElement('div');
+          cnt.className = 'g-count';
+          cnt.textContent = g.count + ' 次';
+          row.appendChild(name); row.appendChild(wrap); row.appendChild(cnt);
+          box.appendChild(row);
+        });
+      }
+      renderGeo('geoCountries', regions.countries || []);
+      renderGeo('geoProvinces', regions.provinces || []);
+      var rv = d.recent_visitors || [];
+      var vb = $('visitorBody');
+      vb.innerHTML = '';
+      if (!rv.length) {
+        vb.innerHTML = '<tr><td colspan="4" style="color:var(--muted)">暂无数据</td></tr>';
+      } else {
+        rv.forEach(function (r) {
+          var tr = document.createElement('tr');
+          [r.time, r.ip, r.region, r.ua].forEach(function (val) {
+            var td = document.createElement('td');
+            td.textContent = val || '—';
+            tr.appendChild(td);
+          });
+          vb.appendChild(tr);
+        });
+      }
     });
   }
   $('statsRefresh').addEventListener('click', loadStats);
