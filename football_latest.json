@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T22:40:01+00:00",
+  "updated_at": "2026-09-04T01:04:55+00:00",
   "matches": [
     {
       "date": "2026-01-22",
@@ -32512,6 +32512,18 @@
     },
     {
       "date": "2026-09-01",
+      "team1": "Wolfsberger AC",
+      "s1": 1,
+      "s2": 3,
+      "team2": "LASK",
+      "result": "P",
+      "team1_cn": "沃尔夫斯贝格",
+      "team2_cn": "LASK林茨",
+      "season": "2026",
+      "_league": "AUT"
+    },
+    {
+      "date": "2026-09-01",
       "team1": "Remo",
       "s1": 2,
       "s2": 3,
@@ -32521,6 +32533,18 @@
       "team2_cn": "科里蒂巴",
       "season": "2026",
       "_league": "BRA"
+    },
+    {
+      "date": "2026-09-01",
+      "team1": "Zurich",
+      "s1": 2,
+      "s2": 4,
+      "team2": "Young Boys",
+      "result": "P",
+      "team1_cn": "苏黎世",
+      "team2_cn": "年轻人",
+      "season": "2026",
+      "_league": "SWZ"
     },
     {
       "date": "2026-09-02",
@@ -32703,6 +32727,210 @@
       "_league": "B1"
     },
     {
+      "date": "2026-09-02",
+      "team1": "Austria Vienna",
+      "s1": 0,
+      "s2": 1,
+      "team2": "Tirol",
+      "result": "P",
+      "team1_cn": "奥地利维也纳",
+      "team2_cn": "蒂罗尔",
+      "season": "2026",
+      "_league": "AUT"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Salzburg",
+      "s1": 5,
+      "s2": 1,
+      "team2": "SK Rapid",
+      "result": "B",
+      "team1_cn": "萨尔茨堡红牛",
+      "team2_cn": "维也纳快速",
+      "season": "2026",
+      "_league": "AUT"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Flamengo RJ",
+      "s1": 2,
+      "s2": 0,
+      "team2": "Mirassol",
+      "result": "B",
+      "team1_cn": "弗拉门戈",
+      "team2_cn": "米拉索尔",
+      "season": "2026",
+      "_league": "BRA"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Aarhus",
+      "s1": 0,
+      "s2": 2,
+      "team2": "Midtjylland",
+      "result": "P",
+      "team1_cn": "奥胡斯",
+      "team2_cn": "中日德兰",
+      "season": "2026",
+      "_league": "DNK"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Avispa Fukuoka",
+      "s1": 2,
+      "s2": 3,
+      "team2": "Urawa Reds",
+      "result": "P",
+      "team1_cn": "福冈黄蜂",
+      "team2_cn": "浦和红钻",
+      "season": "2026",
+      "_league": "JPN"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Cerezo Osaka",
+      "s1": 2,
+      "s2": 0,
+      "team2": "Kashiwa Reysol",
+      "result": "B",
+      "team1_cn": "大阪樱花",
+      "team2_cn": "柏太阳神",
+      "season": "2026",
+      "_league": "JPN"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Chiba",
+      "s1": 1,
+      "s2": 2,
+      "team2": "Okayama",
+      "result": "P",
+      "team1_cn": "千叶市原",
+      "team2_cn": "冈山绿雉",
+      "season": "2026",
+      "_league": "JPN"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Machida",
+      "s1": 2,
+      "s2": 1,
+      "team2": "Kawasaki Frontale",
+      "result": "B",
+      "team1_cn": "町田泽维亚",
+      "team2_cn": "川崎前锋",
+      "season": "2026",
+      "_league": "JPN"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Mito",
+      "s1": 4,
+      "s2": 2,
+      "team2": "Kashima Antlers",
+      "result": "B",
+      "team1_cn": "水户蜀葵",
+      "team2_cn": "鹿岛鹿角",
+      "season": "2026",
+      "_league": "JPN"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Sanfrecce Hiroshima",
+      "s1": 3,
+      "s2": 0,
+      "team2": "Nagoya Grampus",
+      "result": "B",
+      "team1_cn": "广岛三箭",
+      "team2_cn": "名古屋鲸",
+      "season": "2026",
+      "_league": "JPN"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Shimizu S-Pulse",
+      "s1": 1,
+      "s2": 1,
+      "team2": "FC Tokyo",
+      "result": "T",
+      "team1_cn": "清水心跳",
+      "team2_cn": "FC东京",
+      "season": "2026",
+      "_league": "JPN"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Verdy",
+      "s1": 0,
+      "s2": 2,
+      "team2": "Vissel Kobe",
+      "result": "P",
+      "team1_cn": "东京绿茵",
+      "team2_cn": "神户胜利船",
+      "season": "2026",
+      "_league": "JPN"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "V-Varen Nagasaki",
+      "s1": 2,
+      "s2": 2,
+      "team2": "Gamba Osaka",
+      "result": "T",
+      "team1_cn": "长崎航海",
+      "team2_cn": "大阪钢巴",
+      "season": "2026",
+      "_league": "JPN"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Yokohama F. Marinos",
+      "s1": 1,
+      "s2": 1,
+      "team2": "Kyoto",
+      "result": "T",
+      "team1_cn": "横滨水手",
+      "team2_cn": "京都不死鸟",
+      "season": "2026",
+      "_league": "JPN"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Grasshoppers",
+      "s1": 2,
+      "s2": 0,
+      "team2": "St. Gallen",
+      "result": "B",
+      "team1_cn": "草蜢",
+      "team2_cn": "圣加仑",
+      "season": "2026",
+      "_league": "SWZ"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Luzern",
+      "s1": 2,
+      "s2": 1,
+      "team2": "Vaduz",
+      "result": "B",
+      "team1_cn": "卢塞恩",
+      "team2_cn": "瓦杜兹",
+      "season": "2026",
+      "_league": "SWZ"
+    },
+    {
+      "date": "2026-09-02",
+      "team1": "Thun",
+      "s1": 0,
+      "s2": 0,
+      "team2": "Lausanne",
+      "result": "T",
+      "team1_cn": "图恩",
+      "team2_cn": "洛桑",
+      "season": "2026",
+      "_league": "SWZ"
+    },
+    {
       "date": "2026-09-03",
       "team1": "Sociedad",
       "s1": 0,
@@ -32761,6 +32989,78 @@
       "team2_cn": "旧海弗莱鲁汶",
       "season": "2026",
       "_league": "B1"
+    },
+    {
+      "date": "2026-09-03",
+      "team1": "FC Copenhagen",
+      "s1": 2,
+      "s2": 0,
+      "team2": "Nordsjaelland",
+      "result": "B",
+      "team1_cn": "哥本哈根",
+      "team2_cn": "北西兰",
+      "season": "2026",
+      "_league": "DNK"
+    },
+    {
+      "date": "2026-09-03",
+      "team1": "Rakow",
+      "s1": 1,
+      "s2": 2,
+      "team2": "Gornik Zabrze",
+      "result": "P",
+      "team1_cn": "琴斯托霍瓦",
+      "team2_cn": "扎布热矿工",
+      "season": "2026",
+      "_league": "POL"
+    },
+    {
+      "date": "2026-09-03",
+      "team1": "Lech Poznan",
+      "s1": 2,
+      "s2": 1,
+      "team2": "Jagiellonia",
+      "result": "B",
+      "team1_cn": "波兹南莱赫",
+      "team2_cn": "雅盖隆",
+      "season": "2026",
+      "_league": "POL"
+    },
+    {
+      "date": "2026-09-03",
+      "team1": "Mjallby",
+      "s1": 0,
+      "s2": 2,
+      "team2": "Djurgarden",
+      "result": "P",
+      "team1_cn": "米亚尔比",
+      "team2_cn": "佐加顿斯",
+      "season": "2026",
+      "_league": "SWE"
+    },
+    {
+      "date": "2026-09-03",
+      "team1": "Basel",
+      "s1": 1,
+      "s2": 2,
+      "team2": "Sion",
+      "result": "P",
+      "team1_cn": "巴塞尔",
+      "team2_cn": "锡永",
+      "season": "2026",
+      "_league": "SWZ"
+    },
+    {
+      "date": "2026-09-03",
+      "team1": "Lugano",
+      "s1": 1,
+      "s2": 0,
+      "team2": "Servette",
+      "result": "B",
+      "team1_cn": "卢加诺",
+      "team2_cn": "塞尔维特",
+      "season": "2026",
+      "_league": "SWZ"
     }
   ]
 }
