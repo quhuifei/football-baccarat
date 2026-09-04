@@ -801,7 +801,7 @@ TEAM_ALIASES = {
         'Bodo/Glimt': 'Bodo/Glimt',
         'Brann': 'Brann',
         'Fredrikstad': 'Fredrikstad',
-        'Ham-Kam': 'Ham-Kam',
+        'Ham-Kam': 'HamKam',
         'Haugesund': 'Haugesund',
         'KFUM Oslo': 'KFUM Oslo',
         'Kristiansund BK': 'Kristiansund',
