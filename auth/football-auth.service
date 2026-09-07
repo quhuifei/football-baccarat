@@ -1,0 +1,17 @@
+[Unit]
+Description=saixz.com football site auth service (FastAPI)
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/var/www/auth
+EnvironmentFile=/etc/football-auth.env
+ExecStart=/usr/local/bin/uvicorn auth_server:app --host 127.0.0.1 --port 8400
+Restart=always
+RestartSec=3
+# 日志走 stdout，由 systemd journal 收集：
+#   journalctl -u football-auth -f
+
+[Install]
+WantedBy=multi-user.target

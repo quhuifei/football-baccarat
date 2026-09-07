@@ -32,6 +32,7 @@ import json
 import os
 import sys
 import time
+import tempfile
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -52,7 +53,8 @@ OU_PATH = os.path.join(BASE_DIR, "football_ou.json")
 OU_JS_PATH = os.path.join(BASE_DIR, "football_ou.js")
 OU_STORE_PATH = os.path.join(BASE_DIR, "odds_store.json")  # 初盘快照持久化（首次抓到即存，不覆盖）
 OU_MAX_CALLS = 45      # 每次运行 odds 调用上限（fixtures 11 次之外，总预算 ≤60 次/运行）
-OU_STORE_DAYS = 30     # 快照保留天数（按比赛日期裁剪，防文件无限增长）
+# 初盘需要覆盖整个赛季；30 天会令本赛季较早比赛在重建时退回默认 2.5 球。
+OU_STORE_DAYS = 420
 OU_DAYS = 14           # football_ou 输出近 14 天完场对照
 
 # A 类：mmz4281/{赛季码}/{联赛码}.csv
@@ -283,7 +285,7 @@ def parse_extra_csv_latest(text, league, team_cn, missing_teams):
             if start == max_season]
 
 
-def fetch_apifb_fast(csv_index, team_cn, missing_teams):
+def fetch_apifb_fast(csv_index, team_cn, missing_teams, health=None):
     """快速通道：API-Football 按天拉全球比赛，过滤出本站 38 联赛的比赛。
 
     csv_index: {(联赛码, 主队, 客队): {CSV 已有日期}} —— 用于「同队 ±2 天吸附」兜底。
@@ -313,6 +315,10 @@ def fetch_apifb_fast(csv_index, team_cn, missing_teams):
             print(f"[快速通道 {day}] 警告：API 返回错误 {data['errors']}，跳过该天")
             continue
 
+        if not isinstance(data.get('response'), list):
+            continue
+        if health is not None:
+            health.add(day.isoformat())
         added = added_fx = skipped_league = skipped_team = 0
         for f in data.get("response", []):
             lid = (f.get("league") or {}).get("id")
@@ -369,6 +375,8 @@ def fetch_apifb_fast(csv_index, team_cn, missing_teams):
             out.append(make_match(date, home, s1, s2, away, res, season,
                                   league, team_cn, missing_teams))
             added += 1
+        if skipped_team and health is not None:
+            health.discard(day.isoformat())
         if added or added_fx or skipped_team:
             print(f"[快速通道 {day}] 本站联赛已赛 {added} 场、未赛赛程 {added_fx} 场入列"
                   f"（非本站联赛 {skipped_league} 场忽略，队名未映射跳过 {skipped_team} 场）")
@@ -530,9 +538,11 @@ def fetch_ou_snapshots(fixtures, store):
     return got, still + overflow
 
 
-def safe_write_output(json_path, js_path, js_var, payload, list_key, label):
+def safe_write_output(json_path, js_path, js_var, payload, list_key, label,
+                      complete=False, healthy=True):
     """防空写保护：新列表为空、或不足旧文件一半（旧文件 ≥10 条）时，判定本次抓取异常，
     保留磁盘旧文件不覆盖并打印警告。旧文件缺失/损坏时按无旧数据处理，正常写入。
+    complete=True 仅用于已确认完整抓取的赛程窗口，允许正常减少或清空。
     返回 True=已写入，False=已保留旧文件。"""
     new_count = len(payload.get(list_key) or [])
     old_count = 0
@@ -542,16 +552,31 @@ def safe_write_output(json_path, js_path, js_var, payload, list_key, label):
                 old_count = len((json.load(f) or {}).get(list_key) or [])
         except (ValueError, OSError):
             old_count = 0
-    if old_count and (new_count == 0 or new_count < old_count * 0.5):
+    if old_count and not healthy:
+        print(f"[防空写] 警告：{label} 本轮部分数据源失败，已保留旧文件不覆盖")
+        return False
+    if not complete and old_count and (new_count == 0 or new_count < old_count * 0.5):
         print(f"[防空写] 警告：{label} 本次仅 {new_count} 条，旧文件有 {old_count} 条，"
               f"疑似抓取失败，已保留旧文件不覆盖（{os.path.basename(json_path)} 及其 .js）")
         return False
-    with open(json_path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
-    with open(js_path, "w", encoding="utf-8") as f:
-        f.write(f"window.{js_var} = ")
-        json.dump(payload, f, ensure_ascii=False)
-        f.write(";\n")
+    # 两份内容先完整生成，再分别原子替换；读者不会读到半截文件。
+    encoded = json.dumps(payload, ensure_ascii=False)
+    pending = []
+    try:
+        for path, content in ((json_path, json.dumps(payload, ensure_ascii=False, indent=2)),
+                              (js_path, f"window.{js_var} = {encoded};\n")):
+            with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=os.path.dirname(os.path.abspath(path)), delete=False) as f:
+                pending.append((f.name, path))
+                f.write(content)
+                f.flush()
+                os.fsync(f.fileno())
+            os.chmod(f.name, 0o644)
+        for temporary, path in pending:
+            os.replace(temporary, path)
+    finally:
+        for temporary, _ in pending:
+            if os.path.exists(temporary):
+                os.unlink(temporary)
     return True
 
 
@@ -630,6 +655,7 @@ def main():
     all_fixtures = []
     summary = {}
     fixtures_summary = {}
+    source_success = set()
 
     # ---- A 类：当前赛季，404 回退上一赛季 ----
     for league in LEAGUES_A:
@@ -655,6 +681,7 @@ def main():
             continue
 
         matches = parse_main_csv(text, league, used_year, team_cn, missing_teams)
+        source_success.add(league)
         all_matches.extend(matches)
         summary[league] = len(matches)
         print(f"[{league}] {season_code(used_year)} 赛季抓到 {len(matches)} 场已赛比赛")
@@ -685,11 +712,13 @@ def main():
             continue
 
         matches = parse_extra_csv_latest(text, league, team_cn, missing_teams)
+        source_success.add(league)
         all_matches.extend(matches)
         summary[league] = len(matches)
         season_label = matches[0]["season"] if matches else "?"
         print(f"[{league}] 最新赛季（{season_label}）抓到 {len(matches)} 场已赛比赛")
 
+    fast_health = set()
     # ---- 快速通道：API-Football 补最新赛果（无密钥时跳过，行为与旧版一致）----
     if APIFB_KEY:
         print(f"\n快速通道：API-Football 按天拉取最近 {FAST_DAYS} 天全球比赛"
@@ -698,7 +727,7 @@ def main():
         for m in all_matches:
             csv_index.setdefault((m["_league"], m["team1"], m["team2"]), set()).add(m["date"])
         before = len(all_matches)
-        fast_matches, fast_fixtures = fetch_apifb_fast(csv_index, team_cn, missing_teams)
+        fast_matches, fast_fixtures = fetch_apifb_fast(csv_index, team_cn, missing_teams, fast_health)
         all_matches = merge_fast(all_matches, fast_matches)
         all_fixtures.extend(fast_fixtures)
         summary["_fast"] = len(fast_matches)
@@ -728,12 +757,18 @@ def main():
 
     all_matches.sort(key=lambda m: m["date"])
 
+    source_complete = source_success == set(LEAGUES_A + LEAGUES_B)
+    if not source_complete:
+        missing_sources = sorted(set(LEAGUES_A + LEAGUES_B) - source_success)
+        print(f"[防空写] 本轮缺少联赛数据源：{', '.join(missing_sources)}")
+
     output = {
         "updated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
         "matches": all_matches,
     }
     latest_written = safe_write_output(OUTPUT_PATH, OUTPUT_JS_PATH,
-                                       "LATEST_DATA", output, "matches", "赛果增量")
+                                       "LATEST_DATA", output, "matches", "赛果增量",
+                                       healthy=source_complete)
 
     # ---- 近期赛程：按 (联赛, 日期, 时间, 主, 客) 去重后按开球时间排序 ----
     # 保留 fid（API-Football fixture id）：fetch_predictions.py 等下游脚本需要它调 /predictions
@@ -744,12 +779,16 @@ def main():
                           key=lambda x: (x["date"], x["time"] or "99:99", x["team1"]))
     for fx in all_fixtures:
         attach_beijing_time(fx)  # 补 date_bj / time_bj 北京时间字段（显示层用，原 date/time 不动）
+    utc_today = datetime.now(timezone.utc).date()
+    expected_days = {(utc_today + timedelta(days=i)).isoformat() for i in range(FIXTURE_DAYS + 1)}
+    fixtures_complete = expected_days.issubset(fast_health)
     fixtures_output = {
         "updated_at": output["updated_at"],
         "fixtures": all_fixtures,
     }
     fx_written = safe_write_output(FIXTURES_PATH, FIXTURES_JS_PATH,
-                                   "FIXTURES_DATA", fixtures_output, "fixtures", "近期赛程")
+                                   "FIXTURES_DATA", fixtures_output, "fixtures", "近期赛程",
+                                   complete=fixtures_complete, healthy=source_complete)
 
     # ---- 大小球对照输出：近 OU_DAYS 天完场（含结果）+ 窗口内未赛（初盘）----
     ou_cutoff = (today - timedelta(days=OU_DAYS)).isoformat()
@@ -778,7 +817,8 @@ def main():
     ou_items.sort(key=lambda x: (x["date"], x["time"] or "99:99", x["team1"]))
     ou_output = {"updated_at": output["updated_at"], "items": ou_items}
     ou_written = safe_write_output(OU_PATH, OU_JS_PATH,
-                                   "OU_DATA", ou_output, "items", "大小球对照")
+                                   "OU_DATA", ou_output, "items", "大小球对照",
+                                   healthy=source_complete)
 
     print("\n===== 汇总 =====")
     for league in LEAGUES_A + LEAGUES_B:

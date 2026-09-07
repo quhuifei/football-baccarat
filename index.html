@@ -787,7 +787,7 @@
   @media (max-width: 640px) {
     /* 防整页横向晃动：页面级禁止横向滚动（卡片内部仍可自行横滚，iOS 滚动链不再带动整页） */
     html, body { overflow-x: hidden; }
-    body { padding: 12px 8px 8px; }
+    body { padding: 66px 8px calc(8px + env(safe-area-inset-bottom)); }
     h1 { font-size: 23px; letter-spacing: 3px; }
     .controls {
       flex-direction: column;
@@ -1094,7 +1094,20 @@
   #support-img-btn:hover { background: rgba(212, 175, 55, 0.22); }
   @media (max-width: 640px) {
     #support-modal { right: 8px; left: 8px; }
-    .support-card { width: 100%; }
+    #support-modal {
+      bottom: calc(12px + env(safe-area-inset-bottom) + var(--keyboard-inset, 0px));
+    }
+    .support-card {
+      width: 100%; max-width: none;
+      max-height: calc(var(--visible-height, 100dvh) - 80px - env(safe-area-inset-bottom));
+    }
+    #support-fab { bottom: calc(24px + env(safe-area-inset-bottom)); }
+    #chat-input, .support-input-row input[type="text"] { font-size: 16px; }
+    .support-input-row button, .support-head button, #chat-send, #chat-img-btn { min-height: 44px; min-width: 44px; }
+    .league-btn, .year-select, .road-tab { min-height: 44px; }
+    .league-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    .road-wrapper { overscroll-behavior-x: contain; }
+
   }
 </style>
 
@@ -1125,13 +1138,19 @@ function getCurrentMatches() {
   return allData[currentLeague].matches.map((m, i) => ({...m, _idx: i, _league: currentLeague}));
 }
 
+let filteredCache = { data: null, season: null, count: -1, matches: [] };
 function getFilteredMatches() {
+  const data = allData[currentLeague];
+  if (filteredCache.data === data && filteredCache.season === currentSeason &&
+      filteredCache.count === (data?.matches.length ?? 0)) return filteredCache.matches;
   let seq = 0;
   const base = getCurrentMatches();
-  return base.filter(m => {
+  const matches = base.filter(m => {
     if (currentSeason === 'all') return true;
     return m.season === currentSeason;
   }).map(m => ({...m, _seq: seq++}));
+  filteredCache = { data, season: currentSeason, count: data?.matches.length ?? 0, matches };
+  return matches;
 }
 
 // ===== 大小球大路图 =====
@@ -1225,7 +1244,7 @@ function generateStandardRoad(results, maxRows = 6) {
       return;
     }
 
-    if (Object.keys(grid).length === 0) {
+    if (lastPos === null) {
       currentCol = 0;
       grid['0,0'] = res;
       lastPos = [0, 0];
@@ -1259,7 +1278,7 @@ function generateStandardRoad(results, maxRows = 6) {
     }
   });
 
-  if (pendingTies.length > 0 && Object.keys(grid).length === 0) {
+  if (pendingTies.length > 0 && lastPos === null) {
     grid['0,0'] = 'T';
     lastPos = [0, 0];
     cellMatches['0,0'] = pendingTies;
@@ -1308,6 +1327,7 @@ function renderRoadInto(roadEl, matches, league) {
   roadEl.style.gridTemplateColumns = `repeat(${maxCol + 1}, 40px)`;
   roadEl.style.gridTemplateRows = `repeat(${maxRow + 1}, 40px)`;
   roadEl.innerHTML = '';
+  const fragment = document.createDocumentFragment();
 
   for (let r = 0; r <= maxRow; r++) {
     for (let c = 0; c <= maxCol; c++) {
@@ -1406,9 +1426,10 @@ function renderRoadInto(roadEl, matches, league) {
         }
       }
 
-      roadEl.appendChild(cell);
+      fragment.appendChild(cell);
     }
   }
+  roadEl.appendChild(fragment);
 }
 
 function renderRoad() {
@@ -1521,7 +1542,6 @@ function populateSeasonSelect() {
 // 切换联赛：懒加载数据文件后渲染（带竞态保护）
 async function setLeague(league) {
   closeLeaguePanel();
-  markLeagueSeen(league);
   if (league === currentLeague && allData[league]) return;
   const token = ++leagueLoadToken;
   currentLeague = league;
@@ -1554,6 +1574,7 @@ async function setLeague(league) {
   statusEl.textContent = '✅ ' + msg;
 
   renderAll();
+  markLeagueSeen(league);
 }
 
 function renderStats() {
@@ -1567,8 +1588,8 @@ function renderStats() {
   document.getElementById('stat-t').textContent = counts.T;
   document.getElementById('stat-total').textContent = filtered.length;
   // 卡片标签联动（颜色本就对齐：红=大/庄，蓝=小/闲，灰绿=走/和）
-  document.querySelector('#stat-b + .stat-label').textContent = isOu ? '大（大于初盘）' : '庄（主队胜）';
-  document.querySelector('#stat-p + .stat-label').textContent = isOu ? '小（小于初盘）' : '闲（客队胜）';
+  document.querySelector('#stat-b + .stat-label').textContent = isOu ? '大（按盘口判定）' : '庄（主队胜）';
+  document.querySelector('#stat-p + .stat-label').textContent = isOu ? '小（按盘口判定）' : '闲（客队胜）';
   document.querySelector('#stat-t + .stat-label').textContent = isOu ? '走（走水）' : '和（平局）';
 }
 
@@ -1577,6 +1598,7 @@ function renderTable() {
   const filtered = getFilteredMatches().slice().reverse();
   const tbody = document.getElementById('match-table-body');
   tbody.innerHTML = '';
+  const fragment = document.createDocumentFragment();
   let lastGroup = '';
   filtered.forEach((m, i) => {
     const year = m.date.split('-')[0];
@@ -1585,7 +1607,7 @@ function renderTable() {
       const sep = document.createElement('tr');
       sep.className = 'year-separator';
       sep.innerHTML = `<td colspan="8">${groupLabel}</td>`;
-      tbody.appendChild(sep);
+      fragment.appendChild(sep);
       lastGroup = year;
     }
     const tr = document.createElement('tr');
@@ -1594,8 +1616,9 @@ function renderTable() {
     const ouTitle = ou ? `总进球 ${m.s1 + m.s2} · ${ou.isDefault ? '2.5 默认线' : '初盘 ' + ou.line}` : '';
     tr.innerHTML = `<td>${i + 1}</td><td>${year}</td><td>${m.date}</td><td>${m.team1_cn}</td><td>${m.s1}–${m.s2}</td><td>${m.team2_cn}</td><td class="result-${m.result}">${resultLabels[m.result]}</td>` +
       `<td class="ou-col">${ou ? `<span class="ou-mini ou-mini-${ou.token}" title="${ouTitle}">${ouTxt}</span>` : ''}</td>`;
-    tbody.appendChild(tr);
+    fragment.appendChild(tr);
   });
+  tbody.appendChild(fragment);
 }
 
 function updatePageInfo() {
@@ -1764,7 +1787,11 @@ function renderFixturesPanel() {
   const dispList = list.slice().sort((a, b) =>
     (dispDate(a) + (a.time_bj || a.time || '99:99')).localeCompare(
       dispDate(b) + (b.time_bj || b.time || '99:99')));
-  let html = '<div class="fixture-bj-note">时间为北京时间</div>';
+  const updated = fixturesData.updated_at ? new Date(fixturesData.updated_at) : null;
+  const stale = updated && Date.now() - updated.getTime() > 36 * 3600000;
+  let html = '<div class="fixture-bj-note">时间为北京时间' +
+    (updated ? ' · 更新于 ' + esc(updated.toLocaleString('zh-CN')) : '') +
+    (stale ? ' · 数据较旧，等待更新' : '') + '</div>';
   let lastDate = null;
   dispList.forEach(fx => {
     const dd = dispDate(fx);
@@ -1899,6 +1926,7 @@ function chatScrollBottom() { chatMsgsEl.scrollTop = chatMsgsEl.scrollHeight; }
 function renderChatMsg(m) {
   if (chatState.seen.has(m.id)) return;  // 已渲染过的消息不再重复渲染
   chatState.seen.add(m.id);
+  chatMsgsEl.querySelector('.chat-empty')?.remove();
   // 抖音评论区风格：一律靠左、无头像、「昵称：内容」同一行
   const item = document.createElement('div');
   item.className = 'chat-item';
@@ -1943,21 +1971,27 @@ document.getElementById('chat-lightbox').addEventListener('click', function () {
 });
 
 async function chatPoll(initial) {
-  if (chatState.pollBusy) return;  // 上一次拉取未完成就跳过，防止并发重复渲染
+  if (chatState.pollBusy || (document.hidden && !initial)) return;  // 上一次拉取未完成就跳过，防止并发重复渲染
   chatState.pollBusy = true;
+  const follow = initial || chatMsgsEl.scrollHeight - chatMsgsEl.scrollTop - chatMsgsEl.clientHeight < 60;
   try {
     const url = '/api/chat/messages' + (chatState.lastId ? '?after_id=' + chatState.lastId : '');
     const r = await fetch(url, { credentials: 'same-origin' });
-    const d = r.ok ? await r.json() : null;
-    if (d && d.ok && d.messages.length) {
+    if (!r.ok) throw new Error('加载失败');
+    const d = await r.json();
+    if (!d.ok) throw new Error('加载失败');
+    chatMsgsEl.querySelector('.chat-error')?.remove();
+    if (d.messages.length) {
       if (initial) { chatMsgsEl.innerHTML = ''; chatState.seen.clear(); }
       d.messages.forEach(renderChatMsg);
       chatState.lastId = Math.max(chatState.lastId, d.messages[d.messages.length - 1].id);
-      chatScrollBottom();
+      if (follow) chatScrollBottom();
     } else if (initial) {
       chatMsgsEl.innerHTML = '<div class="chat-empty">还没有消息，来说第一句吧</div>';
     }
-  } catch (e) {} finally { chatState.pollBusy = false; }
+  } catch (e) {
+    if (initial) chatMsgsEl.innerHTML = '<div class="chat-empty chat-error">聊天加载失败，正在重试…</div>';
+  } finally { chatState.pollBusy = false; }
 }
 
 function chatApplyLoginState() {
@@ -1985,7 +2019,6 @@ async function chatSend() {
     if (d && d.ok) {
       chatInputEl.value = '';
       renderChatMsg(d.message);
-      chatState.lastId = Math.max(chatState.lastId, d.message.id);
       chatScrollBottom();
     } else if (d && d.need_login) {
       location.href = '/login.html';
@@ -1994,7 +2027,9 @@ async function chatSend() {
       chatInputEl.placeholder = (d && d.error) || '发送失败';
       setTimeout(() => { chatInputEl.placeholder = '说点什么…（200 字以内）'; }, 2000);
     }
-  } catch (e) {} finally { chatSendEl.disabled = false; }
+  } catch (e) {
+    chatInputEl.placeholder = '发送失败，请检查网络后重试';
+  } finally { chatSendEl.disabled = false; }
 }
 
 (async function initChat() {
@@ -2009,7 +2044,14 @@ async function chatSend() {
 })();
 chatSendEl.addEventListener('click', chatSend);
 chatInputEl.addEventListener('click', () => { if (!chatState.me) location.href = '/login.html'; });
-chatInputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') chatSend(); });
+chatInputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.isComposing) chatSend(); });
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    chatPoll(false);
+    if (supportState.open) supportPoll(false);
+  }
+});
 
 // ===== 聊天发图片 =====
 const chatImgBtn = document.getElementById('chat-img-btn');
@@ -2027,8 +2069,8 @@ chatImgFile.addEventListener('change', function () {
     setTimeout(() => { chatInputEl.placeholder = '说点什么…（200 字以内）'; }, 2000);
     return;
   }
-  if (file.size > 5 * 1024 * 1024) {
-    chatInputEl.placeholder = '图片过大（超过 5MB）';
+  if (file.size > 15 * 1024 * 1024) {
+    chatInputEl.placeholder = '图片过大（超过 15MB）';
     setTimeout(() => { chatInputEl.placeholder = '说点什么…（200 字以内）'; }, 2000);
     return;
   }
@@ -2044,7 +2086,6 @@ chatImgFile.addEventListener('change', function () {
       const d = await r.json().catch(() => ({}));
       if (d && d.ok) {
         renderChatMsg(d.message);
-        chatState.lastId = Math.max(chatState.lastId, d.message.id);
         chatScrollBottom();
       } else if (d && d.need_login) {
         location.href = '/login.html';
@@ -2057,11 +2098,27 @@ chatImgFile.addEventListener('change', function () {
   reader.readAsDataURL(file);
 });
 
+// 可视视口在手机键盘弹出时缩小，客服输入栏保持在键盘上方。
+function updateVisibleViewport() {
+  const viewport = window.visualViewport;
+  const height = viewport ? viewport.height : window.innerHeight;
+  const inset = viewport ? Math.max(0, window.innerHeight - height - viewport.offsetTop) : 0;
+  document.documentElement.style.setProperty('--visible-height', height + 'px');
+  document.documentElement.style.setProperty('--keyboard-inset', inset + 'px');
+}
+window.visualViewport?.addEventListener('resize', updateVisibleViewport);
+window.visualViewport?.addEventListener('scroll', updateVisibleViewport);
+window.addEventListener('resize', updateVisibleViewport);
+updateVisibleViewport();
+
 // ===== 悬浮客服求助（双向聊天） =====
-const supportState = { lastId: 0, open: false, started: false };
+const supportState = { lastId: 0, open: false, started: false, busy: false, seen: new Set() };
 const spMsgsEl = document.getElementById('support-msgs');
 
 function renderSupportMsg(m) {
+  if (supportState.seen.has(m.id)) return;
+  supportState.seen.add(m.id);
+  spMsgsEl.querySelector('.support-empty')?.remove();
   const mine = m.sender === 'user';
   const item = document.createElement('div');
   item.className = 'sp-item' + (mine ? ' mine' : '');
@@ -2090,21 +2147,24 @@ function renderSupportMsg(m) {
 }
 
 async function supportPoll(initial) {
+  if (supportState.busy || document.hidden) return;
+  supportState.busy = true;
+  const follow = initial || spMsgsEl.scrollHeight - spMsgsEl.scrollTop - spMsgsEl.clientHeight < 60;
   try {
     const url = '/api/support/my' + (supportState.lastId ? '?after_id=' + supportState.lastId : '');
     const r = await fetch(url, { credentials: 'same-origin' });
     const d = r.ok ? await r.json() : null;
     if (d && d.ok) {
       if (d.messages.length) {
-        if (initial) spMsgsEl.innerHTML = '';
+        if (initial) { spMsgsEl.innerHTML = ''; supportState.seen.clear(); }
         d.messages.forEach(renderSupportMsg);
         supportState.lastId = d.messages[d.messages.length - 1].id;
-        spMsgsEl.scrollTop = spMsgsEl.scrollHeight;
+        if (follow) spMsgsEl.scrollTop = spMsgsEl.scrollHeight;
       } else if (initial) {
         spMsgsEl.innerHTML = '<div class="support-empty">你好，有什么问题可以留言，<br>客服会尽快回复（游客也可使用）</div>';
       }
     }
-  } catch (e) {}
+  } catch (e) {} finally { supportState.busy = false; }
 }
 
 function toggleSupport(show) {
@@ -2137,7 +2197,6 @@ async function submitSupport() {
       input.value = '';
       if (spMsgsEl.querySelector('.support-empty')) spMsgsEl.innerHTML = '';
       renderSupportMsg(d.message);
-      supportState.lastId = Math.max(supportState.lastId, d.message.id);
       spMsgsEl.scrollTop = spMsgsEl.scrollHeight;
     } else {
       input.placeholder = (d && d.error) || '发送失败';
@@ -2146,7 +2205,7 @@ async function submitSupport() {
   } catch (e) {} finally { btn.disabled = false; }
 }
 document.getElementById('support-text').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') submitSupport();
+  if (e.key === 'Enter' && !e.isComposing) submitSupport();
 });
 
 // 客服发图（游客/用户均可，≤30MB，复用聊天室的 base64 模式）
@@ -2176,7 +2235,6 @@ supportImgFile.addEventListener('change', function () {
       if (d && d.ok) {
         if (spMsgsEl.querySelector('.support-empty')) spMsgsEl.innerHTML = '';
         renderSupportMsg(d.message);
-        supportState.lastId = Math.max(supportState.lastId, d.message.id);
         spMsgsEl.scrollTop = spMsgsEl.scrollHeight;
       } else {
         const input = document.getElementById('support-text');
