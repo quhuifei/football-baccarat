@@ -40,7 +40,7 @@ FastAPI + SQLite，单文件实现
   POST /api/auth/admin/words/delete    {word} 删除敏感词
   GET  /api/auth/admin/stats           用户/聊天/客服统计 + nginx 访问量
   GET  /api/auth/admin/data-status     足球数据仓库 mtime + 最新 commit
-  POST /api/auth/admin/data-update     git fetch && reset --hard origin/main
+  POST /api/auth/admin/data-update     安全同步网站代码并保留实时数据
   GET  /api/auth/admin/announcements   公告历史列表
   POST /api/auth/admin/announcements/add        {text} 发布公告（其余下架）
   POST /api/auth/admin/announcements/deactivate {id} 下架公告
