@@ -90,18 +90,6 @@
     font-size: 13px;
     letter-spacing: 1px;
   }
-  .data-health {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 6px 12px;
-    margin: 12px auto 0;
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.6;
-  }
-  .data-health .health-ok { color: #4dd0a8; }
-  .data-health .health-warn { color: #f6c453; }
   .controls {
     display: flex;
     justify-content: center;
@@ -809,7 +797,6 @@
       width: 100%;
     }
     .controls > label { font-size: 13px; }
-    .data-health { justify-content: flex-start; padding: 0 6px; }
     .year-select { width: 100%; min-width: 0; }
     #season-wrapper {
       display: flex;
@@ -959,8 +946,6 @@
       </select>
     </span>
   </div>
-  <div class="data-health" id="data-health" aria-live="polite">数据状态：正在加载赛果与赛程…</div>
-
   <div class="stats">
     <div class="stat-card"><div class="stat-number" style="color:#ff6b6b" id="stat-b">0</div><div class="stat-label">庄（主队胜）</div></div>
     <div class="stat-card"><div class="stat-number" style="color:#4dabf7" id="stat-p">0</div><div class="stat-label">闲（客队胜）</div></div>
@@ -1640,28 +1625,6 @@ function escapeHtml(value) {
     c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-function renderDataHealth() {
-  const el = document.getElementById('data-health');
-  if (!el) return;
-  const format = value => {
-    const date = value ? new Date(value) : null;
-    return date && !isNaN(date.getTime()) ? date.toLocaleString('zh-CN') : '暂无数据';
-  };
-  const stale = value => {
-    const date = value ? new Date(value) : null;
-    return !date || isNaN(date.getTime()) || Date.now() - date.getTime() > 36 * 3600000;
-  };
-  const latest = latestMeta && latestMeta.updated_at;
-  const fixtures = fixturesData && fixturesData.updated_at;
-  el.replaceChildren();
-  [['赛果', latest], ['赛程', fixtures]].forEach(([label, value]) => {
-    const item = document.createElement('span');
-    item.className = stale(value) ? 'health-warn' : 'health-ok';
-    item.textContent = `${label}：${format(value)}${stale(value) ? '（待更新）' : ''}`;
-    el.appendChild(item);
-  });
-}
-
 function updatePageInfo() {
   const leagueInfo = allData[currentLeague];
   if (!leagueInfo) return;
@@ -1809,7 +1772,6 @@ async function initFixturesPanel() {
   }
   await fixturesLoading;
   renderFixturesPanel();
-  renderDataHealth();
 }
 
 function renderFixturesPanel() {
@@ -1829,11 +1791,7 @@ function renderFixturesPanel() {
   const dispList = list.slice().sort((a, b) =>
     (dispDate(a) + (a.time_bj || a.time || '99:99')).localeCompare(
       dispDate(b) + (b.time_bj || b.time || '99:99')));
-  const updated = fixturesData.updated_at ? new Date(fixturesData.updated_at) : null;
-  const stale = updated && Date.now() - updated.getTime() > 36 * 3600000;
-  let html = '<div class="fixture-bj-note">时间为北京时间' +
-    (updated ? ' · 更新于 ' + esc(updated.toLocaleString('zh-CN')) : '') +
-    (stale ? ' · 数据较旧，等待更新' : '') + '</div>';
+  let html = '<div class="fixture-bj-note">时间为北京时间</div>';
   let lastDate = null;
   dispList.forEach(fx => {
     const dd = dispDate(fx);
@@ -1887,10 +1845,8 @@ async function loadLatestData() {
       (latestByLeague[m._league] = latestByLeague[m._league] || []).push(m);
     });
     latestMeta = { count: data.matches.length, updated_at: data.updated_at || null };
-    renderDataHealth();
   } catch (err) {
     latestMeta = null;
-    renderDataHealth();
     console.log('加载最新数据失败:', err.message);
   }
 }
