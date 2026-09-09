@@ -90,6 +90,18 @@
     font-size: 13px;
     letter-spacing: 1px;
   }
+  .data-health {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 12px;
+    margin: 12px auto 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .data-health .health-ok { color: #4dd0a8; }
+  .data-health .health-warn { color: #f6c453; }
   .controls {
     display: flex;
     justify-content: center;
@@ -797,6 +809,7 @@
       width: 100%;
     }
     .controls > label { font-size: 13px; }
+    .data-health { justify-content: flex-start; padding: 0 6px; }
     .year-select { width: 100%; min-width: 0; }
     #season-wrapper {
       display: flex;
@@ -946,6 +959,7 @@
       </select>
     </span>
   </div>
+  <div class="data-health" id="data-health" aria-live="polite">数据状态：正在加载赛果与赛程…</div>
 
   <div class="stats">
     <div class="stat-card"><div class="stat-number" style="color:#ff6b6b" id="stat-b">0</div><div class="stat-label">庄（主队胜）</div></div>
@@ -1614,11 +1628,38 @@ function renderTable() {
     const ou = ouOutcome(m);  // 大小球结果（快照场真实初盘线，历史场 2.5 默认线）
     const ouTxt = ou ? ou.label : '';
     const ouTitle = ou ? `总进球 ${m.s1 + m.s2} · ${ou.isDefault ? '2.5 默认线' : '初盘 ' + ou.line}` : '';
-    tr.innerHTML = `<td>${i + 1}</td><td>${year}</td><td>${m.date}</td><td>${m.team1_cn}</td><td>${m.s1}–${m.s2}</td><td>${m.team2_cn}</td><td class="result-${m.result}">${resultLabels[m.result]}</td>` +
+    tr.innerHTML = `<td>${i + 1}</td><td>${escapeHtml(year)}</td><td>${escapeHtml(m.date)}</td><td>${escapeHtml(m.team1_cn)}</td><td>${m.s1}–${m.s2}</td><td>${escapeHtml(m.team2_cn)}</td><td class="result-${m.result}">${resultLabels[m.result]}</td>` +
       `<td class="ou-col">${ou ? `<span class="ou-mini ou-mini-${ou.token}" title="${ouTitle}">${ouTxt}</span>` : ''}</td>`;
     fragment.appendChild(tr);
   });
   tbody.appendChild(fragment);
+}
+
+function escapeHtml(value) {
+  return String(value == null ? '' : value).replace(/[&<>"']/g,
+    c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function renderDataHealth() {
+  const el = document.getElementById('data-health');
+  if (!el) return;
+  const format = value => {
+    const date = value ? new Date(value) : null;
+    return date && !isNaN(date.getTime()) ? date.toLocaleString('zh-CN') : '暂无数据';
+  };
+  const stale = value => {
+    const date = value ? new Date(value) : null;
+    return !date || isNaN(date.getTime()) || Date.now() - date.getTime() > 36 * 3600000;
+  };
+  const latest = latestMeta && latestMeta.updated_at;
+  const fixtures = fixturesData && fixturesData.updated_at;
+  el.replaceChildren();
+  [['赛果', latest], ['赛程', fixtures]].forEach(([label, value]) => {
+    const item = document.createElement('span');
+    item.className = stale(value) ? 'health-warn' : 'health-ok';
+    item.textContent = `${label}：${format(value)}${stale(value) ? '（待更新）' : ''}`;
+    el.appendChild(item);
+  });
 }
 
 function updatePageInfo() {
@@ -1768,6 +1809,7 @@ async function initFixturesPanel() {
   }
   await fixturesLoading;
   renderFixturesPanel();
+  renderDataHealth();
 }
 
 function renderFixturesPanel() {
@@ -1845,8 +1887,10 @@ async function loadLatestData() {
       (latestByLeague[m._league] = latestByLeague[m._league] || []).push(m);
     });
     latestMeta = { count: data.matches.length, updated_at: data.updated_at || null };
+    renderDataHealth();
   } catch (err) {
     latestMeta = null;
+    renderDataHealth();
     console.log('加载最新数据失败:', err.message);
   }
 }

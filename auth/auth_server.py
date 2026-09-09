@@ -66,8 +66,10 @@ import logging
 import os
 import re
 import secrets
+import shutil
 import sqlite3
 import subprocess
+import tempfile
 import time
 from starlette.concurrency import run_in_threadpool
 from contextlib import closing
@@ -2075,8 +2077,15 @@ async def admin_data_status(request: Request) -> JSONResponse:
     })
 
 
+_GENERATED_DATA_FILES = (
+    "football_latest.json", "football_latest.js",
+    "football_fixtures.json", "football_fixtures.js",
+    "football_ou.json", "football_ou.js", "odds_store.json",
+)
+
+
 def _update_football_repo(repo: str) -> tuple[bool, str]:
-    """在工作线程中更新仓库；fetch 失败时不执行 reset。"""
+    """安全更新代码，同时保留服务器刚生成的数据文件。"""
     try:
         r1 = subprocess.run(
             ["git", "fetch", "origin"], cwd=repo, capture_output=True, text=True, timeout=120,
@@ -2084,10 +2093,24 @@ def _update_football_repo(repo: str) -> tuple[bool, str]:
         if r1.returncode != 0:
             out = (r1.stdout + r1.stderr).strip()[-2000:]
             return False, f"拉取失败：{out[:500]}"
-        r2 = subprocess.run(
-            ["git", "reset", "--hard", "origin/main"],
-            cwd=repo, capture_output=True, text=True, timeout=120,
-        )
+
+        with tempfile.TemporaryDirectory(prefix="football-data-") as backup:
+            for name in _GENERATED_DATA_FILES:
+                path = os.path.join(repo, name)
+                if os.path.isfile(path):
+                    shutil.copy2(path, os.path.join(backup, name))
+
+            # 仅临时还原会在每轮抓取后变化的数据；其余本地改动不能被后台按钮悄悄覆盖。
+            subprocess.run(["git", "restore", "--", *_GENERATED_DATA_FILES],
+                           cwd=repo, capture_output=True, text=True, timeout=30)
+            r2 = subprocess.run(
+                ["git", "merge", "--ff-only", "origin/main"],
+                cwd=repo, capture_output=True, text=True, timeout=120,
+            )
+            for name in _GENERATED_DATA_FILES:
+                saved = os.path.join(backup, name)
+                if os.path.isfile(saved):
+                    shutil.copy2(saved, os.path.join(repo, name))
     except subprocess.TimeoutExpired:
         return False, "更新超时（120 秒）"
     out = ((r1.stdout + r1.stderr + r2.stdout + r2.stderr).strip())[-2000:]
@@ -2096,7 +2119,7 @@ def _update_football_repo(repo: str) -> tuple[bool, str]:
 
 @app.post("/api/auth/admin/data-update")
 async def admin_data_update(request: Request) -> JSONResponse:
-    """数据更新：cd 仓库 && git fetch && git reset --hard origin/main。"""
+    """安全同步网站代码，不覆盖服务器刚生成的赛果与赛程。"""
     email, err = _require_admin(request)
     if not email:
         return err
