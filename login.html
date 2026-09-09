@@ -34,26 +34,6 @@
     justify-content: center;
     padding: 24px 16px;
   }
-  .page-back {
-    position: fixed;
-    top: max(14px, env(safe-area-inset-top));
-    left: 14px;
-    z-index: 10;
-    min-height: 42px;
-    padding: 9px 15px;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    color: var(--gold-bright);
-    background: rgba(7, 21, 16, 0.92);
-    border: 1px solid var(--gold-line);
-    border-radius: 999px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 700;
-    backdrop-filter: blur(10px);
-  }
-  .page-back:hover { border-color: var(--gold); }
   .card {
     width: 100%;
     max-width: 420px;
@@ -266,8 +246,6 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
   @media (max-width: 420px) {
-    body { justify-content: flex-start; padding-top: calc(76px + env(safe-area-inset-top)); }
-    .page-back { top: max(12px, env(safe-area-inset-top)); left: 12px; }
     .card { padding: 28px 20px 24px; }
     input.code-input { font-size: 18px; letter-spacing: 4px; }
     .steps .lbl { display: none; }
@@ -275,7 +253,6 @@
 </style>
 </head>
 <body>
-  <a class="page-back" id="page-back" href="/" aria-label="返回上一页">← 返回</a>
   <div class="card">
     <div class="logo">赛先知足球</div>
     <div class="slogan">登录后查看全球 27 国联赛路图</div>
@@ -401,18 +378,6 @@
   'use strict';
   var $ = function (id) { return document.getElementById(id); };
   var msg = $('msg');
-
-  $('page-back').addEventListener('click', function (e) {
-    var hasProtectedNext = new URLSearchParams(location.search).has('next');
-    if (hasProtectedNext || !document.referrer) return;
-    try {
-      var previous = new URL(document.referrer);
-      if (previous.origin === location.origin && previous.pathname !== location.pathname) {
-        e.preventDefault();
-        history.back();
-      }
-    } catch (_) {}
-  });
 
   function say(text, ok) {
     msg.textContent = text || '';

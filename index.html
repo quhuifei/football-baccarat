@@ -935,7 +935,6 @@
 <div class="container">
   <h1 id="page-title">世界杯 · 全球 27 国联赛</h1>
 
-  <section class="mobile-screen active" data-mobile-screen="road" aria-label="路图">
   <div class="controls">
     <label for="league-btn" style="color:#778da9;font-size:14px;">选择赛事：</label>
     <button type="button" class="year-select league-btn" id="league-btn" onclick="openLeaguePanel()">加载中...<span id="league-btn-dot" class="hidden"></span></button>
@@ -961,11 +960,9 @@
   <div class="road-wrapper" id="single-road-wrapper">
     <div class="road" id="road"></div>
   </div>
-  <button type="button" class="mobile-results-toggle" onclick="toggleMobileResults()">查看完整赛果</button>
-  </section>
 
   <div class="match-chat-row">
-  <div class="match-list mobile-screen" data-mobile-screen="road">
+  <div class="match-list">
     <h2>完整赛果列表</h2>
     <table>
       <thead><tr><th>#</th><th>年份</th><th>日期</th><th>左队（庄）</th><th>比分</th><th>右队（闲）</th><th>结果</th><th class="ou-col">大小</th></tr></thead>
@@ -974,12 +971,12 @@
     </table>
   </div>
 
-  <div class="fixtures-panel mobile-screen" id="fixtures-panel" data-mobile-screen="fixtures">
+  <div class="fixtures-panel" id="fixtures-panel">
     <h2>近期赛程</h2>
     <div class="fixtures-inline-body" id="fixtures-inline-body"><div class="fixture-empty">赛程加载中…</div></div>
   </div>
 
-  <div class="chat-panel mobile-screen" id="chat-panel" data-mobile-screen="community">
+  <div class="chat-panel" id="chat-panel">
     <h2>球迷聊天室</h2>
     <div class="chat-msgs" id="chat-msgs"></div>
     <div class="chat-input-row">
@@ -992,34 +989,11 @@
   <div class="chat-lightbox hidden" id="chat-lightbox"><img id="chat-lightbox-img" alt=""></div>
   </div>
 
-  <section class="mobile-profile-screen mobile-screen" data-mobile-screen="profile" aria-label="我的">
-    <div class="mobile-profile-avatar">◎</div>
-    <h2>我的</h2>
-    <p>查看账号资料、头像和个人设置</p>
-    <a href="/profile.html">进入个人中心</a>
-  </section>
-
   <div class="subtitle" id="api-status" style="font-size:12px;color:#4dd0a8;min-height:18px;margin-top:18px;">正在加载联赛目录...</div>
 
   <div class="footer" id="footer">数据来源：football-data.co.uk · API-Football · 世界杯近 4 届 + 全球 27 国联赛 2014 起</div>
   <div class="footer" style="margin-top:8px;color:#c9a227;opacity:0.85;">数据仅供参考，不构成投资建议</div>
 </div>
-
-<!-- 手机端主导航：路图为首页，其余现有功能按入口切换 -->
-<nav class="mobile-nav" aria-label="主导航">
-  <button type="button" class="active" data-mobile-target="road" onclick="mobileNavigate('road')">
-    <span class="mobile-nav-icon">▦</span><span>路图</span>
-  </button>
-  <button type="button" data-mobile-target="fixtures" onclick="mobileNavigate('fixtures')">
-    <span class="mobile-nav-icon">▣</span><span>赛程</span>
-  </button>
-  <button type="button" data-mobile-target="community" onclick="mobileNavigate('community')">
-    <span class="mobile-nav-icon">◌</span><span>社区</span>
-  </button>
-  <button type="button" data-mobile-target="profile" onclick="mobileNavigate('profile')">
-    <span class="mobile-nav-icon">◎</span><span>我的</span>
-  </button>
-</nav>
 
 <!-- 联赛选择器弹层 -->
 <div class="league-overlay" id="league-overlay" onclick="if(event.target===this)closeLeaguePanel()">
@@ -1033,103 +1007,6 @@
 </div>
 
 <div class="tooltip" id="tooltip"></div>
-
-<!-- 手机端路图优先：首页首屏只保留必要控制，路图尽早出现 -->
-<style>
-@media (max-width: 640px) {
-  body { padding: 62px 10px calc(88px + env(safe-area-inset-bottom)); }
-  #topbar { height: 54px; padding: 0 10px; background: rgba(5, 18, 14, .96); }
-  #brand-mark { padding: 0; border: 0; background: transparent; color: var(--gold); font-size: 0; }
-  #brand-mark .ic { width: 19px; height: 19px; vertical-align: middle; }
-  #brand-mark::after { content: '赛先知'; font: 700 18px "Oswald", "Noto Sans SC", sans-serif; letter-spacing: 2px; margin-left: 7px; vertical-align: middle; }
-  #account-chip { padding: 3px; border-color: rgba(212,175,55,.24); background: rgba(15,32,27,.75); }
-  #account-chip #account-email { display: none; }
-  #account-chip #logout-btn { padding: 3px 8px; font-size: 11px; }
-  #account-chip #logout-btn { display: none; }
-  #account-chip.guest { width: 34px; height: 34px; padding: 0; border-radius: 50%; display: grid; place-items: center; }
-  #account-chip.guest #register-link { display: none; }
-  #account-chip.guest #login-link { width: 100%; height: 100%; padding: 0; border: 0; font-size: 0; display: grid; place-items: center; }
-  #account-chip.guest #login-link::after { content: '◎'; font-size: 23px; line-height: 1; color: var(--gold); }
-  h1 { display: none; }
-  .container { max-width: 100%; }
-  .controls { display: grid; grid-template-columns: 118px minmax(0, 1fr); gap: 0; padding: 3px; margin: 0 0 10px; width: 100%; background: rgba(11, 31, 24, .92); border: 1px solid rgba(212,175,55,.42); border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,.2); backdrop-filter: none; }
-  .controls > label, #season-wrapper > label { display: none; }
-  #season-wrapper { display: block; min-width: 0; border-left: 1px solid rgba(212,175,55,.24); }
-  .league-btn, .year-select { width: 100%; min-width: 0; height: 50px; padding: 0 26px 0 12px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border: 0; border-radius: 11px; background-color: transparent; font-size: 15px; }
-  .league-btn { font-size: 14px; }
-  .year-select { font-size: 16px; font-weight: 700; }
-  .league-btn .lb-en { display: none; }
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 0 0 12px; padding: 8px 0; border: 1px solid var(--gold-line); border-radius: 13px; background: rgba(11, 31, 24, .62); }
-  .stat-card { padding: 0 2px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
-  .stat-card + .stat-card { border-left: 1px solid rgba(212,175,55,.14); }
-  .stat-number { font-size: 19px; line-height: 1.15; }
-  .stat-label { font-size: 10px; letter-spacing: 0; margin-top: 2px; }
-  .road-tabs { margin: 0 auto 10px; gap: 6px; }
-  .road-tab { min-height: 40px; padding: 7px 28px; font-size: 13px; }
-  .road-wrapper { position: relative; padding: 10px 8px 12px; border-radius: 16px; margin: 0 -2px 12px; }
-  .road-wrapper::before { content: '近期走势'; display: block; color: var(--gold); font-size: 14px; font-weight: 700; letter-spacing: 2px; padding: 0 2px 9px; }
-  .road { gap: 3px; }
-  .cell { width: 43px; height: 43px; border-radius: 8px; }
-  .cell-circle { width: 35px; height: 35px; font-size: 13px; }
-  .match-chat-row { gap: 12px; }
-  .match-chat-row .fixtures-panel { order: initial; max-height: 300px; }
-  .fixtures-panel, .match-list, .chat-panel { border-radius: 16px; padding: 14px 12px; }
-  .fixtures-panel h2, .chat-panel h2, .match-list h2 { font-size: 20px; margin-bottom: 14px; }
-  .fixture-item { padding: 11px 8px; }
-  .chat-input-row { gap: 7px; padding-top: 10px; }
-  #support-fab { bottom: calc(76px + env(safe-area-inset-bottom)); right: 14px; }
-  .mobile-nav {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 3000;
-    display: grid; grid-template-columns: repeat(4, 1fr); align-items: center;
-    height: calc(64px + env(safe-area-inset-bottom)); padding: 6px 8px env(safe-area-inset-bottom);
-    background: rgba(5, 18, 14, .97); border-top: 1px solid rgba(212,175,55,.22);
-    box-shadow: 0 -10px 30px rgba(0,0,0,.25); backdrop-filter: blur(14px);
-  }
-  .mobile-nav button {
-    appearance: none; border: 0; background: transparent; color: var(--muted); min-height: 52px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-    font: 12px inherit; cursor: pointer;
-  }
-  .mobile-nav button.active { color: var(--gold); }
-  .mobile-nav-icon { font-size: 22px; line-height: 1; font-weight: 700; }
-
-  /* 手机端四个独立内容页。每次只显示当前页。 */
-  .match-chat-row { display: contents; }
-  .mobile-screen { display: none !important; }
-  .mobile-screen.active { display: block !important; }
-  section.mobile-screen[data-mobile-screen="road"].active { display: block !important; }
-  .fixtures-panel.mobile-screen.active,
-  .chat-panel.mobile-screen.active {
-    display: flex !important; height: calc(100dvh - 162px); min-height: 500px; max-height: none;
-  }
-  .match-list.mobile-screen.active { display: none !important; }
-  body.mobile-results-open .match-list.mobile-screen.active { display: block !important; }
-  .mobile-results-toggle {
-    display: block; width: 100%; margin: 2px 0 12px; padding: 12px;
-    border: 1px solid rgba(212,175,55,.35); border-radius: 12px;
-    background: rgba(11,31,24,.7); color: var(--gold); font: 700 14px inherit;
-  }
-  .mobile-profile-screen {
-    height: calc(100dvh - 162px); min-height: 500px; padding: 56px 24px; text-align: center;
-    border: 1px solid var(--gold-line); border-radius: 18px; background: rgba(11,31,24,.72);
-  }
-  .mobile-profile-avatar {
-    width: 76px; height: 76px; margin: 0 auto 18px; display: grid; place-items: center;
-    border: 1px solid rgba(212,175,55,.55); border-radius: 50%; color: var(--gold); font-size: 38px;
-    background: rgba(212,175,55,.08);
-  }
-  .mobile-profile-screen h2 { margin: 0 0 8px; color: var(--gold); }
-  .mobile-profile-screen p { margin: 0 0 24px; color: var(--muted); font-size: 14px; }
-  .mobile-profile-screen a {
-    display: inline-block; padding: 11px 24px; border-radius: 999px;
-    background: var(--gold); color: #071510; text-decoration: none; font-weight: 800;
-  }
-  #api-status, .footer { display: none !important; }
-}
-@media (min-width: 641px) {
-  .mobile-nav, .mobile-results-toggle, .mobile-profile-screen { display: none; }
-}
-</style>
 
 <!-- 悬浮客服求助（聊天窗） -->
 <button type="button" id="support-fab" onclick="toggleSupport()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.5 0-2.9-.35-4.1-1L3 20l1.05-4.9A8.5 8.5 0 1 1 21 11.5z"/></svg> 求助</button>
@@ -1941,35 +1818,6 @@ initFixturesPanel();
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeLeaguePanel(); }
 });
-
-function mobileNavigate(target) {
-  const isMobile = window.matchMedia('(max-width: 640px)').matches;
-  if (isMobile) {
-    document.body.classList.remove('mobile-results-open');
-    document.querySelectorAll('[data-mobile-screen]').forEach(screen => {
-      screen.classList.toggle('active', screen.dataset.mobileScreen === target);
-    });
-    window.scrollTo({ top: 0, behavior: 'auto' });
-    if (target === 'fixtures') initFixturesPanel();
-  }
-  const targets = {
-    road: 'single-road-wrapper',
-    fixtures: 'fixtures-panel',
-    community: 'chat-panel',
-  };
-  const el = document.getElementById(targets[target]);
-  if (!isMobile && el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  document.querySelectorAll('.mobile-nav button').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mobileTarget === target);
-  });
-}
-
-function toggleMobileResults() {
-  document.body.classList.toggle('mobile-results-open');
-  const button = document.querySelector('.mobile-results-toggle');
-  if (button) button.textContent = document.body.classList.contains('mobile-results-open')
-    ? '收起完整赛果' : '查看完整赛果';
-}
 
 // ===== 数据加载 =====
 // api-status 默认隐藏（CSS #api-status{display:none}），仅错误信息显示：静默加载、出错可见
