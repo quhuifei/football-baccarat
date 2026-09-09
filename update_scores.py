@@ -80,13 +80,9 @@ FTR_MAP = {"H": "B", "A": "P", "D": "T"}
 # ---- 快速通道：API-Football（api-sports.io）----
 APIFB_KEY = os.environ.get("API_FOOTBALL_KEY", "").strip()
 APIFB_URL = "https://v3.football.api-sports.io/fixtures?date={d}"
-APIFB_STATUS_URL = "https://v3.football.api-sports.io/status"
 FAST_DAYS = 4      # 拉取 最近3天+今天（Pro 7500 次/天，余量充足；免费版只能填 2）
 FIXTURE_DAYS = 7   # 赛程向前拉取天数（今天+未来7天；免费版窗口只到明天，填 1）
 APIFB_SLEEP = 6    # 调用间隔秒数（限流保护）
-# 站点主动把每日实时接口消耗限制在 5,000 次以内。
-API_DAILY_LIMIT = 5000
-APIFB_MAX_CALLS_PER_RUN = FAST_DAYS + FIXTURE_DAYS + OU_MAX_CALLS
 # API-Football league.id → 本站联赛码（2026-08 逐一用 /leagues 接口按 国家+名称+League 类型核实）
 APIFB_LEAGUES = {
     39: "E0", 40: "E1", 41: "E2", 42: "E3", 43: "EC",
@@ -116,29 +112,6 @@ def current_season_start(today=None):
     """当前赛季起始年：月份 >= 7 则为当年，否则为上年。"""
     today = today or datetime.now()
     return today.year if today.month >= 7 else today.year - 1
-
-
-def api_budget_available():
-    """确认本轮完整更新不会把 API-Football 当日用量推过站点自设上限。"""
-    if not APIFB_KEY:
-        return False
-    try:
-        req = urllib.request.Request(
-            APIFB_STATUS_URL,
-            headers={"x-apisports-key": APIFB_KEY, "User-Agent": USER_AGENT})
-        with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
-            payload = json.load(resp)
-        current = int(((payload.get("response") or {}).get("requests") or {}).get("current"))
-    except (ValueError, TypeError, OSError, urllib.error.URLError) as e:
-        print(f"[接口额度] 无法确认当日用量（{e}），本轮跳过实时接口以避免超额")
-        return False
-    # 状态查询本身也可能计入用量，因此额外预留 1 次。
-    if current + APIFB_MAX_CALLS_PER_RUN + 1 > API_DAILY_LIMIT:
-        print(f"[接口额度] 今日已用 {current} 次；本轮最多还需 {APIFB_MAX_CALLS_PER_RUN} 次，"
-              f"已达到本站每日 {API_DAILY_LIMIT} 次上限，跳过实时接口")
-        return False
-    print(f"[接口额度] 今日已用 {current} 次；本轮最多 {APIFB_MAX_CALLS_PER_RUN} 次，允许更新")
-    return True
 
 
 def season_code(start_year):
@@ -764,7 +737,7 @@ def main():
         print(f"[{league}] 最新赛季（{season_label}）抓到 {len(matches)} 场已赛比赛")
 
     fast_health = set()
-    api_available = api_budget_available()
+    api_available = bool(APIFB_KEY)
     # ---- 快速通道：API-Football 补最新赛果（无密钥时跳过，行为与旧版一致）----
     if api_available:
         print(f"\n快速通道：API-Football 按天拉取最近 {FAST_DAYS} 天全球比赛"

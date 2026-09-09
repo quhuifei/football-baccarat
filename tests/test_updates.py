@@ -36,16 +36,6 @@ class OutputTests(unittest.TestCase):
             self.assertEqual(matches, [])
             self.assertEqual(fixtures, [])
 
-    def test_daily_api_budget_stops_before_five_thousand(self):
-        def status(current):
-            return io.BytesIO(json.dumps({'response': {'requests': {'current': current}}}).encode())
-        with patch.object(scores, 'APIFB_KEY', 'test-key'), \
-                patch.object(scores.urllib.request, 'urlopen', side_effect=lambda *a, **k: status(4943)):
-            self.assertTrue(scores.api_budget_available())
-        with patch.object(scores, 'APIFB_KEY', 'test-key'), \
-                patch.object(scores.urllib.request, 'urlopen', side_effect=lambda *a, **k: status(4944)):
-            self.assertFalse(scores.api_budget_available())
-
     def test_unhealthy_source_preserves_existing_output(self):
         with tempfile.TemporaryDirectory() as d:
             json_path, js_path = str(Path(d) / 'data.json'), str(Path(d) / 'data.js')
