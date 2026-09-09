@@ -267,6 +267,18 @@
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.03);
     font-size: 13px;
+    cursor: pointer;
+    transition: border-color .15s, background .15s, transform .15s;
+  }
+  .fixture-item:hover,
+  .fixture-item:focus-visible {
+    border-color: rgba(212, 175, 55, 0.55);
+    background: rgba(212, 175, 55, 0.08);
+  }
+  .fixture-item:active { transform: scale(.99); }
+  .road-wrapper.fixture-jump-highlight {
+    border-color: rgba(240, 213, 122, 0.75);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12), 0 10px 34px rgba(0, 0, 0, 0.45);
   }
   .fixture-item .fx-league { color: var(--muted); font-size: 11px; white-space: nowrap; flex-shrink: 0; }
   .fixture-item .fx-teams { flex: 1; min-width: 0; overflow-wrap: anywhere; }
@@ -1803,7 +1815,8 @@ function renderFixturesPanel() {
     }
     const meta = leagueMetaMap[fx._league];
     const lname = meta ? meta.flag + ' ' + meta.cn : esc(fx._league);
-    html += '<div class="fixture-item">' +
+    html += '<div class="fixture-item" role="button" tabindex="0" data-league="' + esc(fx._league) +
+      '" data-season="' + esc(fx.season || '') + '" aria-label="查看 ' + esc(lname) + ' 路图">' +
       '<span class="fx-league">' + lname + '</span>' +
       '<span class="fx-teams">' + esc(fx.team1_cn || fx.team1) + ' vs ' + esc(fx.team2_cn || fx.team2) + '</span>' +
       (fx.ou_line != null ? '<span class="fx-ou">初盘 ' + esc(String(fx.ou_line)) + '</span>' : '') +
@@ -1811,6 +1824,34 @@ function renderFixturesPanel() {
       '</div>';
   });
   body.innerHTML = html;
+  body.querySelectorAll('.fixture-item').forEach(item => {
+    item.addEventListener('click', () => openFixtureLeague(item.dataset.league, item.dataset.season));
+    item.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openFixtureLeague(item.dataset.league, item.dataset.season);
+      }
+    });
+  });
+}
+
+async function openFixtureLeague(league, season) {
+  if (!league || !leagueMetaMap[league]) return;
+  await setLeague(league);
+  if (!allData[league]) return;
+
+  const seasonSelect = document.getElementById('season-select');
+  const hasSeason = season && Array.from(seasonSelect.options).some(option => option.value === season);
+  if (hasSeason) {
+    currentSeason = season;
+    seasonSelect.value = season;
+    renderAll();
+  }
+
+  const roadWrapper = document.getElementById('single-road-wrapper');
+  roadWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  roadWrapper.classList.add('fixture-jump-highlight');
+  window.setTimeout(() => roadWrapper.classList.remove('fixture-jump-highlight'), 1200);
 }
 
 initFixturesPanel();
