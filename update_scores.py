@@ -402,6 +402,26 @@ def merge_fast(all_matches, fast_matches):
     return list(merged.values())
 
 
+def restore_previous_missing_leagues(all_matches, previous_matches, missing_leagues):
+    """数据源临时不可用时，带回旧文件中对应联赛的赛果。
+
+    当 API-Football 仍能给出最近赛果时，新赛果会覆盖同一场旧记录；其余历史赛果
+    留在输出中，避免一次上游 503 让前端拿到只有几天的新数据。
+    """
+    if not missing_leagues:
+        return all_matches, 0
+    retained = [m for m in previous_matches if m.get("_league") in missing_leagues]
+    return merge_fast(retained, all_matches), len(retained)
+
+
+def load_previous_matches(path):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return (json.load(f) or {}).get("matches") or []
+    except (ValueError, OSError):
+        return []
+
+
 # ---- 初盘大小球：/odds 快照 ----
 # API-Football 不区分初盘/临场，「初盘」= 我们首次看到该场 Goals Over/Under 盘口时的快照。
 # fixtures 提前 7 天进入窗口，首次抓到即存 odds_store.json，之后绝不覆盖。
@@ -755,12 +775,27 @@ def main():
         for t in sorted(missing_teams):
             print(f"  - {t}")
 
+    all_sources = set(LEAGUES_A + LEAGUES_B)
+    source_complete = source_success == all_sources
+    missing_sources = all_sources - source_success
+    if not source_complete:
+        print(f"[防空写] 本轮缺少联赛数据源：{', '.join(sorted(missing_sources))}")
+        all_matches, restored = restore_previous_missing_leagues(
+            all_matches, load_previous_matches(OUTPUT_PATH), missing_sources)
+        if restored:
+            print(f"[防空写] 已保留旧文件中 {restored} 场缺失联赛赛果，并合并本轮新赛果")
+
     all_matches.sort(key=lambda m: m["date"])
 
-    source_complete = source_success == set(LEAGUES_A + LEAGUES_B)
-    if not source_complete:
-        missing_sources = sorted(set(LEAGUES_A + LEAGUES_B) - source_success)
-        print(f"[防空写] 本轮缺少联赛数据源：{', '.join(missing_sources)}")
+    utc_today = datetime.now(timezone.utc).date()
+    expected_result_days = {
+        (utc_today - timedelta(days=FAST_DAYS - 1 - i)).isoformat()
+        for i in range(FAST_DAYS)
+    }
+    fast_results_complete = expected_result_days.issubset(fast_health)
+    # CSV 全部故障时，只要最近赛果窗口由 API-Football 完整响应，就可以安全写入：
+    # 缺失联赛的旧记录已在上方保留，计数保护仍会拦截异常缩水。
+    results_healthy = source_complete or fast_results_complete
 
     output = {
         "updated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
@@ -768,7 +803,7 @@ def main():
     }
     latest_written = safe_write_output(OUTPUT_PATH, OUTPUT_JS_PATH,
                                        "LATEST_DATA", output, "matches", "赛果增量",
-                                       healthy=source_complete)
+                                       healthy=results_healthy)
 
     # ---- 近期赛程：按 (联赛, 日期, 时间, 主, 客) 去重后按开球时间排序 ----
     # 保留 fid（API-Football fixture id）：fetch_predictions.py 等下游脚本需要它调 /predictions
@@ -779,7 +814,6 @@ def main():
                           key=lambda x: (x["date"], x["time"] or "99:99", x["team1"]))
     for fx in all_fixtures:
         attach_beijing_time(fx)  # 补 date_bj / time_bj 北京时间字段（显示层用，原 date/time 不动）
-    utc_today = datetime.now(timezone.utc).date()
     expected_days = {(utc_today + timedelta(days=i)).isoformat() for i in range(FIXTURE_DAYS + 1)}
     fixtures_complete = expected_days.issubset(fast_health)
     fixtures_output = {
@@ -788,7 +822,8 @@ def main():
     }
     fx_written = safe_write_output(FIXTURES_PATH, FIXTURES_JS_PATH,
                                    "FIXTURES_DATA", fixtures_output, "fixtures", "近期赛程",
-                                   complete=fixtures_complete, healthy=source_complete)
+                                   complete=fixtures_complete,
+                                   healthy=(source_complete or fixtures_complete))
 
     # ---- 大小球对照输出：近 OU_DAYS 天完场（含结果）+ 窗口内未赛（初盘）----
     ou_cutoff = (today - timedelta(days=OU_DAYS)).isoformat()
@@ -818,7 +853,7 @@ def main():
     ou_output = {"updated_at": output["updated_at"], "items": ou_items}
     ou_written = safe_write_output(OU_PATH, OU_JS_PATH,
                                    "OU_DATA", ou_output, "items", "大小球对照",
-                                   healthy=source_complete)
+                                   healthy=results_healthy)
 
     print("\n===== 汇总 =====")
     for league in LEAGUES_A + LEAGUES_B:

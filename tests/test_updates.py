@@ -46,6 +46,20 @@ class OutputTests(unittest.TestCase):
             ))
             self.assertEqual(json.loads(Path(json_path).read_text()), old)
 
+    def test_failed_league_keeps_history_but_fast_result_wins(self):
+        old = [
+            {'_league': 'E0', 'date': '2026-09-01', 'team1': 'A', 'team2': 'B', 's1': 1},
+            {'_league': 'SP1', 'date': '2026-09-01', 'team1': 'C', 'team2': 'D', 's1': 2},
+        ]
+        fresh = [
+            {'_league': 'E0', 'date': '2026-09-01', 'team1': 'A', 'team2': 'B', 's1': 3},
+            {'_league': 'E0', 'date': '2026-09-02', 'team1': 'E', 'team2': 'F', 's1': 0},
+        ]
+        merged, retained = scores.restore_previous_missing_leagues(fresh, old, {'E0'})
+        self.assertEqual(retained, 1)
+        self.assertEqual(len(merged), 2)
+        self.assertEqual(next(m for m in merged if m['team1'] == 'A')['s1'], 3)
+
     def test_initial_odds_snapshot_retention_covers_a_season(self):
         self.assertGreaterEqual(scores.OU_STORE_DAYS, 365)
 
