@@ -375,8 +375,6 @@ def fetch_apifb_fast(csv_index, team_cn, missing_teams, health=None):
             out.append(make_match(date, home, s1, s2, away, res, season,
                                   league, team_cn, missing_teams))
             added += 1
-        if skipped_team and health is not None:
-            health.discard(day.isoformat())
         if added or added_fx or skipped_team:
             print(f"[快速通道 {day}] 本站联赛已赛 {added} 场、未赛赛程 {added_fx} 场入列"
                   f"（非本站联赛 {skipped_league} 场忽略，队名未映射跳过 {skipped_team} 场）")
