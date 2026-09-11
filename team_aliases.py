@@ -550,6 +550,7 @@ TEAM_ALIASES = {
         'SC Braga': 'Sp Braga',
         'Santa Clara': 'Santa Clara',
         'Sporting CP': 'Sp Lisbon',
+        'Vitória SC': 'Guimaraes',
     },
     # T1
     'T1': {
