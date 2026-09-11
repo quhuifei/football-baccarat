@@ -1,10 +1,7 @@
-name: 每小时更新赛果
+name: 手动更新赛果
 
 on:
-  schedule:
-    # 每小时第 20 分钟运行一次（UTC，等于北京时间每小时第 20 分）
-    - cron: "20 * * * *"
-  workflow_dispatch: {} # 允许在 Actions 页面手动触发
+  workflow_dispatch: {}
 
 permissions:
   contents: write
