@@ -16,14 +16,4 @@ for (let n = 0; n < 200; n++) {
 }
 // 优化前版本的200组固定种子样本：空序列、开头和局、长龙、转列与碰撞。
 assert.equal(digest.digest('hex'), '3d58ed54feca93829270c5544e8728a71d49bf339e4b915f4783ddd46c9f911d');
-
-// 大小球长龙满六格后换到下一列顶部，避免手机端只看到最底下一排。
-const longOver = Array.from({length: 14}, (_, i) => ({result: 'B', _idx: i, _seq: i}));
-const compact = road(longOver, 6, true).grid;
-assert.equal(compact['0,5'], 'B');
-assert.equal(compact['1,0'], 'B');
-assert.equal(compact['1,5'], 'B');
-assert.equal(compact['2,0'], 'B');
-assert.equal(compact['2,1'], 'B');
-assert.equal(compact['1,5'], compact['0,5']);
 console.log('200 road regressions passed');

@@ -1234,7 +1234,7 @@ function getOuRoadMatches() {
   return out;
 }
 
-function generateStandardRoad(results, maxRows = 6, wrapLongRuns = false) {
+function generateStandardRoad(results, maxRows = 6) {
   const grid = {};
   const cellMatches = {};
   let lastPos = null;
@@ -1267,17 +1267,6 @@ function generateStandardRoad(results, maxRows = 6, wrapLongRuns = false) {
     const lastRes = grid[lastPos.join(',')];
     if (res === lastRes) {
       const [col, row] = lastPos;
-      // 大小球连续结果过长时，满六行后从下一列顶部继续。
-      // 胜平负仍使用百家乐标准的底部横向长龙规则。
-      if (wrapLongRuns && row === maxRows - 1) {
-        let wrapCol = col + 1;
-        while (grid[wrapCol + ',0']) wrapCol++;
-        grid[wrapCol + ',0'] = res;
-        lastPos = [wrapCol, 0];
-        currentCol = Math.max(currentCol, wrapCol);
-        cellMatches[wrapCol + ',0'] = [ref];
-        return;
-      }
       let newRow = row + 1;
       while (newRow < maxRows && grid[col + ',' + newRow]) newRow++;
       if (newRow < maxRows && !grid[col + ',' + newRow]) {
@@ -1334,7 +1323,7 @@ function getTooltipContent(refs) {
 }
 
 function renderRoadInto(roadEl, matches, league) {
-  const roadData = generateStandardRoad(matches, 6, roadMode === 'ou');
+  const roadData = generateStandardRoad(matches);
 
   const grid = roadData.grid;
   const cellMatches = roadData.cellMatches;
