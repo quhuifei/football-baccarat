@@ -1881,14 +1881,69 @@ async function loadLatestData() {
     if (!data || !Array.isArray(data.matches)) {
       throw new Error('数据格式不正确');
     }
+    // 每次都从最新文件重新分组，避免页面长期驻留时把旧批次反复叠加。
+    const nextByLeague = {};
     data.matches.forEach(m => {
       if (!m._league) return;
-      (latestByLeague[m._league] = latestByLeague[m._league] || []).push(m);
+      (nextByLeague[m._league] = nextByLeague[m._league] || []).push(m);
     });
+    Object.keys(latestByLeague).forEach(code => delete latestByLeague[code]);
+    Object.assign(latestByLeague, nextByLeague);
     latestMeta = { count: data.matches.length, updated_at: data.updated_at || null };
+    return true;
   } catch (err) {
-    latestMeta = null;
     console.log('加载最新数据失败:', err.message);
+    return false;
+  }
+}
+
+// 页面在手机后台停留后，回到前台自动同步赛果与近期赛程。
+// 这里只读取本站生成的静态数据文件，不会额外调用上游比赛接口。
+const LIVE_DATA_REFRESH_INTERVAL = 5 * 60 * 1000;
+const LIVE_DATA_REFRESH_MIN_GAP = 15 * 1000;
+let liveDataRefreshBusy = false;
+let liveDataLastCheckedAt = 0;
+
+async function refreshLiveData(force = false) {
+  if (document.hidden || liveDataRefreshBusy) return;
+  const now = Date.now();
+  const gap = now - liveDataLastCheckedAt;
+  if (gap < LIVE_DATA_REFRESH_MIN_GAP || (!force && gap < LIVE_DATA_REFRESH_INTERVAL)) return;
+
+  liveDataRefreshBusy = true;
+  liveDataLastCheckedAt = now;
+  const previousUpdatedAt = latestMeta && latestMeta.updated_at;
+  try {
+    const loaded = await loadLatestData();
+    if (loaded && (!previousUpdatedAt || latestMeta.updated_at !== previousUpdatedAt)) {
+      Object.keys(allData).forEach(code => mergeLatestInto(code));
+      computeUpdatedLeagues();
+      refreshLeagueDots();
+
+      if (allData[currentLeague]) {
+        const selectedSeason = currentSeason;
+        populateSeasonSelect();
+        const select = document.getElementById('season-select');
+        if (selectedSeason && Array.from(select.options).some(option => option.value === selectedSeason)) {
+          currentSeason = selectedSeason;
+          select.value = selectedSeason;
+        }
+        updatePageInfo();
+        renderAll();
+      }
+    }
+
+    // 近期赛程也可能在用户离开期间变化，和赛果一起静默更新。
+    try {
+      await loadScript('football_fixtures.js');
+      fixturesData = window.FIXTURES_DATA || null;
+      fixturesLoading = null;
+      renderFixturesPanel();
+    } catch (err) {
+      console.log('刷新赛程失败:', err.message);
+    }
+  } finally {
+    liveDataRefreshBusy = false;
   }
 }
 
@@ -1949,12 +2004,18 @@ async function initApp() {
   updateLeagueButton();
   statusEl.textContent = '正在检查最新战绩数据...';
   await loadLatestData();
+  liveDataLastCheckedAt = Date.now();
   computeUpdatedLeagues();
   refreshLeagueDots();
   await setLeague(currentLeague);
 }
 
 initApp();
+window.setInterval(() => refreshLiveData(false), LIVE_DATA_REFRESH_INTERVAL);
+window.addEventListener('focus', () => refreshLiveData(false));
+window.addEventListener('pageshow', event => {
+  if (event.persisted) refreshLiveData(true);
+});
 
 // ===== 球迷聊天室 =====
 const chatState = { me: null, lastId: 0, timer: null, pollBusy: false, seen: new Set() };
@@ -2089,6 +2150,7 @@ chatInputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.isC
 
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) {
+    refreshLiveData(true);
     chatPoll(false);
     if (supportState.open) supportPoll(false);
   }
